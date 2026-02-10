@@ -1110,7 +1110,7 @@ section.nosotros p{
     gap:20px;
     align-items:stretch;
     margin:10px 0 18px;
-    --bloque-alto: 260px;
+    --bloque-alto: 220px;
 }
 
 .nosotros-video{
@@ -1350,10 +1350,10 @@ section.nosotros p{
         font-size:28px;
     }
     .nosotros-layout{
-        --bloque-alto: 190px;
+        --bloque-alto: 170px;
     }
     .nosotros-video{
-        max-height:190px;
+        max-height:170px;
     }
     .nosotros-texto{
         font-size:16px;
