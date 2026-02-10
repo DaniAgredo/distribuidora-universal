@@ -1088,7 +1088,7 @@ section.nosotros p{
     gap:20px;
     align-items:stretch;
     margin:10px 0 18px;
-    --bloque-alto: 420px;
+    --bloque-alto: 440px;
 }
 
 .nosotros-video{
@@ -1103,7 +1103,6 @@ section.nosotros p{
     animation:fadeUp .6s ease both, floaty 5s ease-in-out infinite;
     align-self:stretch;
     min-height:var(--bloque-alto);
-    max-height:var(--bloque-alto);
 }
 
 .nosotros-video video{
