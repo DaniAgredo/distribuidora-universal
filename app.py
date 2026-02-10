@@ -10,6 +10,18 @@ def inicio():
 def conocenos():
     return render_template("conocenos.html")
 
+@app.route("/envios")
+def envios():
+    return render_template("envios.html")
+
+@app.route("/devoluciones")
+def devoluciones():
+    return render_template("devoluciones.html")
+
+@app.route("/pagos")
+def pagos():
+    return render_template("pagos.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
 

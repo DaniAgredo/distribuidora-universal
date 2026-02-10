@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Envíos y Entregas</title>
+
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="pagina-nosotros">
+
+<!-- ========= HEADER ========= -->
+<header class="header">
+  <div class="fila-superior">
+
+    <!-- IZQUIERDA: LOGO + NOMBRE -->
+    <div class="titulo">
+      <span class="icono">&#127757;</span>
+      <div class="nombre">
+        DISTRIBUIDORA UNIVERSAL DE POPAYAN S.A.S
+        <small>Soluciones Comerciales Integrales</small>
+        <small>NIT: 900779615-8 Popayán-Cauca &#10024; Colombia</small>
+      </div>
+    </div>
+
+    <!-- DERECHA: TIENDA + LOGIN -->
+    <div class="acciones">
+      <a href="https://wa.me/573215485315" class="whatsapp" target="_blank" rel="noopener">
+        <i class="fa-brands fa-whatsapp"></i>
+      </a>
+      <a href="/" class="volver">&#8592; Volver</a>
+      <a href="#" class="login">&#128100; Cuenta</a>
+      <a href="#" class="modo-nocturno" aria-label="Modo nocturno">
+        <i class="fa-solid fa-moon"></i>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- FILA INFERIOR -->
+  <div class="fila-inferior">
+    <div class="franja-movimiento">
+      &#127760; CARRERA 5 # 7-13 BARRIO CENTRO &#128205; Popayán, Cauca — &#128338; horario de atención de Lunes a Sábado 8:00 AM – 4:00 PM — &#128230; Variedad real para hogares, negocios y campo...
+    </div>
+  </div>
+</header>
+
+<main class="contenido-pagina">
+  <section class="ayuda ayuda-pagina">
+    <h2 class="titulo-seccion">Envíos y entregas</h2>
+    <div class="ayuda-grid">
+      <article class="ayuda-card">
+        <div class="ayuda-head">
+          <span class="ayuda-icon">&#128666;</span>
+          <h3>Rutas y tiempos</h3>
+        </div>
+        <p>
+          En pueblos cercanos hacemos salidas semanales con ruta principal los jueves.
+          La entrega hacia el sur se reparte durante los siguientes 3 días
+          (Timbío, El Bordo, Rosas y zonas cercanas). Hacia el norte atendemos rutas
+          como Piendamó y Morales.
+        </p>
+        <p>
+          El cliente decide cuándo enviar su pedido; según la ruta, puede llegar
+          entre 7 y 15 días. Si no hay disponibilidad inmediata, dejamos el pedido
+          programado y coordinamos confirmación por WhatsApp.
+        </p>
+        <a class="ayuda-cta" href="#contacto">Programar envío</a>
+      </article>
+    </div>
+  </section>
+</main>
+
+<!-- ========= FOOTER ========= -->
+<footer class="footer">
+  <div class="footer-contenido">
+
+    <!-- CENTRO DE AYUDA -->
+    <div class="footer-col">
+      <h4>Centro de ayuda</h4>
+      <div class="footer-ayuda">
+        <a class="ayuda-link" href="/envios">Envíos y entregas</a>
+        <a class="ayuda-link" href="/devoluciones">Cambios y devoluciones</a>
+        <a class="ayuda-link" href="/pagos">Métodos de pago</a>
+        <a class="ayuda-link" href="javascript:void(0)">Preguntas frecuentes</a>
+        <a class="ayuda-link" href="javascript:void(0)">Términos y condiciones</a>
+        <a class="ayuda-link" href="javascript:void(0)">Políticas de privacidad</a>
+      </div>
+    </div>
+
+    <!-- UBICANOS -->
+    <div class="footer-section">
+      <h4>Ubícanos</h4>
+      <p>
+        Carrera 5 # 7-13 Barrio Centro<br>
+        <a
+          href="https://www.google.com/maps?q=Popayán+Cauca+Carrera+5+7-13"
+          target="_blank"
+          class="map-link"
+          rel="noopener"
+        >
+          &#128205; Popayán - Cauca · Cómo llegar
+        </a><br>
+        &#128242; 321 548 5315<br>
+        Distriuniversal@gmail.com
+      </p>
+    </div>
+
+    <!-- ESCRIBENOS -->
+    <div class="footer-section" id="contacto">
+      <h4>Escríbenos</h4>
+      <input type="email" placeholder="Tu correo" class="footer-input">
+      <textarea placeholder="Escribe tu mensaje..." class="footer-textarea"></textarea>
+      <button class="footer-btn">Enviar</button>
+    </div>
+
+    <!-- REDES SOCIALES -->
+    <div class="footer-section">
+      <h4>Síguenos</h4>
+      <div class="socials">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    &#8593;
+  </div>
+
+  <div class="footer-final">
+    <div class="brand">
+      © 2026 DISTRIBUIDORA UNIVERSAL S.A.S Colombia ® · Todos los derechos reservados
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Modo nocturno
+  const themeToggle = document.querySelector(".modo-nocturno");
+  const themeIcon = themeToggle ? themeToggle.querySelector("i") : null;
+  const setTheme = (isDark) => {
+    document.body.classList.toggle("dark", isDark);
+    if (themeToggle) themeToggle.classList.toggle("active", isDark);
+    if (themeIcon) {
+      themeIcon.classList.toggle("fa-moon", !isDark);
+      themeIcon.classList.toggle("fa-sun", isDark);
+    }
+    localStorage.setItem("tema", isDark ? "dark" : "light");
+  };
+
+  const storedTheme = localStorage.getItem("tema");
+  if (storedTheme) setTheme(storedTheme === "dark");
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      setTheme(!document.body.classList.contains("dark"));
+    });
+  }
+</script>
+
+</body>
+</html>
