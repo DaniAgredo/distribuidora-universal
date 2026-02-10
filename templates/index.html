@@ -231,7 +231,7 @@
     <div class="footer-col">
       <h4>Centro de ayuda</h4>
       <a href="javascript:void(0)">Preguntas frecuentes</a>
-      <a href="javascript:void(0)">T&eacute;rminos y condiciones</a>
+      <a href="javascript:void(0)">Terminos y condiciones</a>
       <a href="javascript:void(0)">Pol&iacute;ticas de privacidad</a>
     </div>
 
@@ -277,6 +277,25 @@ const btnTop = document.querySelector('.btn-top');
 setInterval(cambiarMensaje, 5000); // tipo periÃ³dico
 /* ===== SLIDER PERILLA (MOUSE) ===== */
 const slider = document.querySelector('.slider');
+
+if (slider) {
+    let autoDir = 1;
+    let autoRun = true;
+    setInterval(() => {
+        if (!autoRun) return;
+        slider.scrollLeft += autoDir;
+        if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2) {
+            autoDir = -1;
+        } else if (slider.scrollLeft <= 0) {
+            autoDir = 1;
+        }
+    }, 20);
+
+    slider.addEventListener('mouseenter', () => autoRun = false);
+    slider.addEventListener('mouseleave', () => autoRun = true);
+    slider.addEventListener('touchstart', () => autoRun = false, { passive: true });
+    slider.addEventListener('touchend', () => autoRun = true);
+}
 
 slider.addEventListener('mousemove', (e) => {
     const rect = slider.getBoundingClientRect();
