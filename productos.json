@@ -1,0 +1,14 @@
+[
+    {
+        "nombre": "Advil Niños",
+        "precio": "$12.000",
+        "categoria": "Drogueria",
+        "imagen": "/static/img/advil.png"
+    },
+    {
+        "nombre": "Jabón Rey",
+        "precio": "$3.000",
+        "categoria": "Aseo",
+        "imagen": "/static/img/jabon.png"
+    }
+]
