@@ -329,12 +329,21 @@ slider.addEventListener('mousemove', (e) => {
 const categoriasDropdown = document.querySelector('.dropdown');
 const categoriasBtn = document.querySelector('.btn-categorias');
 if (categoriasDropdown && categoriasBtn) {
-    categoriasBtn.addEventListener('click', (e) => {
-        e.preventDefault();
+    const toggleCategorias = () => {
         categoriasDropdown.classList.toggle('open');
         const expanded = categoriasDropdown.classList.contains('open');
         categoriasBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    };
+
+    categoriasBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleCategorias();
     });
+    categoriasBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleCategorias();
+    }, { passive: false });
 
     document.addEventListener('click', (e) => {
         if (!categoriasDropdown.contains(e.target)) {

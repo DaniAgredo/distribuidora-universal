@@ -3,6 +3,9 @@ margin:0;
 font-family:Arial;
 background:rgb(231, 240, 250)
 }
+*{
+    box-sizing:border-box;
+}
 html, body{
     width:100%;
     overflow-x:hidden; /* elimina scroll lateral */
@@ -366,6 +369,7 @@ justify-content:center;
     background:rgb(224,235,250);
     padding:8px 0;
     margin-top:6px;
+    overflow-x:hidden;
 }
 
 .banner-contenido{
@@ -377,6 +381,8 @@ justify-content:center;
 align-items: stretch;
 
 flex-direction: row;
+    width:100%;
+    overflow-x:hidden;
 }
 
 /* IZQUIERDA */
@@ -407,7 +413,7 @@ flex-direction: row;
     align-items:center;
     gap:5px;
     width:max-content;
-    animation:scrollPagos 30s linear infinite;
+    animation:scrollPagos 45s linear infinite;
 
    
     
@@ -467,6 +473,17 @@ flex-direction: row;
     background:linear-gradient(135deg,#1e88e5,#42a5f5);
 }
 @media(max-width:768px){
+    .titulo{
+        width:100%;
+        align-items:flex-start;
+    }
+    .titulo .icono{
+        order:2;
+        margin-left:auto;
+    }
+    .nombre{
+        text-align:left;
+    }
     .banner{
         padding:2px 0;
     }
@@ -543,6 +560,10 @@ flex-direction: row;
         display:flex;
         padding:8px 10px;
         font-size:12px;
+    }
+
+    .marquee-pagos{
+        animation-duration:55s;
     }
 }
 
@@ -635,6 +656,7 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     padding:0;                /* clave */
     border-radius:0;
     box-shadow:none;
+    max-width:100%;
 }
 
 
@@ -663,6 +685,7 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     background:#1f60eb;
     scroll-behavior:smooth;
     position:relative;
+    box-sizing:border-box;
 
     /* ocultar scrollbar */
     scrollbar-width:none;
