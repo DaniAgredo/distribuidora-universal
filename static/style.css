@@ -350,9 +350,9 @@ justify-content:center;
     align-items:center;
     justify-content:center;
     border-radius:50%;
-    background:rgba(255,255,255,0.9);
-    border:1.5px solid rgba(255,255,255,0.9);
-    color:#111111;
+    background:#ffffff;
+    border:1.5px solid #dbe7ff;
+    color:#0d47a1;
     text-decoration:none;
     box-shadow:0 6px 14px rgba(0,0,0,0.18);
     backdrop-filter:blur(4px);
@@ -846,6 +846,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     padding:10px 0px;
     margin-top: 30px; /* se superpone un poco al banner */
     max-width:100%;
+    overflow:hidden;
 }
 
 .mensaje{
@@ -860,6 +861,11 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     opacity: 0 ;
     transform: translate(10px);
     margin-top: 35px;
+    left:0;
+    right:0;
+    width:100%;
+    padding:0 14px;
+    box-sizing:border-box;
 
 
 }
