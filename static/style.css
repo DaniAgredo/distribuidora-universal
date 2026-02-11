@@ -413,7 +413,7 @@ flex-direction: row;
     align-items:center;
     gap:5px;
     width:max-content;
-    animation:scrollPagos 45s linear infinite;
+    animation:scrollPagos 38s linear infinite;
 
    
     
@@ -473,6 +473,14 @@ flex-direction: row;
     background:linear-gradient(135deg,#1e88e5,#42a5f5);
 }
 @media(max-width:768px){
+    .fila-superior{
+        width:100%;
+        padding:0 8px;
+        box-sizing:border-box;
+    }
+    .acciones{
+        padding-right:4px;
+    }
     .titulo{
         width:100%;
         align-items:flex-start;
@@ -563,7 +571,7 @@ flex-direction: row;
     }
 
     .marquee-pagos{
-        animation-duration:55s;
+        animation-duration:45s;
     }
 }
 
