@@ -369,7 +369,7 @@ justify-content:center;
     background:rgb(224,235,250);
     padding:8px 0;
     margin-top:6px;
-    overflow-x:hidden;
+    overflow:visible;
 }
 
 .banner-contenido{
@@ -382,7 +382,7 @@ align-items: stretch;
 
 flex-direction: row;
     width:100%;
-    overflow-x:hidden;
+    overflow:visible;
 }
 
 /* IZQUIERDA */
@@ -395,6 +395,7 @@ flex-direction: row;
     flex-direction:row;
     gap:18px;
     justify-content: center;
+    overflow:visible;
 }
 /* CONTENEDOR INVISIBLE */
 .franja-pagos{
@@ -522,7 +523,7 @@ flex-direction: row;
         padding:8px;
         align-items:stretch;
         max-width:100%;
-        overflow:hidden;
+        overflow:visible;
         order:0;
     }
 
@@ -665,6 +666,7 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     border-radius:0;
     box-shadow:none;
     max-width:100%;
+    overflow:visible;
 }
 
 
@@ -769,7 +771,7 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     background:rgb(51, 137, 250);
     min-width:180px;
     box-shadow:0 4px 10px rgba(0,0,0,0.15);
-    z-index:100;
+    z-index:999;
 border-radius: 10px;
 }
 
