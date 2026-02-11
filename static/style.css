@@ -723,11 +723,12 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     margin-top: -10px;
 
     background:#1f60eb;
-    scroll-behavior:smooth;
+    scroll-behavior:auto;
     position:relative;
     box-sizing:border-box;
     max-width:100%;
     touch-action:pan-x;
+    -webkit-overflow-scrolling:touch;
 
     /* ocultar scrollbar */
     scrollbar-width:none;
