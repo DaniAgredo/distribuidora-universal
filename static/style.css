@@ -8,11 +8,14 @@ background:rgb(231, 240, 250)
 }
 html, body{
     width:100%;
+    max-width:100%;
     overflow-x:hidden; /* elimina scroll lateral */
+    overscroll-behavior-x:none;
 }
 
 body{
     padding-top:86px;
+    position:relative;
 }
 
 
@@ -373,6 +376,7 @@ justify-content:center;
     padding:8px 0;
     margin-top:6px;
     overflow:visible;
+    max-width:100%;
 }
 
 .banner-contenido{
@@ -386,6 +390,7 @@ align-items: stretch;
 flex-direction: row;
     width:100%;
     overflow:visible;
+    max-width:100%;
 }
 
 /* IZQUIERDA */
@@ -408,6 +413,7 @@ flex-direction: row;
     overflow:hidden;
     margin: 6px 0px;
     padding: 1px 0px; /* un poco de espacio */
+    max-width:100%;
     
 }
 
@@ -706,6 +712,8 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     scroll-behavior:smooth;
     position:relative;
     box-sizing:border-box;
+    max-width:100%;
+    touch-action:pan-x;
 
     /* ocultar scrollbar */
     scrollbar-width:none;
@@ -719,6 +727,7 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     width:100%;
     background:rgb(56, 155, 248);
     padding:1px 0;
+    max-width:100%;
 }
 
 /* ===== IMAGENES ===== */
@@ -836,6 +845,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     text-align:center;
     padding:10px 0px;
     margin-top: 30px; /* se superpone un poco al banner */
+    max-width:100%;
 }
 
 .mensaje{
@@ -949,6 +959,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     padding:50px 15px;
    background:rgb(231, 240, 250);
     text-align:center;
+    max-width:100%;
 }
 
 /* TITULO */
@@ -1198,6 +1209,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     align-items:center;
     gap:10px;            /* menos aire */
     text-align:center;
+    max-width:100%;
 }
 
 
