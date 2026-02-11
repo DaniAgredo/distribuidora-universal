@@ -451,18 +451,135 @@ flex-direction: row;
     overflow:hidden;
     display:flex;
 }
+
+.mapa-link-btn{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    margin:0;
+    padding:12px 14px;
+    font-family:'Poppins', sans-serif;
+    font-size:14px;
+    font-weight:600;
+    color:#ffffff;
+    text-decoration:none;
+    background:linear-gradient(135deg,#1e88e5,#42a5f5);
+}
 @media(max-width:768px){
+    .banner{
+        padding:2px 0;
+    }
     .banner-contenido{
         flex-direction:column;
+        padding:0 8px;
+        box-sizing:border-box;
     }
 
     .banner-info,
     .mapa{
         width:100%;
+        max-width:100%;
+        box-sizing:border-box;
     }
 
     .mapa iframe{
-        min-height:220px;
+        display:none;
+    }
+
+    .banner-info{
+        flex-direction:column;
+        gap:6px;
+        padding:8px;
+        align-items:stretch;
+        max-width:100%;
+        overflow:hidden;
+    }
+
+    .tienda{
+        font-size:16px;
+        padding:6px 8px;
+        justify-content:center;
+        width:100%;
+        text-align:center;
+    }
+
+    .btn-categorias{
+        width:34px;
+        height:34px;
+        font-size:16px;
+        flex:0 0 34px;
+    }
+
+    .buscador{
+        height:34px;
+        font-size:12px;
+        width:auto;
+        padding-left:12px;
+        flex:1 1 0;
+        min-width:0;
+    }
+
+    .buscador-categorias{
+        width:100%;
+        flex-wrap:nowrap;
+        gap:4px;
+    }
+
+    .mapa{
+        padding:0;
+        border-radius:10px;
+        display:flex;
+        flex-direction:column;
+    }
+
+    .mapa-link-btn{
+        display:flex;
+        padding:8px 10px;
+        font-size:12px;
+    }
+}
+
+@media(max-width:480px){
+    .banner-contenido{
+        padding:0 6px;
+    }
+
+    .banner-info{
+        padding:6px;
+        gap:6px;
+    }
+
+    .tienda{
+        font-size:14px;
+        padding:6px 8px;
+    }
+
+    .btn-categorias{
+        width:30px;
+        height:30px;
+        font-size:16px;
+        flex:0 0 30px;
+    }
+
+    .buscador{
+        height:30px;
+        font-size:12px;
+    }
+
+    .mapa-link-btn{
+        padding:8px 10px;
+        font-size:11px;
+    }
+
+    .mensajes-negocio{
+        min-height:70px;
+        margin-top:8px;
+        padding:6px 0;
+    }
+
+    .mensaje{
+        font-size:18px;
     }
 }
 
@@ -491,11 +608,13 @@ display:inline-block;
 /* BUSCADOR */
 .buscador{
     height:44px;
-    flex:1;
+    flex:1 1 auto;
     border:none;
     padding-left: 40px;
     font-size:15px;
     outline:none;
+    min-width:0;
+    box-sizing:border-box;
 border-radius: 8px;
 box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
@@ -537,6 +656,7 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 
     background:#1f60eb;
     scroll-behavior:smooth;
+    position:relative;
 
     /* ocultar scrollbar */
     scrollbar-width:none;
@@ -592,18 +712,7 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 
 /* DIFUMINADO LATERAL (integrado al azul) */
 .slider::after{
-    content:"";
-    position:absolute;
-    right:0;
-    top:0;
-    width:120px;
-    height:100%;
-    background:linear-gradient(
-        to left,
-        rgba(31,96,235,.95),
-        rgba(31,96,235,0)
-    );
-    pointer-events:none;
+    display:none;
 }
 .slide-texto{
     position:absolute;
@@ -1623,6 +1732,22 @@ section.nosotros p{
     }
     .evento-card.is-active{
         transform:scale(1.35);
+    }
+    .slider::after{
+        width:60px;
+    }
+    .mensajes-negocio{
+        min-height:80px;
+        margin-top:10px;
+        padding:6px 0;
+    }
+    .mensaje{
+        font-size:20px;
+        line-height:1.3;
+    }
+    .footer-contenido{
+        grid-template-columns:1fr;
+        gap:24px;
     }
     .ayuda{
         margin:20px 12px;
