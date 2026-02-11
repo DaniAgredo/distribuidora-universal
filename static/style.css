@@ -1790,11 +1790,11 @@ section.nosotros p{
         font-size:28px;
     }
     .nosotros-layout{
-        --bloque-alto: 110px;
+        --bloque-alto: 130px;
         margin:-12px 0 10px;
     }
     .nosotros-video{
-        max-height:110px;
+        max-height:130px;
     }
     .nosotros-texto{
         font-size:16px;
@@ -1839,6 +1839,22 @@ section.nosotros p{
     }
     .ayuda-cta{
         width:100%;
+    }
+
+    .side-tab{
+        width:56px;
+    }
+    .side-tab summary{
+        width:56px;
+        height:56px;
+        font-size:11px;
+        border-radius:10px;
+    }
+    .side-tab-contenido{
+        width:min(100%, 260px);
+        padding:10px 12px;
+        font-size:13px;
+        line-height:1.5;
     }
 }
 
