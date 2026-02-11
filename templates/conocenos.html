@@ -355,7 +355,7 @@
   const sideTabs = document.querySelectorAll(".side-tab");
   sideTabs.forEach((tab) => {
     let closeTimer;
-    const scheduleClose = (delay = 1500) => {
+    const scheduleClose = (delay = 3000) => {
       clearTimeout(closeTimer);
       closeTimer = setTimeout(() => {
         if (tab.open) tab.open = false;
@@ -368,11 +368,11 @@
       sideTabs.forEach((t) => {
         if (t !== tab) t.open = false;
       });
-      scheduleClose(3500);
+      scheduleClose(7000);
     });
 
     tab.addEventListener("mouseenter", () => clearTimeout(closeTimer));
-    tab.addEventListener("mouseleave", () => scheduleClose(900));
+    tab.addEventListener("mouseleave", () => scheduleClose(2500));
   });
 
   document.addEventListener("click", (e) => {
