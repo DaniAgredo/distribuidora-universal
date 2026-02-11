@@ -470,6 +470,10 @@ flex-direction: row;
     .banner{
         padding:2px 0;
     }
+    .fila-superior{
+        gap:8px;
+        padding-bottom:6px;
+    }
     .banner-contenido{
         flex-direction:column;
         padding:0 8px;
@@ -494,10 +498,11 @@ flex-direction: row;
         align-items:stretch;
         max-width:100%;
         overflow:hidden;
+        order:0;
     }
 
     .tienda{
-        font-size:16px;
+        font-size:15px;
         padding:6px 8px;
         justify-content:center;
         width:100%;
@@ -531,6 +536,7 @@ flex-direction: row;
         border-radius:10px;
         display:flex;
         flex-direction:column;
+        order:1;
     }
 
     .mapa-link-btn{
@@ -551,7 +557,7 @@ flex-direction: row;
     }
 
     .tienda{
-        font-size:14px;
+        font-size:13px;
         padding:6px 8px;
     }
 
@@ -1702,7 +1708,7 @@ section.nosotros p{
 
 @media(max-width:768px){
     body{
-        padding-top:120px;
+        padding-top:190px;
     }
     section.nosotros{
         margin:20px auto;
