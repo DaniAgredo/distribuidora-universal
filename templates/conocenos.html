@@ -30,9 +30,11 @@
     <div class="acciones">
       <a href="https://wa.me/573215485315" class="whatsapp" target="_blank" rel="noopener">
         <i class="fa-brands fa-whatsapp"></i>
+        <span class="whatsapp-saludo">WhatsApp</span>
       </a>
       <a href="/" class="volver">&#8592; Volver</a>
-      <a href="#" class="login">&#128100; Cuenta</a>
+      <a href="#" class="login"><i class="fa-solid fa-user login-icon"></i> <span class="login-text">Cuenta</span></a>
+      <a href="#" class="logout-header">Salir</a>
       <a href="#" class="modo-nocturno" aria-label="Modo nocturno">
         <i class="fa-solid fa-moon"></i>
       </a>
@@ -216,6 +218,98 @@
   </div>
 </footer>
 
+<!-- ========= MODAL CUENTA ========= -->
+<div class="login-modal" id="loginModal" aria-hidden="true">
+  <div class="login-overlay" data-close="login"></div>
+  <div class="login-sheet" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <button class="login-close" type="button" aria-label="Cerrar">×</button>
+    <div class="login-header">
+      <h3 id="loginTitle">Cuenta Distribuidora</h3>
+      <p>Accede o registra tu negocio para pedidos r&aacute;pidos.</p>
+      <div class="login-greeting" aria-live="polite">
+        <span class="greet-line">Bienvenido</span>
+        <span class="greet-sub">Estamos listos para tu pedido.</span>
+      </div>
+    </div>
+    <div class="login-tabs">
+      <button type="button" class="login-tab active" data-tab="login">Iniciar sesi&oacute;n</button>
+      <button type="button" class="login-tab" data-tab="registro">Registrarse</button>
+    </div>
+
+    <div class="login-panel active" data-panel="login">
+      <form class="login-form" id="loginForm">
+        <label>Correo</label>
+        <input type="email" name="correo" placeholder="correo@negocio.com" required>
+        <label>Contrase&ntilde;a</label>
+        <input type="password" name="password" placeholder="••••••••" required>
+        <button type="submit" class="btn-primary">Ingresar</button>
+      </form>
+      <div class="login-divider">o</div>
+      <div class="login-social">
+        <button type="button" class="btn-social facebook">Continuar con Facebook</button>
+        <button type="button" class="btn-social qr">Ingresar con QR</button>
+      </div>
+      <div class="qr-panel" id="qrPanel">
+        <div class="qr-box" aria-hidden="true"></div>
+        <p>Escanea tu c&oacute;digo QR para entrar r&aacute;pido.</p>
+      </div>
+    </div>
+
+    <div class="login-panel" data-panel="registro">
+      <form class="registro-form" id="registroForm">
+        <div class="form-grid">
+          <div>
+            <label>Nombre completo</label>
+            <input type="text" name="nombre" placeholder="Don Jorge" required>
+          </div>
+          <div>
+            <label>Nombre del negocio</label>
+            <input type="text" name="negocio" placeholder="Tienda La Esquina" required>
+          </div>
+          <div>
+            <label>Direcci&oacute;n</label>
+            <input type="text" name="direccion" placeholder="Carrera, barrio, municipio" required>
+          </div>
+          <div>
+            <label>Observaciones de entrega</label>
+            <textarea name="observaciones" rows="3" placeholder="Casa con puertas rojas, al lado de..."></textarea>
+          </div>
+          <div>
+            <label>Correo</label>
+            <input type="email" name="correoRegistro" placeholder="correo@negocio.com" required>
+          </div>
+          <div>
+            <label>Contrase&ntilde;a</label>
+            <input type="password" name="passwordRegistro" placeholder="Crea tu contrase&ntilde;a" required>
+          </div>
+          <div>
+            <label>Fecha de cumplea&ntilde;os</label>
+            <input type="text" name="cumple" placeholder="DD/MM" inputmode="numeric" maxlength="5">
+          </div>
+          <div>
+            <label>M&eacute;todo de pago preferido</label>
+            <select name="pago">
+              <option value="Nequi">Nequi</option>
+              <option value="Bancolombia">Bancolombia</option>
+              <option value="Efectivo">Efectivo</option>
+              <option value="Transferencia">Transferencia</option>
+            </select>
+          </div>
+          <div>
+            <label>WhatsApp</label>
+            <input type="tel" name="telefono" placeholder="+57 3xx xxx xxxx">
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">Crear cuenta</button>
+        <small class="form-note">Recuerda tu contrase&ntilde;a. Guardamos direcci&oacute;n, observaciones y m&eacute;todo de pago para pedidos r&aacute;pidos.</small>
+      </form>
+    </div>
+    <div class="login-footer">
+      <button type="button" class="logout-modal">Salir de la cuenta</button>
+    </div>
+  </div>
+</div>
+
 <script>
   // Mensajes suaves en franja de entrega
   const entregaMensajes = document.querySelectorAll(".entrega-mensaje");
@@ -304,6 +398,8 @@
     if (themeIcon) {
       themeIcon.classList.toggle("fa-moon", !isDark);
       themeIcon.classList.toggle("fa-sun", isDark);
+      themeIcon.classList.toggle("fa-solid", !isDark);
+      themeIcon.classList.toggle("fa-regular", isDark);
     }
     localStorage.setItem("tema", isDark ? "dark" : "light");
   };
@@ -317,6 +413,197 @@
       setTheme(!document.body.classList.contains("dark"));
     });
   }
+
+  // Modal login / registro
+  const loginModal = document.getElementById("loginModal");
+  const loginTriggers = document.querySelectorAll(".login");
+  const loginClose = loginModal ? loginModal.querySelector(".login-close") : null;
+  const loginOverlay = loginModal ? loginModal.querySelector(".login-overlay") : null;
+  const loginTabs = loginModal ? loginModal.querySelectorAll(".login-tab") : [];
+  const loginPanels = loginModal ? loginModal.querySelectorAll(".login-panel") : [];
+  const qrBtn = loginModal ? loginModal.querySelector(".btn-social.qr") : null;
+  const qrPanel = loginModal ? loginModal.querySelector("#qrPanel") : null;
+
+  const openLogin = () => {
+    if (!loginModal) return;
+    loginModal.classList.add("open");
+    loginModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+  };
+  const closeLogin = () => {
+    if (!loginModal) return;
+    loginModal.classList.remove("open");
+    loginModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  };
+
+  loginTriggers.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openLogin();
+    });
+  });
+  if (loginClose) loginClose.addEventListener("click", closeLogin);
+  if (loginOverlay) loginOverlay.addEventListener("click", closeLogin);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLogin();
+  });
+
+  loginTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.tab;
+      loginTabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      loginPanels.forEach((p) => {
+        p.classList.toggle("active", p.dataset.panel === target);
+      });
+    });
+  });
+
+  if (qrBtn && qrPanel) {
+    qrBtn.addEventListener("click", () => {
+      qrPanel.classList.toggle("open");
+    });
+  }
+
+  const USER_KEY = "du_cliente";
+  const loginGreeting = loginModal ? loginModal.querySelector(".login-greeting") : null;
+  const greetLine = loginModal ? loginModal.querySelector(".greet-line") : null;
+  const greetSub = loginModal ? loginModal.querySelector(".greet-sub") : null;
+  const logoutBtns = document.querySelectorAll(".logout-modal");
+  const logoutHeaderBtns = document.querySelectorAll(".logout-header");
+  const loginForm = document.getElementById("loginForm");
+  let greetTimer;
+
+  const updateUserUI = (user) => {
+    const isLogged = !!(user && user.loggedIn);
+    const name = isLogged && user.nombre ? user.nombre : null;
+    clearInterval(greetTimer);
+    if (isLogged && name) {
+      document.body.classList.add("logged-in");
+      logoutBtns.forEach((el) => (el.style.display = "inline-flex"));
+      logoutHeaderBtns.forEach((el) => (el.style.display = "inline-flex"));
+      if (loginGreeting && greetLine && greetSub) {
+        loginGreeting.classList.add("show");
+        greetLine.textContent = `¡Bienvenido, ${name}!`;
+        const mensajes = [
+          `¿Qué tal va tu día, ${name}?`,
+          `Listos para tu pedido, ${name}.`,
+          `Cuenta con nosotros hoy, ${name}.`
+        ];
+        let i = 0;
+        greetSub.textContent = mensajes[i];
+        greetTimer = setInterval(() => {
+          i = (i + 1) % mensajes.length;
+          greetSub.textContent = mensajes[i];
+        }, 3500);
+      }
+    } else {
+      document.body.classList.remove("logged-in");
+      logoutBtns.forEach((el) => (el.style.display = "none"));
+      logoutHeaderBtns.forEach((el) => (el.style.display = "none"));
+      if (loginGreeting) loginGreeting.classList.remove("show");
+    }
+  };
+
+  const fillLoginFromUser = (user) => {
+    if (!loginForm || !user) return;
+    if (user.correo) loginForm.correo.value = user.correo;
+    if (user.clave) loginForm.password.value = user.clave;
+  };
+
+  const storedUser = localStorage.getItem(USER_KEY);
+  if (storedUser) {
+    try {
+      const parsed = JSON.parse(storedUser);
+      fillLoginFromUser(parsed);
+      updateUserUI(parsed);
+    } catch (e) {
+      localStorage.removeItem(USER_KEY);
+    }
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const correo = loginForm.correo.value.trim();
+      let user = { nombre: "Cliente", correo: correo, clave: loginForm.password.value.trim(), loggedIn: true };
+      const saved = localStorage.getItem(USER_KEY);
+      if (saved) {
+        try { user = JSON.parse(saved); } catch (err) {}
+        user.correo = correo || user.correo;
+        user.clave = loginForm.password.value.trim() || user.clave;
+        user.loggedIn = true;
+      } else if (correo && correo.includes("@")) {
+        user.nombre = correo.split("@")[0];
+      }
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      updateUserUI(user);
+      closeLogin();
+    });
+  }
+
+  const registroForm = document.getElementById("registroForm");
+  if (registroForm) {
+    registroForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const user = {
+        nombre: registroForm.nombre.value.trim() || "Cliente",
+        negocio: registroForm.negocio.value.trim(),
+        direccion: registroForm.direccion.value.trim(),
+        observaciones: registroForm.observaciones.value.trim(),
+        correo: registroForm.correoRegistro.value.trim(),
+        clave: registroForm.passwordRegistro.value.trim(),
+        cumple: registroForm.cumple.value.trim(),
+        pago: registroForm.pago.value,
+        telefono: registroForm.telefono.value.trim(),
+        loggedIn: true
+      };
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      fillLoginFromUser(user);
+      updateUserUI(user);
+      closeLogin();
+    });
+  }
+
+  logoutBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const saved = localStorage.getItem(USER_KEY);
+      if (saved) {
+        try {
+          const user = JSON.parse(saved);
+          user.loggedIn = false;
+          localStorage.setItem(USER_KEY, JSON.stringify(user));
+          updateUserUI(user);
+        } catch (err) {
+          localStorage.removeItem(USER_KEY);
+          updateUserUI(null);
+        }
+      } else {
+        updateUserUI(null);
+      }
+    });
+  });
+  logoutHeaderBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const saved = localStorage.getItem(USER_KEY);
+      if (saved) {
+        try {
+          const user = JSON.parse(saved);
+          user.loggedIn = false;
+          localStorage.setItem(USER_KEY, JSON.stringify(user));
+          updateUserUI(user);
+        } catch (err) {
+          localStorage.removeItem(USER_KEY);
+          updateUserUI(null);
+        }
+      } else {
+        updateUserUI(null);
+      }
+    });
+  });
 </script>
 
 </body>

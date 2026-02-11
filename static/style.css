@@ -137,6 +137,22 @@ justify-content:center;
     .login{
         font-size:13px;
     }
+    .saludo-banner{
+        padding:8px 12px;
+    }
+    .saludo-banner-line{
+        font-size:16px;
+    }
+    .saludo-banner-text{
+        font-size:12px;
+    }
+    .ruta-text{
+        font-size:12px;
+    }
+    .ruta-banner{
+        margin-top:6px;
+        padding-top:6px;
+    }
 }
 
 
@@ -211,6 +227,15 @@ justify-content:center;
 .whatsapp {
     font-size:22px;
     color:white;
+}
+.whatsapp-saludo{
+    display:none;
+    font-family:'Poppins', sans-serif;
+    font-size:12px;
+    font-weight:600;
+    color:white;
+    margin-left:6px;
+    white-space:nowrap;
 }
 
 
@@ -291,6 +316,56 @@ justify-content:center;
     box-shadow:0 6px 14px rgba(0,0,0,0.18);
     backdrop-filter:blur(4px);
     transition:all .3s ease;
+}
+.logout-header{
+    display:none;
+    font-family:'Poppins', sans-serif;
+    font-size:14px;
+    font-weight:600;
+    color:white;
+    text-decoration:none;
+    padding:8px 14px;
+    background:rgba(255,255,255,0.08);
+    border:1.5px solid rgba(255,255,255,0.7);
+    border-radius:20px;
+    box-shadow:0 6px 14px rgba(0,0,0,0.18);
+    backdrop-filter:blur(4px);
+    transition:all .3s ease;
+}
+.logout-header:hover{
+    background:rgba(255,255,255,0.2);
+    color:#ffffff;
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(0,0,0,0.25);
+}
+body.logged-in .logout-header{
+    display:inline-flex;
+    align-items:center;
+}
+body.logged-in .login{
+    display:none;
+}
+.login-text{
+    margin-left:6px;
+}
+.logout-modal{
+    display:none;
+    width:100%;
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,.08);
+    background:#f8fafc;
+    font-weight:600;
+    cursor:pointer;
+}
+body.logged-in .logout-modal{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+}
+.logout-modal:hover{
+    background:#eef2ff;
 }
 
 .login-icon{
@@ -406,11 +481,27 @@ flex-direction: row;
     background:linear-gradient(90deg,#103b7c,#1888f8);
     padding:20px;
     border-radius:5px;
-    display:flex;
-    flex-direction:row;
-    gap:18px;
-    justify-content: center;
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) minmax(160px, 260px);
+    column-gap:14px;
+    row-gap:10px;
+    align-items:start;
     overflow:visible;
+}
+.banner-info > .saludo-banner{
+    grid-column:1 / -1;
+}
+.banner-info > .tienda{
+    grid-column:1;
+}
+.banner-info > .buscador-categorias{
+    grid-column:1;
+}
+.banner-info > .ruta-banner{
+    grid-column:2;
+    grid-row:2 / span 2;
+    align-self:start;
+    text-align:left;
 }
 /* CONTENEDOR INVISIBLE */
 .franja-pagos{
@@ -548,9 +639,24 @@ flex-direction: row;
         max-width:100%;
         overflow:visible;
         order:0;
+        display:flex;
     }
-
-    .tienda{
+    .banner-info > .saludo-banner{
+        order:0;
+    }
+    .banner-info > .tienda{
+        order:1;
+    }
+    .banner-info > .buscador-categorias{
+        order:2;
+    }
+    .banner-info > .ruta-banner{
+        order:3;
+        align-self:flex-start;
+        text-align:left;
+        margin-top:6px;
+    }
+.tienda{
         font-size:15px;
         padding:6px 8px;
         justify-content:center;
@@ -585,7 +691,7 @@ flex-direction: row;
         border-radius:10px;
         display:flex;
         flex-direction:column;
-        order:1;
+        order:2;
     }
 
     .mapa-link-btn{
@@ -597,6 +703,71 @@ flex-direction: row;
     .marquee-pagos{
         animation-duration:30s;
     }
+}
+
+.saludo-banner{
+    display:none;
+    width:100%;
+    margin:0 0 6px;
+    padding:0;
+    border-radius:0;
+    background:transparent;
+    border:none;
+    color:#ffffff;
+    box-shadow:none;
+}
+body.logged-in .saludo-banner{
+    display:block;
+}
+.saludo-banner-line{
+    display:block;
+    font-size:18px;
+    font-weight:400;
+    margin-bottom:4px;
+    letter-spacing:0.4px;
+}
+.saludo-banner-text{
+    display:block;
+    font-size:13px;
+    color:#eaf3ff;
+    opacity:0.95;
+    transition:opacity .4s ease;
+    letter-spacing:0.3px;
+}
+.saludo-banner-text.fade{
+    opacity:0;
+}
+.ruta-banner{
+    display:none;
+    width:100%;
+    margin:0 0 4px;
+    color:#eaf3ff;
+    font-family:'Poppins', sans-serif;
+    padding-top:2px;
+    margin:0;
+    max-width:100%;
+}
+body.logged-in .ruta-banner{
+    display:block;
+}
+.ruta-title{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    opacity:0.85;
+}
+.ruta-text{
+    display:block;
+    font-size:13px;
+    letter-spacing:0.2px;
+    margin-top:4px;
+    opacity:0.95;
+    transition:opacity .4s ease;
+}
+.ruta-text.fade{
+    opacity:0;
 }
 
 @media(max-width:480px){
@@ -2242,4 +2413,277 @@ body.dark .acciones .modo-nocturno{
     background:rgba(255,255,255,0.12);
     border-color:rgba(255,255,255,0.4);
     color:#f8fafc;
+}
+
+/* ===== MODAL LOGIN ===== */
+body.modal-open{
+    overflow:hidden;
+}
+.login-modal{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:2000;
+}
+.login-modal.open{
+    display:flex;
+}
+.login-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(7,15,32,.55);
+    backdrop-filter:blur(2px);
+    opacity:0;
+    transition:opacity .3s ease;
+}
+.login-modal.open .login-overlay{
+    opacity:1;
+}
+.login-sheet{
+    position:relative;
+    width:min(92vw, 520px);
+    max-height:85vh;
+    overflow:auto;
+    background:rgba(255,255,255,.94);
+    border-radius:20px 20px 0 0;
+    padding:20px 18px 22px;
+    box-shadow:0 25px 60px rgba(0,0,0,.25);
+    transform:translateY(24px);
+    opacity:0;
+    transition:transform .35s ease, opacity .35s ease;
+    z-index:1;
+}
+.login-modal.open .login-sheet{
+    transform:translateY(0);
+    opacity:1;
+}
+.login-close{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:50%;
+    background:rgba(0,0,0,.06);
+    font-size:20px;
+    cursor:pointer;
+}
+.login-header h3{
+    margin:0 0 4px;
+    font-size:20px;
+}
+.login-header p{
+    margin:0 0 12px;
+    color:#4b5563;
+}
+.login-greeting{
+    display:none;
+    margin:8px 0 12px;
+    padding:12px 14px;
+    border-radius:16px;
+    background:rgba(13,132,252,.14);
+    border:1.5px solid rgba(13,132,252,.35);
+    color:#0b2f66;
+    box-shadow:0 10px 22px rgba(13,132,252,.18);
+}
+.login-greeting.show{
+    display:block;
+}
+.greet-line{
+    display:block;
+    font-size:20px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+.greet-sub{
+    display:block;
+    font-size:14px;
+    color:#214a85;
+}
+.login-tabs{
+    display:flex;
+    gap:10px;
+    margin:6px 0 14px;
+}
+.login-tab{
+    flex:1;
+    padding:8px 10px;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,.08);
+    background:#f1f5ff;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+.login-tab.active{
+    background:#0d84fc;
+    color:white;
+    border-color:#0d84fc;
+}
+.login-panel{
+    display:none;
+}
+.login-panel.active{
+    display:block;
+}
+.login-form,
+.registro-form{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.login-form label,
+.registro-form label{
+    font-size:12px;
+    color:#4b5563;
+    font-weight:600;
+}
+.login-form input,
+.registro-form input,
+.registro-form select,
+.registro-form textarea{
+    width:100%;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid #e2e8f0;
+    background:white;
+    font-size:14px;
+}
+.registro-form textarea{
+    resize:vertical;
+    min-height:70px;
+}
+.btn-primary{
+    margin-top:6px;
+    padding:10px 12px;
+    border:none;
+    border-radius:999px;
+    background:#0d84fc;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 10px 20px rgba(13,132,252,.25);
+}
+.login-divider{
+    text-align:center;
+    color:#94a3b8;
+    font-size:12px;
+    margin:10px 0;
+}
+.login-social{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+.btn-social{
+    padding:9px 12px;
+    border-radius:999px;
+    border:1px solid #e2e8f0;
+    background:white;
+    font-weight:600;
+    cursor:pointer;
+}
+.btn-social.facebook{
+    background:#f3f6ff;
+    color:#1d4ed8;
+    border-color:#dbeafe;
+}
+.btn-social.qr{
+    background:#f8fafc;
+}
+.qr-panel{
+    display:none;
+    margin-top:10px;
+    text-align:center;
+}
+.qr-panel.open{
+    display:block;
+}
+.qr-box{
+    width:120px;
+    height:120px;
+    margin:0 auto 8px;
+    border-radius:12px;
+    background:repeating-linear-gradient(45deg, #dbeafe, #dbeafe 4px, #eff6ff 4px, #eff6ff 8px);
+}
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+.form-note{
+    display:block;
+    margin-top:8px;
+    font-size:11px;
+    color:#64748b;
+}
+@media(min-width:720px){
+    .form-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+@media(min-width:768px){
+    .login-modal{
+        align-items:center;
+    }
+    .login-sheet{
+        border-radius:20px;
+    }
+}
+
+body.dark .login-sheet{
+    background:rgba(15,23,42,.92);
+    color:#e2e8f0;
+}
+body.dark .login-header p{
+    color:#cbd5f5;
+}
+body.dark .login-greeting{
+    background:rgba(13,132,252,.18);
+    border-color:rgba(148,184,255,.35);
+    color:#e2ecff;
+}
+body.dark .greet-sub{
+    color:#cbd5f5;
+}
+body.dark .ruta-banner{
+    color:#eaf3ff;
+}
+body.dark .login-form input,
+body.dark .registro-form input,
+body.dark .registro-form select,
+body.dark .registro-form textarea{
+    background:#0f1b33;
+    border-color:#1e2a40;
+    color:#e6eefc;
+}
+body.dark .login-tab{
+    background:#0f1b33;
+    color:#cbd5f5;
+    border-color:#1e2a40;
+}
+body.dark .login-tab.active{
+    background:#0d84fc;
+    color:white;
+    border-color:#0d84fc;
+}
+body.dark .btn-social{
+    background:#0f1b33;
+    border-color:#1e2a40;
+    color:#e6eefc;
+}
+body.dark .btn-social.facebook{
+    color:#93c5fd;
+}
+body.dark .login-close{
+    background:rgba(255,255,255,.08);
+    color:#e2e8f0;
+}
+body.dark .logout-modal{
+    background:#0f1b33;
+    border-color:#1e2a40;
+    color:#e2e8f0;
 }
