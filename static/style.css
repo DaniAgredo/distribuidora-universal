@@ -160,6 +160,9 @@ justify-content:center;
 .franja-movimiento:hover{
     animation-play-state:paused;
 }
+.franja-movimiento.pausa{
+    animation-play-state:paused;
+}
 
 @keyframes moverTexto{
     from{
@@ -414,7 +417,7 @@ flex-direction: row;
     align-items:center;
     gap:5px;
     width:max-content;
-    animation:scrollPagos 32s linear infinite;
+    animation:scrollPagos 28s linear infinite;
 
    
     
@@ -443,11 +446,17 @@ flex-direction: row;
 /* ANIMACION */
 @keyframes scrollPagos{
     from{
-        transform:translateX(50%);
+        transform:translateX(0);
     }
     to{
         transform:translateX(-100%);
     }
+}
+.marquee-pagos:hover{
+    animation-play-state:paused;
+}
+.marquee-pagos.pausa{
+    animation-play-state:paused;
 }
 
 .mapa{
@@ -485,6 +494,7 @@ flex-direction: row;
     .titulo{
         width:100%;
         align-items:flex-start;
+        padding-right:6px;
     }
     .titulo .icono{
         order:2;
@@ -572,7 +582,7 @@ flex-direction: row;
     }
 
     .marquee-pagos{
-        animation-duration:38s;
+        animation-duration:30s;
     }
 }
 

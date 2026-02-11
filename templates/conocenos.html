@@ -283,6 +283,14 @@
     }
   });
 
+  // Pausa franja al tocar
+  const franjaMov = document.querySelector(".franja-movimiento");
+  if (franjaMov) {
+    franjaMov.addEventListener("touchstart", () => franjaMov.classList.add("pausa"), { passive: true });
+    franjaMov.addEventListener("touchend", () => franjaMov.classList.remove("pausa"), { passive: true });
+    franjaMov.addEventListener("touchcancel", () => franjaMov.classList.remove("pausa"), { passive: true });
+  }
+
   // Modo nocturno
   const themeToggle = document.querySelector(".modo-nocturno");
   const themeIcon = themeToggle ? themeToggle.querySelector("i") : null;

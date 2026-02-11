@@ -353,6 +353,17 @@ if (categoriasDropdown && categoriasBtn) {
     });
 }
 
+// Pausa franja al tocar
+const pausaEnTouch = (selector) => {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    el.addEventListener('touchstart', () => el.classList.add('pausa'), { passive: true });
+    el.addEventListener('touchend', () => el.classList.remove('pausa'), { passive: true });
+    el.addEventListener('touchcancel', () => el.classList.remove('pausa'), { passive: true });
+};
+pausaEnTouch('.franja-movimiento');
+pausaEnTouch('.marquee-pagos');
+
 // Modo nocturno
 const themeToggle = document.querySelector(".modo-nocturno");
 const themeIcon = themeToggle ? themeToggle.querySelector("i") : null;
