@@ -742,6 +742,10 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 border-radius: 10px;
 }
 
+.dropdown.open .dropdown-contenido{
+    display:block;
+}
+
 .dropdown-contenido a{
     display:block;
     padding:10px;
@@ -1708,7 +1712,7 @@ section.nosotros p{
 
 @media(max-width:768px){
     body{
-        padding-top:190px;
+        padding-top:225px;
     }
     section.nosotros{
         margin:20px auto;

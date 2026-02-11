@@ -325,6 +325,25 @@ slider.addEventListener('mousemove', (e) => {
         (slider.scrollWidth - rect.width) * percent;
 });
 
+// Dropdown categorias (tap en movil)
+const categoriasDropdown = document.querySelector('.dropdown');
+const categoriasBtn = document.querySelector('.btn-categorias');
+if (categoriasDropdown && categoriasBtn) {
+    categoriasBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        categoriasDropdown.classList.toggle('open');
+        const expanded = categoriasDropdown.classList.contains('open');
+        categoriasBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!categoriasDropdown.contains(e.target)) {
+            categoriasDropdown.classList.remove('open');
+            categoriasBtn.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
 // Modo nocturno
 const themeToggle = document.querySelector(".modo-nocturno");
 const themeIcon = themeToggle ? themeToggle.querySelector("i") : null;
