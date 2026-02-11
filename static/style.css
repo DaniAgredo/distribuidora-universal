@@ -640,6 +640,13 @@ flex-direction: row;
     .mensaje{
         font-size:18px;
     }
+    .marcas-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+    .marca-item{
+        height:90px;
+    }
 }
 
 
