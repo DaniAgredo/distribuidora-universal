@@ -413,7 +413,7 @@ flex-direction: row;
     align-items:center;
     gap:5px;
     width:max-content;
-    animation:scrollPagos 38s linear infinite;
+    animation:scrollPagos 32s linear infinite;
 
    
     
@@ -442,7 +442,7 @@ flex-direction: row;
 /* ANIMACION */
 @keyframes scrollPagos{
     from{
-        transform:translateX(100%);
+        transform:translateX(50%);
     }
     to{
         transform:translateX(-100%);
@@ -571,7 +571,7 @@ flex-direction: row;
     }
 
     .marquee-pagos{
-        animation-duration:45s;
+        animation-duration:38s;
     }
 }
 
