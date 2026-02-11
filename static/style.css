@@ -290,6 +290,10 @@ justify-content:center;
     transition:all .3s ease;
 }
 
+.login i{
+    color:#ffffff;
+}
+
 .login:hover{
     opacity:1;
 
