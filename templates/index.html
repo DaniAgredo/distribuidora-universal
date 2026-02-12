@@ -61,7 +61,7 @@
 
         <!-- COLUMNA IZQUIERDA -->
         <div class="banner-info">
-           <a href="#" class="tienda"><i class="fa-solid fa-cart-shopping tienda-icon"></i> Tienda Virtual</a>
+           <a href="/tienda" class="tienda" id="tiendaBtn"><i class="fa-solid fa-cart-shopping tienda-icon"></i> Tienda Virtual</a>
         
 
             <!-- BOTON CATEGORIAS -->
@@ -500,6 +500,14 @@ if (themeToggle) {
         e.preventDefault();
         setTheme(!document.body.classList.contains("dark"));
     });
+}
+
+// Tienda en movil
+const tiendaBtn = document.getElementById("tiendaBtn");
+if (tiendaBtn) {
+    tiendaBtn.addEventListener("touchstart", () => {
+        window.location.href = tiendaBtn.getAttribute("href");
+    }, { passive: true });
 }
 
 // Modal login / registro
