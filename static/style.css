@@ -493,9 +493,11 @@ flex-direction: row;
 }
 .banner-info > .tienda{
     grid-column:1;
+    margin-top:6px;
 }
 .banner-info > .buscador-categorias{
     grid-column:1;
+    margin-top:4px;
 }
 .banner-info > .banner-side{
     grid-column:2;
@@ -663,6 +665,8 @@ flex-direction: row;
     }
     .qr-catalogo{
         align-items:center;
+        max-width:200px;
+        padding:10px 8px;
     }
     .qr-img{
         width:104px;
@@ -767,19 +771,29 @@ body.logged-in .ruta-banner{
     flex-direction:column;
     align-items:center;
     gap:6px;
+    width:100%;
+    max-width:220px;
+    padding:12px 10px;
+    border-radius:16px;
+    background:rgba(255,255,255,0.16);
+    border:1px solid rgba(255,255,255,0.35);
+    box-shadow:0 12px 24px rgba(0,0,0,0.18);
+    backdrop-filter:blur(6px);
 }
 .qr-img{
     width:110px;
     height:110px;
     border-radius:14px;
     background:#f8fafc;
-    box-shadow:0 10px 24px rgba(0,0,0,0.2);
+    box-shadow:0 8px 18px rgba(0,0,0,0.22);
     object-fit:cover;
 }
 .qr-label{
     font-size:12px;
-    color:#eaf3ff;
+    color:#f0f6ff;
     text-align:center;
+    font-weight:600;
+    letter-spacing:0.2px;
 }
 .ruta-title{
     display:block;
