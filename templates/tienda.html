@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda - Distribuidora Universal</title>
+
+<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="/static/tienda.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="pagina-tienda">
+
+<header class="header">
+  <div class="fila-superior tienda-header">
+    <div class="tienda-left">
+      <div class="titulo tienda-title">
+        <span class="icono">&#127758;</span>
+        <div class="nombre">
+          Tienda Universal
+          
+        </div>
+      </div>
+      <form class="tienda-search tienda-search-inline" method="get" action="/tienda">
+        <input type="hidden" name="cat" value="{{ cat }}">
+        <button class="tienda-btn" type="submit">Buscar</button>
+        <input class="tienda-input" type="text" name="q" value="{{ q }}" placeholder="Buscar productos, marcas o categorias...">
+      </form>
+    </div>
+    <div class="acciones tienda-acciones">
+      <a href="https://wa.me/573215485315" class="whatsapp" target="_blank" rel="noopener">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="whatsapp-saludo">WhatsApp</span>
+      </a>
+      <a href="/" class="volver">&#8592; Volver</a>
+      <a href="/carrito" class="carrito-link"><i class="fa-solid fa-bag-shopping"></i> Carrito <span id="cartCount">0</span></a>
+      <a href="/cuenta" class="login"><i class="fa-solid fa-user login-icon"></i> <span class="login-text">Cuenta</span></a>
+      <a href="#" class="modo-nocturno" aria-label="Modo nocturno">
+        <i class="fa-solid fa-moon"></i>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="tienda-main">
+  {% set cat_images = [
+    '/static/images/banner1.jpg',
+    '/static/images/banner2.jpg',
+    '/static/images/banner3.jpg',
+    '/static/images/banner4.jpg',
+    '/static/images/banner5.jpg',
+    '/static/images/banner6.jpg',
+    '/static/images/banner7.jpg',
+    '/static/images/banner8.jpg'
+  ] %}
+  {% set cat_labels = {
+    'comestibles': 'Abarrotes'
+  } %}
+  <section class="tienda-chips" aria-label="Categorias">
+    <div class="chips-story">
+      <a class="chip-story {% if not cat %}active{% endif %}" href="/tienda{% if q %}?q={{ q|urlencode }}{% endif %}">
+        <span class="chip-circle">
+          <img src="/static/images/banner1.jpg" alt="Todos" loading="lazy">
+        </span>
+        <span class="chip-name">Todos</span>
+      </a>
+      {% for c in categorias %}
+      {% set nombre_categoria = cat_labels.get(c.slug, c.nombre) %}
+      <a class="chip-story {% if cat == c.slug %}active{% endif %}" href="/tienda?cat={{ c.slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
+        <span class="chip-circle">
+          <img src="{{ cat_images[loop.index0 % cat_images|length] }}" alt="{{ nombre_categoria }}" loading="lazy">
+        </span>
+        <span class="chip-name">{{ nombre_categoria }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    <div class="tienda-resumen">
+      {% if not db_missing %}
+        <span>{{ total }} articulos</span>
+      {% endif %}
+    </div>
+  </section>
+  <script>
+    const chipsWrap = document.querySelector('.chips-story');
+    if (chipsWrap) {
+      const updateFocus = () => {
+        const rect = chipsWrap.getBoundingClientRect();
+        const center = rect.left + rect.width / 2;
+        let best = null;
+        let bestDist = Infinity;
+        chipsWrap.querySelectorAll('.chip-story').forEach((chip) => {
+          const cRect = chip.getBoundingClientRect();
+          const cCenter = cRect.left + cRect.width / 2;
+          const dist = Math.abs(center - cCenter);
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = chip;
+          }
+        });
+        chipsWrap.querySelectorAll('.chip-story.is-focus').forEach((el) => el.classList.remove('is-focus'));
+        if (best) best.classList.add('is-focus');
+      };
+      chipsWrap.addEventListener('scroll', () => {
+        window.requestAnimationFrame(updateFocus);
+      });
+      chipsWrap.addEventListener('touchstart', updateFocus, { passive: true });
+      window.addEventListener('resize', updateFocus);
+      updateFocus();
+    }
+  </script>
+
+  {% if db_missing %}
+  <div class="tienda-empty">
+    <strong>Base de datos no encontrada.</strong>
+    <p>Ejecuta el script para crear el catalogo.</p>
+  </div>
+  {% endif %}
+
+  {% if not db_missing %}
+  <section class="tienda-grid" aria-label="Listado de productos">
+    {% if items %}
+      {% for item in items %}
+      <a class="tienda-card" href="/producto/{{ item.producto_id }}">
+        <div class="tienda-img">
+          <img src="{{ item.imagen or '/static/images/placeholder.svg' }}" alt="{{ item.producto }}" loading="lazy" onerror="this.src='/static/images/placeholder.svg'">
+        </div>
+        <div class="tienda-info">
+          <h3>{{ item.producto }}</h3>
+          <p>{{ item.categoria }} &middot; {% if item.marcas == 1 %}1 marca{% else %}{{ item.marcas }} marcas{% endif %}</p>
+          <span>Desde {{ item.precio_desde|cop }}</span>
+        </div>
+      </a>
+      {% endfor %}
+    {% else %}
+      <div class="tienda-empty">
+        <strong>No encontramos resultados.</strong>
+        <p>Prueba con otra palabra o cambia la categoria.</p>
+      </div>
+    {% endif %}
+  </section>
+
+  <div class="tienda-paginacion">
+    {% if page > 1 %}
+      <a href="/tienda?page={{ page - 1 }}{% if cat %}&cat={{ cat }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">Anterior</a>
+    {% endif %}
+    <span>Pagina {{ page }} de {{ pages }}</span>
+    {% if page < pages %}
+      <a href="/tienda?page={{ page + 1 }}{% if cat %}&cat={{ cat }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">Siguiente</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</main>
+
+<script>
+  const themeToggle = document.querySelector(".modo-nocturno");
+  const themeIcon = themeToggle ? themeToggle.querySelector("i") : null;
+  const setTheme = (isDark) => {
+    document.body.classList.toggle("dark", isDark);
+    if (themeToggle) themeToggle.classList.toggle("active", isDark);
+    if (themeIcon) {
+      themeIcon.classList.toggle("fa-moon", !isDark);
+      themeIcon.classList.toggle("fa-sun", isDark);
+      themeIcon.classList.toggle("fa-solid", !isDark);
+      themeIcon.classList.toggle("fa-regular", isDark);
+    }
+    localStorage.setItem("tema", isDark ? "dark" : "light");
+  };
+
+  const storedTheme = localStorage.getItem("tema");
+  if (storedTheme) setTheme(storedTheme === "dark");
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      setTheme(!document.body.classList.contains("dark"));
+    });
+  }
+
+  const CART_KEY = 'du_cart';
+  const cartCount = document.getElementById('cartCount');
+  const updateCartCount = () => {
+    if (!cartCount) return;
+    const stored = localStorage.getItem(CART_KEY);
+    let total = 0;
+    if (stored) {
+      try {
+        const cart = JSON.parse(stored);
+        total = cart.reduce((acc, item) => acc + (Number(item.qty) || 0), 0);
+      } catch (e) { total = 0; }
+    }
+    cartCount.textContent = total;
+  };
+  updateCartCount();
+  window.addEventListener('storage', updateCartCount);
+</script>
+
+</body>
+</html>
