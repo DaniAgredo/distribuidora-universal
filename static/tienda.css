@@ -1,6 +1,6 @@
 .pagina-tienda{
     background:linear-gradient(180deg,#eaf2ff 0%, #f6f9ff 100%);
-    padding-top:120px;
+    padding-top:160px;
 }
 
 .pagina-tienda .tienda-header{
@@ -23,6 +23,11 @@
 .pagina-tienda .tienda-title .icono{
     font-size:28px;
 }
+.pagina-tienda .tienda-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
 .tienda-main{
     max-width:1300px;
@@ -44,7 +49,23 @@
     right:8px;
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:2px;
+}
+.tienda-acciones a{
+    font-size:11px;
+    padding:4px 7px;
+}
+.tienda-acciones .whatsapp{
+    width:30px;
+    height:30px;
+}
+.tienda-acciones .volver-circle{
+    width:30px;
+    height:30px;
+}
+.tienda-acciones .carrito-link{
+    font-size:11px;
+    padding:4px 7px;
 }
 .tienda-search-inline{
     flex:1 1 420px;
@@ -115,16 +136,18 @@
     flex-direction:column;
     align-items:flex-start;
     gap:12px;
-    margin:4px 0 4px;
+    margin:10px 0 6px;
     position:relative;
     z-index:1;
+    width:100%;
 }
 .tienda-chips .chips-story{
     width:100%;
 }
 .chips-story{
-    background:rgba(255,255,255,0.6);
-    border-radius:16px;
+    background:transparent;
+    border-radius:0;
+    min-height:0;
 }
 .chips-story{
     display:flex;
@@ -135,7 +158,8 @@
     scroll-padding:40px;
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
-    min-height:120px;
+    min-height:96px;
+    scroll-behavior:smooth;
 }
 .chips-story::-webkit-scrollbar{
     display:none;
@@ -149,13 +173,13 @@
     color:#1f2937;
     font-size:12px;
     font-weight:600;
-    min-width:102px;
+    min-width:92px;
     scroll-snap-align:center;
     transition:transform .25s ease, box-shadow .25s ease;
 }
 .chip-circle{
-    width:86px;
-    height:86px;
+    width:78px;
+    height:78px;
     border-radius:50%;
     display:flex;
     align-items:center;
@@ -181,10 +205,10 @@
     box-shadow:0 10px 20px rgba(13,132,252,.25);
 }
 .chip-story.is-focus{
-    transform:scale(1.08);
+    transform:scale(1.12);
 }
 .chip-story:active{
-    transform:scale(1.08);
+    transform:scale(1.12);
 }
 .chip-story.is-focus .chip-circle{
     border-color:#0d84fc;
@@ -392,11 +416,12 @@
 
 @media(max-width:900px){
     .pagina-tienda{
-        padding-top:150px;
+        padding-top:190px;
     }
     .tienda-acciones{
         top:6px;
         right:6px;
+        gap:2px;
     }
     .tienda-search-wrap{
         justify-content:stretch;
@@ -433,14 +458,23 @@
 
 @media(max-width:600px){
     .pagina-tienda{
-        padding-top:170px;
+        padding-top:220px;
+    }
+    .tienda-acciones a{
+        font-size:10px;
+        padding:3px 6px;
+    }
+    .tienda-acciones .whatsapp,
+    .tienda-acciones .volver-circle{
+        width:26px;
+        height:26px;
     }
     .chip-story{
-        min-width:84px;
+        min-width:72px;
     }
     .chip-circle{
-        width:70px;
-        height:70px;
+        width:60px;
+        height:60px;
     }
     .tienda-grid{
         grid-template-columns:repeat(2, minmax(0, 1fr));
