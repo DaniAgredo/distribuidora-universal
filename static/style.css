@@ -3022,3 +3022,87 @@ body.dark .logout-modal{
         display:none;
     }
 }
+/* Cuenta overrides */
+body.logged-in .saludo-banner{
+    display:none;
+}
+body.logged-in .ruta-banner{
+    display:none;
+}
+.cuenta-hero{
+    grid-template-columns:1.1fr 1fr;
+}
+.cuenta-tienda{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items:center;
+    width:100%;
+    background:#dbe9ff;
+    border:1px solid #c6d9ff;
+    border-radius:14px;
+    padding:12px;
+    box-shadow:0 10px 22px rgba(16,59,124,.12);
+}
+.cuenta-tienda .tienda{
+    font-size:22px;
+    padding:8px 14px;
+    background:linear-gradient(135deg,#0d84fc,#42a5f5);
+    color:#ffffff;
+    box-shadow:0 10px 20px rgba(13,132,252,.25);
+}
+.cuenta-tienda .buscador-categorias{
+    width:100%;
+    background:transparent;
+}
+.cuenta-tienda .buscador{
+    background:#e1ecff;
+    color:#0f172a;
+    border:1px solid #c6d9ff;
+    width:100%;
+}
+.cuenta-tienda .buscador::placeholder{
+    color:#64748b;
+}
+.cuenta-tienda .btn-categorias{
+    background:#1d6ef2;
+}
+body.dark .cuenta-tienda{
+    background:#0f1b33;
+    border-color:#233252;
+    box-shadow:0 12px 24px rgba(0,0,0,.35);
+}
+body.dark .cuenta-tienda .buscador{
+    background:#0f1b33;
+    border-color:#233252;
+    color:#e6eefc;
+}
+body.dark .cuenta-tienda .buscador::placeholder{
+    color:#94a3b8;
+}
+body.dark .cuenta-tienda .btn-categorias{
+    background:#0d84fc;
+}
+@media(max-width:900px){
+    .cuenta-hero{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+    .cuenta-tienda{
+        align-items:stretch;
+        width:100%;
+        max-width:100%;
+        margin:0 auto;
+        padding:12px;
+    }
+    .cuenta-tienda .tienda{
+        width:100%;
+        justify-content:center;
+    }
+    .cuenta-tienda .buscador-categorias{
+        width:100%;
+    }
+    .cuenta-tienda .buscador{
+        width:100%;
+    }
+}

@@ -57,6 +57,22 @@
       <p>Administra tus pedidos, puntos y facturas en un solo lugar.</p>
       <div class="cuenta-status" id="cuentaStatus">Cuenta en revisi&#243;n</div>
     </div>
+    <div class="cuenta-tienda">
+      <a href="javascript:void(0)" class="tienda cuenta-tienda-btn" aria-disabled="true"><i class="fa-solid fa-cart-shopping tienda-icon"></i> Tienda Virtual</a>
+      <div class="buscador-categorias">
+        <div class="dropdown">
+          <button class="btn-categorias" aria-expanded="false">&#9776;</button>
+          <div class="dropdown-contenido">
+            <a href="/drogueria">&#128138; Droguer&#237;a</a>
+            <a href="/aseo">&#129529; Aseo</a>
+            <a href="/ferreteria">&#128295; Ferreter&#237;a</a>
+            <a href="/papeleria">&#128213; Papeler&#237;a</a>
+            <a href="/jabones">&#129530; Varios</a>
+          </div>
+        </div>
+        <input class="buscador" type="text" placeholder="Buscar productos...">
+      </div>
+    </div>
   </section>
 
   <section class="cuenta-resumen">
@@ -330,6 +346,7 @@
       }
     });
   }
+
 
   // Modo nocturno
   const themeToggle = document.querySelector(".modo-nocturno");
