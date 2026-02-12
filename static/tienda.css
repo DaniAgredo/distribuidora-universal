@@ -1,11 +1,16 @@
 .pagina-tienda{
     background:linear-gradient(180deg,#eaf2ff 0%, #f6f9ff 100%);
+    padding-top:120px;
 }
 
 .pagina-tienda .tienda-header{
     width:98%;
     max-width:1400px;
     margin:0 auto;
+    position:relative;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
 }
 .pagina-tienda .tienda-title .nombre{
     font-size:22px;
@@ -32,6 +37,14 @@
     gap:14px;
     flex:1;
     min-width:0;
+}
+.tienda-acciones{
+    position:absolute;
+    top:8px;
+    right:8px;
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 .tienda-search-inline{
     flex:1 1 420px;
@@ -103,14 +116,29 @@
     align-items:flex-start;
     gap:12px;
     margin:4px 0 4px;
+    position:relative;
+    z-index:1;
+}
+.tienda-chips .chips-story{
+    width:100%;
+}
+.chips-story{
+    background:rgba(255,255,255,0.6);
+    border-radius:16px;
 }
 .chips-story{
     display:flex;
     gap:14px;
     overflow-x:auto;
-    padding:4px 2px 8px;
+    padding:6px 6px 12px;
     scroll-snap-type:x mandatory;
-    scroll-padding:20px;
+    scroll-padding:40px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    min-height:120px;
+}
+.chips-story::-webkit-scrollbar{
+    display:none;
 }
 .chip-story{
     display:flex;
@@ -153,6 +181,9 @@
     box-shadow:0 10px 20px rgba(13,132,252,.25);
 }
 .chip-story.is-focus{
+    transform:scale(1.08);
+}
+.chip-story:active{
     transform:scale(1.08);
 }
 .chip-story.is-focus .chip-circle{
@@ -360,6 +391,13 @@
 }
 
 @media(max-width:900px){
+    .pagina-tienda{
+        padding-top:150px;
+    }
+    .tienda-acciones{
+        top:6px;
+        right:6px;
+    }
     .tienda-search-wrap{
         justify-content:stretch;
     }
@@ -394,6 +432,9 @@
 }
 
 @media(max-width:600px){
+    .pagina-tienda{
+        padding-top:170px;
+    }
     .chip-story{
         min-width:84px;
     }
@@ -407,6 +448,16 @@
     .tienda-card{
         min-height:220px;
     }
+}
+
+.tienda-acciones .volver-circle{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
 }
 
 body.dark .pagina-tienda{

@@ -35,7 +35,7 @@
         <i class="fa-brands fa-whatsapp"></i>
         <span class="whatsapp-saludo">WhatsApp</span>
       </a>
-      <a href="/" class="volver">&#8592; Volver</a>
+      <a href="/" class="volver volver-circle" aria-label="Volver">&#8592;</a>
       <a href="/carrito" class="carrito-link"><i class="fa-solid fa-bag-shopping"></i> Carrito <span id="cartCount">0</span></a>
       <a href="/cuenta" class="login"><i class="fa-solid fa-user login-icon"></i> <span class="login-text">Cuenta</span></a>
       <a href="#" class="modo-nocturno" aria-label="Modo nocturno">
@@ -67,15 +67,34 @@
         </span>
         <span class="chip-name">Todos</span>
       </a>
-      {% for c in categorias %}
-      {% set nombre_categoria = cat_labels.get(c.slug, c.nombre) %}
-      <a class="chip-story {% if cat == c.slug %}active{% endif %}" href="/tienda?cat={{ c.slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
-        <span class="chip-circle">
-          <img src="{{ cat_images[loop.index0 % cat_images|length] }}" alt="{{ nombre_categoria }}" loading="lazy">
-        </span>
-        <span class="chip-name">{{ nombre_categoria }}</span>
-      </a>
-      {% endfor %}
+      {% if categorias %}
+        {% for c in categorias %}
+        {% set nombre_categoria = cat_labels.get(c.slug, c.nombre) %}
+        <a class="chip-story {% if cat == c.slug %}active{% endif %}" href="/tienda?cat={{ c.slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
+          <span class="chip-circle">
+            <img src="{{ cat_images[loop.index0 % cat_images|length] }}" alt="{{ nombre_categoria }}" loading="lazy">
+          </span>
+          <span class="chip-name">{{ nombre_categoria }}</span>
+        </a>
+        {% endfor %}
+      {% else %}
+        {% set fallback = [
+          ('aseo','Aseo'),
+          ('drogueria','Droguería'),
+          ('ferreteria','Ferretería'),
+          ('papeleria','Papelería'),
+          ('abarrotes','Abarrotes'),
+          ('varios','Varios')
+        ] %}
+        {% for slug, nombre in fallback %}
+        <a class="chip-story" href="/tienda?cat={{ slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
+          <span class="chip-circle">
+            <img src="{{ cat_images[loop.index0 % cat_images|length] }}" alt="{{ nombre }}" loading="lazy">
+          </span>
+          <span class="chip-name">{{ nombre }}</span>
+        </a>
+        {% endfor %}
+      {% endif %}
     </div>
     <div class="tienda-resumen">
       {% if not db_missing %}
