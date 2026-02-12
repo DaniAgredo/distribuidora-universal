@@ -46,6 +46,11 @@
 </header>
 
 <main class="tienda-main">
+  <form class="tienda-search tienda-search-mobile" method="get" action="/tienda">
+    <input type="hidden" name="cat" value="{{ cat }}">
+    <button class="tienda-btn" type="submit">Buscar</button>
+    <input class="tienda-input" type="text" name="q" value="{{ q }}" placeholder="Buscar productos, marcas o categorias...">
+  </form>
   {% set cat_images = [
     '/static/images/banner1.jpg',
     '/static/images/banner2.jpg',
