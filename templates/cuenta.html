@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi cuenta</title>
+
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="pagina-cuenta">
+
+<!-- ========= HEADER ========= -->
+<header class="header">
+  <div class="fila-superior">
+
+    <!-- IZQUIERDA: LOGO + NOMBRE -->
+    <div class="titulo">
+      <span class="icono">&#127758;</span>
+      <div class="nombre">
+        DISTRIBUIDORA UNIVERSAL DE POPAYAN S.A.S
+        <small>Soluciones Comerciales Integrales</small>
+        <small>NIT: 900779615-8 Popay&aacute;n-Cauca &#10024; Colombia</small>
+      </div>
+    </div>
+
+    <!-- DERECHA: TIENDA + LOGIN -->
+    <div class="acciones">
+      <a href="https://wa.me/573215485315" class="whatsapp" target="_blank" rel="noopener">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="whatsapp-saludo">WhatsApp</span>
+      </a>
+      <a href="/" class="volver">&#8592; Volver</a>
+      <a href="#" class="login"><i class="fa-solid fa-user login-icon"></i> <span class="login-text">Cuenta</span></a>
+      <a href="#" class="logout-header">Salir</a>
+      <a href="#" class="modo-nocturno" aria-label="Modo nocturno">
+        <i class="fa-solid fa-moon"></i>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- FILA INFERIOR -->
+  <div class="fila-inferior">
+    <div class="franja-movimiento">
+      &#127760; CARRERA 5 # 7-13 BARRIO CENTRO &#128205; Popay&aacute;n, Cauca &mdash; &#128338; horario de atenci&oacute;n de Lunes a S&aacute;bado 8:00 AM &ndash; 4:00 PM &mdash; &#128230; Variedad real para hogares, negocios y campo...
+    </div>
+  </div>
+</header>
+
+<main class="contenido-pagina cuenta-main">
+  <section class="cuenta-hero">
+    <div class="cuenta-identidad">
+      <h1>Mi cuenta</h1>
+      <p>Administra tus pedidos, puntos y facturas en un solo lugar.</p>
+      <div class="cuenta-status" id="cuentaStatus">Cuenta en revisi&#243;n</div>
+    </div>
+    <div class="cuenta-tienda">
+      <a href="/" class="tienda"><i class="fa-solid fa-cart-shopping tienda-icon"></i> Tienda Virtual</a>
+      <div class="buscador-categorias">
+        <div class="dropdown">
+          <button class="btn-categorias" aria-expanded="false">&#9776;</button>
+          <div class="dropdown-contenido">
+            <a href="/drogueria">&#128138; Droguer&#237;a</a>
+            <a href="/aseo">&#129529; Aseo</a>
+            <a href="/ferreteria">&#128295; Ferreter&#237;a</a>
+            <a href="/papeleria">&#128213; Papeler&#237;a</a>
+            <a href="/jabones">&#129530; Varios</a>
+          </div>
+        </div>
+        <input class="buscador" type="text" placeholder="Buscar productos...">
+      </div>
+    </div>
+  </section>
+
+  <section class="cuenta-resumen">
+    <div class="cuenta-kpi">
+      <span>Pedidos totales</span>
+      <strong id="kpiPedidos">0</strong>
+    </div>
+    <div class="cuenta-kpi">
+      <span>En curso</span>
+      <strong id="kpiEnCurso">0</strong>
+    </div>
+    <div class="cuenta-kpi">
+      <span>Puntos</span>
+      <strong id="kpiPuntos">0</strong>
+    </div>
+    <div class="cuenta-kpi">
+      <span>Total facturado</span>
+      <strong id="kpiTotal">$0</strong>
+    </div>
+  </section>
+
+  <section class="cuenta-grid">
+    <article class="cuenta-card">
+      <h2>Datos del cliente</h2>
+      <dl class="cuenta-datos">
+        <div>
+          <dt>Nombre</dt>
+          <dd data-user="nombre">&mdash;</dd>
+        </div>
+        <div>
+          <dt>Negocio</dt>
+          <dd data-user="negocio">&mdash;</dd>
+        </div>
+        <div>
+          <dt>Correo</dt>
+          <dd data-user="correo">&mdash;</dd>
+        </div>
+        <div>
+          <dt>WhatsApp</dt>
+          <dd data-user="telefono">&mdash;</dd>
+        </div>
+        <div>
+          <dt>Direcci&oacute;n</dt>
+          <dd data-user="direccion">&mdash;</dd>
+        </div>
+        <div>
+          <dt>Pago preferido</dt>
+          <dd data-user="pago">&mdash;</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="cuenta-card">
+      <h2>Pedido en curso</h2>
+      <div class="cuenta-pedido" id="pedidoActual">
+        <p class="cuenta-empty">No hay pedidos en curso.</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="cuenta-card cuenta-historial">
+    <div class="cuenta-card-head">
+      <h2>Historial de pedidos</h2>
+      <span class="cuenta-total" id="historialTotal">Total: $0</span>
+    </div>
+    <div class="cuenta-tabla">
+      <table>
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody id="historialBody">
+          <tr>
+            <td colspan="4" class="cuenta-empty">A&#250;n no hay pedidos registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="cuenta-card cuenta-facturas">
+    <h2>Facturas virtuales</h2>
+    <ul class="facturas-list" id="facturasList">
+      <li class="facturas-empty">A&#250;n no hay facturas disponibles.</li>
+    </ul>
+  </section>
+</main>
+
+<!-- ========= FOOTER ========= -->
+<footer class="footer">
+  <div class="footer-contenido">
+
+    <!-- CENTRO DE AYUDA -->
+    <div class="footer-col">
+      <h4>Centro de ayuda</h4>
+      <div class="footer-ayuda">
+        <a class="ayuda-link" href="/envios">Env&#237;os y entregas</a>
+        <a class="ayuda-link" href="/devoluciones">Cambios y devoluciones</a>
+        <a class="ayuda-link" href="/pagos">M&eacute;todos de pago</a>
+        <a class="ayuda-link" href="javascript:void(0)">Preguntas frecuentes</a>
+        <a class="ayuda-link" href="javascript:void(0)">T&eacute;rminos y condiciones</a>
+        <a class="ayuda-link" href="javascript:void(0)">Pol&iacute;ticas de privacidad</a>
+      </div>
+    </div>
+
+    <!-- UBICANOS -->
+    <div class="footer-section">
+      <h4>Ub&iacute;canos</h4>
+      <p>
+        Carrera 5 # 7-13 Barrio Centro<br>
+        <a
+          href="https://www.google.com/maps?q=Popayan+Cauca+Carrera+5+7-13"
+          target="_blank"
+          class="map-link"
+          rel="noopener"
+        >
+          &#128205; Popayan - Cauca &middot; C&oacute;mo llegar
+        </a><br>
+        &#128242; 321 548 5315<br>
+        Distriuniversal@gmail.com
+      </p>
+    </div>
+
+    <!-- ESCRIBENOS -->
+    <div class="footer-section" id="contacto">
+      <h4>Escr&iacute;benos</h4>
+      <input type="email" placeholder="Tu correo" class="footer-input">
+      <textarea placeholder="Escribe tu mensaje..." class="footer-textarea"></textarea>
+      <button class="footer-btn">Enviar</button>
+    </div>
+
+    <!-- REDES SOCIALES -->
+    <div class="footer-section">
+      <h4>S&iacute;guenos</h4>
+      <div class="socials">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    &#8593;
+  </div>
+
+  <div class="footer-final">
+    <div class="brand">
+      &#169; 2026 DISTRIBUIDORA UNIVERSAL S.A.S Colombia &#174; &middot; Todos los derechos reservados
+    </div>
+  </div>
+</footer>
+
+<!-- ========= MODAL CUENTA ========= -->
+<div class="login-modal" id="loginModal" aria-hidden="true">
+  <div class="login-overlay" data-close="login"></div>
+  <div class="login-sheet" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <button class="login-close" type="button" aria-label="Cerrar">&#215;</button>
+    <div class="login-header">
+      <h3 id="loginTitle">Cuenta Distribuidora</h3>
+      <p>Accede o registra tu negocio para pedidos.</p>
+      <div class="login-greeting" aria-live="polite">
+        <span class="greet-line">Bienvenido</span>
+        <span class="greet-sub">Estamos listos para tu pedido.</span>
+      </div>
+    </div>
+    <div class="login-tabs">
+      <button type="button" class="login-tab active" data-tab="login">Iniciar sesi&#243;n</button>
+      <button type="button" class="login-tab" data-tab="registro">Registrarse</button>
+    </div>
+
+    <div class="login-panel active" data-panel="login">
+      <form class="login-form" id="loginForm">
+        <label>Correo</label>
+        <input type="email" name="correo" placeholder="correo@negocio.com" required>
+        <label>Contrase&ntilde;a</label>
+        <input type="password" name="password" placeholder="********" required>
+        <button type="submit" class="btn-primary">Ingresar</button>
+      </form>
+      <div class="login-divider">o</div>
+      <div class="login-social">
+        <button type="button" class="btn-social facebook">Continuar con Facebook</button>
+      </div>
+    </div>
+
+    <div class="login-panel" data-panel="registro">
+      <form class="registro-form" id="registroForm">
+        <div class="form-grid">
+          <div>
+            <label>Nombre completo</label>
+            <input type="text" name="nombre" placeholder="Don Jorge" required>
+          </div>
+          <div>
+            <label>Nombre del negocio</label>
+            <input type="text" name="negocio" placeholder="Tienda La Esquina" required>
+          </div>
+          <div>
+            <label>Direcci&oacute;n</label>
+            <input type="text" name="direccion" placeholder="Carrera, barrio, municipio" required>
+          </div>
+          <div>
+            <label>Observaciones de entrega</label>
+            <textarea name="observaciones" rows="3" placeholder="Casa con puertas rojas, al lado de..."></textarea>
+          </div>
+          <div>
+            <label>Correo</label>
+            <input type="email" name="correoRegistro" placeholder="correo@negocio.com" required>
+          </div>
+          <div>
+            <label>Contrase&ntilde;a</label>
+            <input type="password" name="passwordRegistro" placeholder="Crea tu Contrase&ntilde;a" required>
+          </div>
+          <div>
+            <label>Fecha de cumplea&ntilde;os</label>
+            <input type="text" name="cumple" placeholder="DD/MM" inputmode="numeric" maxlength="5">
+          </div>
+          <div>
+            <label>M&eacute;todo de pago preferido</label>
+            <select name="pago">
+              <option value="Nequi">Nequi</option>
+              <option value="Bancolombia">Bancolombia</option>
+              <option value="Efectivo">Efectivo</option>
+              <option value="Transferencia">Transferencia</option>
+            </select>
+          </div>
+          <div>
+            <label>WhatsApp</label>
+            <input type="tel" name="telefono" placeholder="+57 3xx xxx xxxx">
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">Crear cuenta</button>
+        <small class="form-note">Recuerda tu Contrase&ntilde;a. Guardamos Direcci&oacute;n, observaciones y M&eacute;todo de pago para pedidos r&#225;pidos.</small>
+      </form>
+    </div>
+    <div class="login-footer">
+      <button type="button" class="logout-modal">Salir de la cuenta</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Dropdown categorias (tap en movil)
+  const categoriasDropdown = document.querySelector('.dropdown');
+  const categoriasBtn = document.querySelector('.btn-categorias');
+  if (categoriasDropdown && categoriasBtn) {
+    const toggleCategorias = () => {
+      categoriasDropdown.classList.toggle('open');
+      const expanded = categoriasDropdown.classList.contains('open');
+      categoriasBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    };
+
+    categoriasBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleCategorias();
+    });
+    categoriasBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleCategorias();
+    }, { passive: false });
+
+    document.addEventListener('click', (e) => {
+      if (!categoriasDropdown.contains(e.target)) {
+        categoriasDropdown.classList.remove('open');
+        categoriasBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // Modo nocturno
+  const themeToggle = document.querySelector(".modo-nocturno");
+  const themeIcon = themeToggle ? themeToggle.querySelector("i") : null;
+  const setTheme = (isDark) => {
+    document.body.classList.toggle("dark", isDark);
+    if (themeToggle) themeToggle.classList.toggle("active", isDark);
+    if (themeIcon) {
+      themeIcon.classList.toggle("fa-moon", !isDark);
+      themeIcon.classList.toggle("fa-sun", isDark);
+      themeIcon.classList.toggle("fa-solid", !isDark);
+      themeIcon.classList.toggle("fa-regular", isDark);
+    }
+    localStorage.setItem("tema", isDark ? "dark" : "light");
+  };
+
+  const storedTheme = localStorage.getItem("tema");
+  if (storedTheme) setTheme(storedTheme === "dark");
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      setTheme(!document.body.classList.contains("dark"));
+    });
+  }
+
+  // Modal login / registro
+  const loginModal = document.getElementById("loginModal");
+  const loginTriggers = document.querySelectorAll(".login");
+  const loginClose = loginModal ? loginModal.querySelector(".login-close") : null;
+  const loginOverlay = loginModal ? loginModal.querySelector(".login-overlay") : null;
+  const loginTabs = loginModal ? loginModal.querySelectorAll(".login-tab") : [];
+  const loginPanels = loginModal ? loginModal.querySelectorAll(".login-panel") : [];
+
+  const openLogin = () => {
+    if (!loginModal) return;
+    loginModal.classList.add("open");
+    loginModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+  };
+  const closeLogin = () => {
+    if (!loginModal) return;
+    loginModal.classList.remove("open");
+    loginModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  };
+
+  loginTriggers.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openLogin();
+    });
+  });
+  if (loginClose) loginClose.addEventListener("click", closeLogin);
+  if (loginOverlay) loginOverlay.addEventListener("click", closeLogin);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLogin();
+  });
+
+  loginTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.tab;
+      loginTabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      loginPanels.forEach((p) => {
+        p.classList.toggle("active", p.dataset.panel === target);
+      });
+    });
+  });
+
+  const USER_KEY = "du_cliente";
+  const loginGreeting = loginModal ? loginModal.querySelector(".login-greeting") : null;
+  const greetLine = loginModal ? loginModal.querySelector(".greet-line") : null;
+  const greetSub = loginModal ? loginModal.querySelector(".greet-sub") : null;
+  const logoutBtns = document.querySelectorAll(".logout-modal");
+  const logoutHeaderBtns = document.querySelectorAll(".logout-header");
+  const loginForm = document.getElementById("loginForm");
+  let greetTimer;
+
+  const updateUserUI = (user) => {
+    const isLogged = !!(user && user.loggedIn);
+    const name = isLogged && user.nombre ? user.nombre : null;
+    clearInterval(greetTimer);
+    if (isLogged && name) {
+      document.body.classList.add("logged-in");
+      logoutBtns.forEach((el) => (el.style.display = "inline-flex"));
+      logoutHeaderBtns.forEach((el) => (el.style.display = "inline-flex"));
+      if (loginGreeting && greetLine && greetSub) {
+        loginGreeting.classList.add("show");
+        greetLine.textContent = `&#161;Bienvenido, ${name}!`;
+        const mensajes = [
+          `&#191;Qu&#233; tal va tu d&#237;a, ${name}?`,
+          `Listos para tu pedido, ${name}.`,
+          `Cuenta con nosotros hoy, ${name}.`
+        ];
+        let i = 0;
+        greetSub.textContent = mensajes[i];
+        greetTimer = setInterval(() => {
+          i = (i + 1) % mensajes.length;
+          greetSub.textContent = mensajes[i];
+        }, 3500);
+      }
+    } else {
+      document.body.classList.remove("logged-in");
+      logoutBtns.forEach((el) => (el.style.display = "none"));
+      logoutHeaderBtns.forEach((el) => (el.style.display = "none"));
+      if (loginGreeting) loginGreeting.classList.remove("show");
+    }
+  };
+
+  const fillLoginFromUser = (user) => {
+    if (!loginForm || !user) return;
+    if (user.correo) loginForm.correo.value = user.correo;
+    if (user.clave) loginForm.password.value = user.clave;
+  };
+
+  const storedUser = localStorage.getItem(USER_KEY);
+  if (storedUser) {
+    try {
+      const parsed = JSON.parse(storedUser);
+      fillLoginFromUser(parsed);
+      updateUserUI(parsed);
+    } catch (e) {
+      localStorage.removeItem(USER_KEY);
+    }
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const correo = loginForm.correo.value.trim();
+      let user = { nombre: "Cliente", correo: correo, clave: loginForm.password.value.trim(), loggedIn: true };
+      const saved = localStorage.getItem(USER_KEY);
+      if (saved) {
+        try { user = JSON.parse(saved); } catch (err) {}
+        user.correo = correo || user.correo;
+        user.clave = loginForm.password.value.trim() || user.clave;
+        user.loggedIn = true;
+      } else if (correo && correo.includes("@")) {
+        user.nombre = correo.split("@")[0];
+      }
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      updateUserUI(user);
+      closeLogin();
+      renderCuenta();
+    });
+  }
+
+  const registroForm = document.getElementById("registroForm");
+  if (registroForm) {
+    registroForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const user = {
+        nombre: registroForm.nombre.value.trim() || "Cliente",
+        negocio: registroForm.negocio.value.trim(),
+        direccion: registroForm.direccion.value.trim(),
+        observaciones: registroForm.observaciones.value.trim(),
+        correo: registroForm.correoRegistro.value.trim(),
+        clave: registroForm.passwordRegistro.value.trim(),
+        cumple: registroForm.cumple.value.trim(),
+        pago: registroForm.pago.value,
+        telefono: registroForm.telefono.value.trim(),
+        loggedIn: true
+      };
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      fillLoginFromUser(user);
+      updateUserUI(user);
+      closeLogin();
+      renderCuenta();
+    });
+  }
+
+  logoutBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const saved = localStorage.getItem(USER_KEY);
+      if (saved) {
+        try {
+          const user = JSON.parse(saved);
+          user.loggedIn = false;
+          localStorage.setItem(USER_KEY, JSON.stringify(user));
+          updateUserUI(user);
+          renderCuenta();
+        } catch (err) {
+          localStorage.removeItem(USER_KEY);
+          updateUserUI(null);
+          renderCuenta();
+        }
+      } else {
+        updateUserUI(null);
+        renderCuenta();
+      }
+    });
+  });
+  logoutHeaderBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const saved = localStorage.getItem(USER_KEY);
+      if (saved) {
+        try {
+          const user = JSON.parse(saved);
+          user.loggedIn = false;
+          localStorage.setItem(USER_KEY, JSON.stringify(user));
+          updateUserUI(user);
+          renderCuenta();
+        } catch (err) {
+          localStorage.removeItem(USER_KEY);
+          updateUserUI(null);
+          renderCuenta();
+        }
+      } else {
+        updateUserUI(null);
+        renderCuenta();
+      }
+    });
+  });
+
+  const formatCOP = (value) => {
+    const safeValue = Number(value) || 0;
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      maximumFractionDigits: 0
+    }).format(safeValue);
+  };
+
+  const ensureStore = (key, fallback) => {
+    const stored = localStorage.getItem(key);
+    if (stored === null) {
+      localStorage.setItem(key, JSON.stringify(fallback));
+      return fallback;
+    }
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      localStorage.setItem(key, JSON.stringify(fallback));
+      return fallback;
+    }
+  };
+
+  const renderCuenta = () => {
+    const statusEl = document.getElementById("cuentaStatus");
+    const userRaw = localStorage.getItem(USER_KEY);
+    let user = null;
+    if (userRaw) {
+      try { user = JSON.parse(userRaw); } catch (e) { user = null; }
+    }
+    const isLogged = !!(user && user.loggedIn);
+
+    const fields = {
+      nombre: "nombre",
+      negocio: "negocio",
+      correo: "correo",
+      telefono: "telefono",
+      direccion: "direccion",
+      pago: "pago"
+    };
+    Object.keys(fields).forEach((key) => {
+      const el = document.querySelector(`[data-user="${key}"]`);
+      if (!el) return;
+      el.textContent = isLogged && user && user[fields[key]] ? user[fields[key]] : "&mdash;";
+    });
+
+    if (statusEl) {
+      statusEl.textContent = isLogged ? "Cuenta activa" : "Inicia sesi&#243;n para ver tus datos";
+      statusEl.classList.toggle("activo", isLogged);
+    }
+
+    const pedidos = ensureStore("du_pedidos", []);
+    const facturas = ensureStore("du_facturas", []);
+    const puntosStore = localStorage.getItem("du_puntos");
+    const puntos = puntosStore ? Number(puntosStore) || 0 : 0;
+
+    const pedidosList = Array.isArray(pedidos) ? pedidos : [];
+    const facturasList = Array.isArray(facturas) ? facturas : [];
+
+    const totalPedidos = pedidosList.length;
+    const enCurso = pedidosList.filter((p) => p && typeof p.estado === "string" && p.estado.toLowerCase().includes("curso")).length;
+    const totalValor = pedidosList.reduce((acc, item) => acc + (Number(item && item.total) || 0), 0);
+
+    const kpiPedidos = document.getElementById("kpiPedidos");
+    const kpiEnCurso = document.getElementById("kpiEnCurso");
+    const kpiPuntos = document.getElementById("kpiPuntos");
+    const kpiTotal = document.getElementById("kpiTotal");
+
+    if (kpiPedidos) kpiPedidos.textContent = totalPedidos;
+    if (kpiEnCurso) kpiEnCurso.textContent = enCurso;
+    if (kpiPuntos) kpiPuntos.textContent = puntos;
+    if (kpiTotal) kpiTotal.textContent = formatCOP(totalValor);
+
+    const historialTotal = document.getElementById("historialTotal");
+    if (historialTotal) historialTotal.textContent = `Total: ${formatCOP(totalValor)}`;
+
+    const pedidoActual = document.getElementById("pedidoActual");
+    if (pedidoActual) {
+      const actual = pedidosList.find((p) => p && typeof p.estado === "string" && p.estado.toLowerCase().includes("curso"));
+      if (!actual) {
+        pedidoActual.innerHTML = '<p class="cuenta-empty">No hay pedidos en curso.</p>';
+      } else {
+        pedidoActual.innerHTML = `
+          <div class="pedido-actual-card">
+            <h3>Pedido #${actual.id || "&mdash;"}</h3>
+            <p>${actual.detalle || "Pedido en preparaci&#243;n"}</p>
+            <div class="pedido-actual-meta">
+              <span>Estado: ${actual.estado || "En curso"}</span>
+              <span>Valor: ${formatCOP(actual.total)}</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    const historialBody = document.getElementById("historialBody");
+    if (historialBody) {
+      if (!pedidosList.length) {
+        historialBody.innerHTML = '<tr><td colspan="4" class="cuenta-empty">A&#250;n no hay pedidos registrados.</td></tr>';
+      } else {
+        historialBody.innerHTML = pedidosList.map((pedido) => `
+          <tr>
+            <td>#${pedido.id || "&mdash;"}</td>
+            <td>${pedido.fecha || "&mdash;"}</td>
+            <td>${pedido.estado || "&mdash;"}</td>
+            <td>${formatCOP(pedido.total)}</td>
+          </tr>
+        `).join("");
+      }
+    }
+
+    const facturasEl = document.getElementById("facturasList");
+    if (facturasEl) {
+      if (!facturasList.length) {
+        facturasEl.innerHTML = '<li class="facturas-empty">A&#250;n no hay facturas disponibles.</li>';
+      } else {
+        facturasEl.innerHTML = facturasList.map((factura) => `
+          <li class="facturas-item">
+            <div>
+              <strong>Factura #${factura.id || "&mdash;"}</strong>
+              <span>${factura.fecha || "&mdash;"}</span>
+            </div>
+            <span>${formatCOP(factura.total)}</span>
+          </li>
+        `).join("");
+      }
+    }
+  };
+
+  renderCuenta();
+</script>
+
+</body>
+</html>
+

@@ -687,6 +687,7 @@ if (loginForm) {
         localStorage.setItem(USER_KEY, JSON.stringify(user));
         updateUserUI(user);
         closeLogin();
+        window.location.href = "/cuenta";
     });
 }
 
@@ -710,6 +711,7 @@ if (registroForm) {
         fillLoginFromUser(user);
         updateUserUI(user);
         closeLogin();
+        window.location.href = "/cuenta";
     });
 }
 

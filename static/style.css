@@ -1658,6 +1658,244 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     margin:0 auto;
     padding:10px 20px 40px;
 }
+/* ===== CUENTA ===== */
+.pagina-cuenta{
+    background:linear-gradient(180deg,#eaf2ff 0%, #f6f9ff 100%);
+}
+.cuenta-main{
+    max-width:1300px;
+}
+.cuenta-hero{
+    margin:12px auto 0;
+    padding:16px 18px;
+    background:#eef4ff;
+    border:1px solid #d8e6ff;
+    border-radius:16px;
+    box-shadow:0 12px 26px rgba(16,59,124,.14);
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:16px;
+    align-items:center;
+}
+.cuenta-identidad h1{
+    margin:0 0 6px;
+    font-size:32px;
+    color:#103b7c;
+    font-family:'Poppins', sans-serif;
+}
+.cuenta-identidad p{
+    margin:0 0 10px;
+    color:#1f2937;
+    font-size:15px;
+}
+.cuenta-status{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid rgba(16,59,124,.2);
+    background:rgba(16,59,124,.08);
+    color:#103b7c;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.3px;
+}
+.cuenta-status.activo{
+    background:rgba(37,211,102,.16);
+    border-color:rgba(37,211,102,.35);
+    color:#0f5132;
+}
+.cuenta-tienda{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items:center;
+}
+.cuenta-tienda .tienda{
+    font-size:22px;
+    padding:6px 12px;
+}
+.cuenta-tienda .buscador-categorias{
+    width:min(560px, 100%);
+}
+.cuenta-resumen{
+    margin-top:14px;
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:12px;
+}
+.cuenta-kpi{
+    background:#f3f7ff;
+    border:1px solid #d6e3ff;
+    border-radius:14px;
+    padding:12px 14px;
+    text-align:center;
+    box-shadow:0 8px 18px rgba(16,59,124,.08);
+    font-family:'Poppins', sans-serif;
+}
+.cuenta-kpi span{
+    display:block;
+    font-size:12px;
+    color:#475569;
+    letter-spacing:.3px;
+    margin-bottom:6px;
+}
+.cuenta-kpi strong{
+    font-size:20px;
+    color:#103b7c;
+}
+.cuenta-grid{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:16px;
+}
+.cuenta-card{
+    background:#f8fbff;
+    border:1px solid #dbe7ff;
+    border-radius:14px;
+    padding:14px 16px;
+    box-shadow:0 10px 20px rgba(16,59,124,.1);
+}
+.cuenta-card h2{
+    margin:0 0 10px;
+    font-size:18px;
+    color:#103b7c;
+    font-family:'Poppins', sans-serif;
+}
+.cuenta-datos{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:10px;
+}
+.cuenta-datos div{
+    background:#eef4ff;
+    border-radius:10px;
+    padding:8px 10px;
+    border:1px solid #d6e3ff;
+}
+.cuenta-datos dt{
+    font-size:11px;
+    color:#64748b;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+}
+.cuenta-datos dd{
+    margin:4px 0 0;
+    font-size:13px;
+    color:#0f172a;
+    font-weight:600;
+}
+.cuenta-pedido{
+    min-height:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.pedido-actual-card{
+    width:100%;
+    background:#eef4ff;
+    border:1px solid #d6e3ff;
+    border-radius:12px;
+    padding:12px 14px;
+}
+.pedido-actual-card h3{
+    margin:0 0 6px;
+    font-size:16px;
+    color:#103b7c;
+}
+.pedido-actual-card p{
+    margin:0 0 10px;
+    font-size:13px;
+    color:#1f2937;
+}
+.pedido-actual-meta{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    color:#475569;
+}
+.cuenta-empty{
+    font-size:13px;
+    color:#64748b;
+    text-align:center;
+    background:#eef4ff;
+    border:1px dashed #c7d5f5;
+    padding:10px 12px;
+    border-radius:10px;
+}
+.cuenta-historial{
+    margin-top:16px;
+}
+.cuenta-card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+}
+.cuenta-total{
+    font-size:13px;
+    color:#475569;
+}
+.cuenta-tabla{
+    overflow-x:auto;
+}
+.cuenta-tabla table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+    font-family:'Poppins', sans-serif;
+}
+.cuenta-tabla th,
+.cuenta-tabla td{
+    text-align:left;
+    padding:10px 8px;
+    border-bottom:1px solid #dbe7ff;
+}
+.cuenta-tabla th{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+    color:#64748b;
+}
+.cuenta-facturas{
+    margin-top:16px;
+}
+.facturas-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+    display:grid;
+    gap:8px;
+}
+.facturas-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:#eef4ff;
+    border:1px solid #d6e3ff;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:13px;
+    color:#1f2937;
+}
+.facturas-item span{
+    display:block;
+    font-size:12px;
+    color:#64748b;
+}
+.facturas-empty{
+    background:#eef4ff;
+    border:1px dashed #c7d5f5;
+    border-radius:10px;
+    padding:10px 12px;
+    text-align:center;
+    color:#64748b;
+    font-size:13px;
+}
 section.nosotros{
     max-width:1100px;
     margin:18px auto;
@@ -2306,6 +2544,96 @@ body.dark .marca-item{
 
 body.dark .pagina-nosotros{
     background:linear-gradient(180deg,#0e1a2b 0%, #16263d 100%);
+}
+body.dark .pagina-cuenta{
+    background:linear-gradient(180deg,#0e1a2b 0%, #16263d 100%);
+}
+body.dark .cuenta-hero{
+    background:#0f1b33;
+    border-color:#1e2a40;
+    box-shadow:0 12px 24px rgba(0,0,0,.35);
+}
+body.dark .cuenta-identidad p{
+    color:#cbd5f5;
+}
+body.dark .cuenta-status{
+    background:rgba(125,160,255,.16);
+    border-color:rgba(125,160,255,.35);
+    color:#cfe1ff;
+}
+body.dark .cuenta-status.activo{
+    background:rgba(34,197,94,.18);
+    border-color:rgba(34,197,94,.35);
+    color:#bbf7d0;
+}
+body.dark .cuenta-kpi,
+body.dark .cuenta-card{
+    background:#15243c;
+    border-color:#1e2a40;
+    box-shadow:0 10px 20px rgba(0,0,0,.35);
+}
+body.dark .cuenta-kpi span,
+body.dark .cuenta-total,
+body.dark .pedido-actual-card p,
+body.dark .pedido-actual-meta,
+body.dark .cuenta-tabla th{
+    color:#cbd5f5;
+}
+body.dark .cuenta-kpi strong,
+body.dark .cuenta-card h2,
+body.dark .pedido-actual-card h3{
+    color:#e6f0ff;
+}
+body.dark .cuenta-datos div,
+body.dark .pedido-actual-card,
+body.dark .cuenta-empty,
+body.dark .facturas-item,
+body.dark .facturas-empty{
+    background:#0f1b33;
+    border-color:#233252;
+}
+body.dark .cuenta-datos dd{
+    color:#e6f0ff;
+}
+body.dark .cuenta-tabla td{
+    color:#e6eefc;
+}
+body.dark .cuenta-tabla th,
+body.dark .cuenta-datos dt{
+    color:#94a3b8;
+}
+
+@media(max-width:900px){
+    .cuenta-hero{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+    .cuenta-tienda{
+        align-items:stretch;
+    }
+    .cuenta-resumen{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+    }
+    .cuenta-grid{
+        grid-template-columns:1fr;
+    }
+    .cuenta-datos{
+        grid-template-columns:1fr;
+    }
+    .pedido-actual-meta{
+        flex-direction:column;
+        gap:4px;
+        align-items:flex-start;
+    }
+}
+
+@media(max-width:600px){
+    .cuenta-hero{
+        padding:14px;
+    }
+    .cuenta-resumen{
+        grid-template-columns:1fr;
+    }
 }
 
 body.dark .nosotros-top{

@@ -22,6 +22,10 @@ def devoluciones():
 def pagos():
     return render_template("pagos.html")
 
+@app.route("/cuenta")
+def cuenta():
+    return render_template("cuenta.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
 
