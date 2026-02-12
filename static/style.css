@@ -1,4 +1,4 @@
-﻿body{
+body{
 margin:0;
 font-family:Arial;
 background:rgb(231, 240, 250)
@@ -198,7 +198,7 @@ justify-content:center;
 
 /* TEXTO FINO */
 .nit::before{
-    content:"🧾 ";
+    content:"?? ";
 }
 
 
@@ -924,7 +924,7 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
 
-/* HOVER â€“ IMAGEN ACTIVA */
+/* HOVER – IMAGEN ACTIVA */
 .slide:hover{
     transform:
         perspective(900px)
@@ -1213,7 +1213,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     max-width:1100px;
     margin:30px auto;
     padding:20px 18px;
-    background:#eef4ff;
+    background:#e1ecff;
     border-radius:12px;
     box-shadow:0 12px 26px rgba(16,59,124,.12);
 }
@@ -1668,7 +1668,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
 .cuenta-hero{
     margin:12px auto 0;
     padding:16px 18px;
-    background:#eef4ff;
+    background:#e1ecff;
     border:1px solid #d8e6ff;
     border-radius:16px;
     box-shadow:0 12px 26px rgba(16,59,124,.14);
@@ -1723,7 +1723,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     gap:12px;
 }
 .cuenta-kpi{
-    background:#f3f7ff;
+    background:#e1ecff;
     border:1px solid #d6e3ff;
     border-radius:14px;
     padding:12px 14px;
@@ -1749,7 +1749,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     gap:16px;
 }
 .cuenta-card{
-    background:#f8fbff;
+    background:#e1ecff;
     border:1px solid #dbe7ff;
     border-radius:14px;
     padding:14px 16px;
@@ -1767,7 +1767,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     gap:10px;
 }
 .cuenta-datos div{
-    background:#eef4ff;
+    background:#e1ecff;
     border-radius:10px;
     padding:8px 10px;
     border:1px solid #d6e3ff;
@@ -1792,7 +1792,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
 }
 .pedido-actual-card{
     width:100%;
-    background:#eef4ff;
+    background:#e1ecff;
     border:1px solid #d6e3ff;
     border-radius:12px;
     padding:12px 14px;
@@ -1817,7 +1817,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     font-size:13px;
     color:#64748b;
     text-align:center;
-    background:#eef4ff;
+    background:#e1ecff;
     border:1px dashed #c7d5f5;
     padding:10px 12px;
     border-radius:10px;
@@ -1872,7 +1872,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     align-items:center;
     justify-content:space-between;
     gap:12px;
-    background:#eef4ff;
+    background:#e1ecff;
     border:1px solid #d6e3ff;
     border-radius:10px;
     padding:10px 12px;
@@ -1885,7 +1885,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     color:#64748b;
 }
 .facturas-empty{
-    background:#eef4ff;
+    background:#e1ecff;
     border:1px dashed #c7d5f5;
     border-radius:10px;
     padding:10px 12px;
@@ -1896,7 +1896,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
 section.nosotros{
     max-width:1100px;
     margin:18px auto;
-    background:#eef4ff;
+    background:#e1ecff;
     padding:12px 18px;
     border-radius:12px;
     box-shadow:0 10px 30px rgba(16,59,124,.15);
@@ -2268,7 +2268,7 @@ section.nosotros p{
     }
 }
 
-/* ===== MINI TABS (MISIÓN / VISIÓN) ===== */
+/* ===== MINI TABS (MISI�N / VISI�N) ===== */
 .side-tabs{
     position:fixed;
     left:16px;
@@ -3016,3 +3016,5 @@ body.dark .logout-modal{
     border-color:#1e2a40;
     color:#e2e8f0;
 }
+
+
