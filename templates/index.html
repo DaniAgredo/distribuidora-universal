@@ -309,11 +309,6 @@
       <div class="login-divider">o</div>
       <div class="login-social">
         <button type="button" class="btn-social facebook">Continuar con Facebook</button>
-        <button type="button" class="btn-social qr">Ingresar con QR</button>
-      </div>
-      <div class="qr-panel" id="qrPanel">
-        <div class="qr-box" aria-hidden="true"></div>
-        <p>Escanea tu c&oacute;digo QR para entrar r&aacute;pido.</p>
       </div>
     </div>
 
@@ -529,8 +524,6 @@ const loginClose = loginModal ? loginModal.querySelector(".login-close") : null;
 const loginOverlay = loginModal ? loginModal.querySelector(".login-overlay") : null;
 const loginTabs = loginModal ? loginModal.querySelectorAll(".login-tab") : [];
 const loginPanels = loginModal ? loginModal.querySelectorAll(".login-panel") : [];
-const qrBtn = loginModal ? loginModal.querySelector(".btn-social.qr") : null;
-const qrPanel = loginModal ? loginModal.querySelector("#qrPanel") : null;
 
 const openLogin = () => {
     if (!loginModal) return;
@@ -568,11 +561,6 @@ loginTabs.forEach((tab) => {
     });
 });
 
-if (qrBtn && qrPanel) {
-    qrBtn.addEventListener("click", () => {
-        qrPanel.classList.toggle("open");
-    });
-}
 
 const USER_KEY = "du_cliente";
 const loginGreeting = loginModal ? loginModal.querySelector(".login-greeting") : null;
@@ -585,15 +573,10 @@ const bannerLine = bannerGreeting ? bannerGreeting.querySelector(".saludo-banner
 const bannerText = bannerGreeting ? bannerGreeting.querySelector(".saludo-banner-text") : null;
 const loginForm = document.getElementById("loginForm");
 const rutaTextEls = document.querySelectorAll(".ruta-text");
-const qrImg = document.querySelector(".qr-img");
 let greetTimer;
 let bannerTimer;
 let rutaTimer;
 
-if (qrImg) {
-    const catalogoUrl = `${window.location.origin}/catalogo`;
-    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(catalogoUrl)}`;
-}
 
 const updateUserUI = (user) => {
     const isLogged = !!(user && user.loggedIn);
