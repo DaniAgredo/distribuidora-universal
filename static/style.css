@@ -497,11 +497,15 @@ flex-direction: row;
 .banner-info > .buscador-categorias{
     grid-column:1;
 }
-.banner-info > .ruta-banner{
+.banner-info > .banner-side{
     grid-column:2;
     grid-row:2 / span 2;
-    align-self:start;
-    text-align:left;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-self:stretch;
+    align-items:center;
+    justify-content:center;
 }
 /* CONTENEDOR INVISIBLE */
 .franja-pagos{
@@ -650,11 +654,19 @@ flex-direction: row;
     .banner-info > .buscador-categorias{
         order:2;
     }
-    .banner-info > .ruta-banner{
+    .banner-info > .banner-side{
         order:3;
-        align-self:flex-start;
-        text-align:left;
-        margin-top:6px;
+        align-self:stretch;
+        width:100%;
+        align-items:center;
+        justify-content:center;
+    }
+    .qr-catalogo{
+        align-items:center;
+    }
+    .qr-img{
+        width:104px;
+        height:104px;
     }
 .tienda{
         font-size:15px;
@@ -749,6 +761,25 @@ body.logged-in .saludo-banner{
 }
 body.logged-in .ruta-banner{
     display:block;
+}
+.qr-catalogo{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+}
+.qr-img{
+    width:110px;
+    height:110px;
+    border-radius:14px;
+    background:#f8fafc;
+    box-shadow:0 10px 24px rgba(0,0,0,0.2);
+    object-fit:cover;
+}
+.qr-label{
+    font-size:12px;
+    color:#eaf3ff;
+    text-align:center;
 }
 .ruta-title{
     display:block;
@@ -2607,7 +2638,7 @@ body.modal-open{
     height:120px;
     margin:0 auto 8px;
     border-radius:12px;
-    background:repeating-linear-gradient(45deg, #dbeafe, #dbeafe 4px, #eff6ff 4px, #eff6ff 8px);
+    background:#f8fafc url("/static/images/qr-demo.svg") center/cover no-repeat;
 }
 .form-grid{
     display:grid;

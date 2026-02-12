@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Distribuidora Universal</title>
@@ -18,7 +19,7 @@
 
     <!-- IZQUIERDA: LOGO + NOMBRE -->
     <div class="titulo">
-      <span class="icono">&#127757;</span>
+      <span class="icono">&#127758;</span>
       <div class="nombre">
         DISTRIBUIDORA UNIVERSAL DE POPAYÁN S.A.S
         <small>Tiendas de Mercancía General, incluyendo Grandes Almacenes</small>
@@ -64,10 +65,6 @@
              <span class="saludo-banner-line">¡Bienvenido!</span>
              <span class="saludo-banner-text">Estamos listos para tu pedido.</span>
            </div>
-           <div class="ruta-banner" aria-live="polite">
-             <span class="ruta-title">Rutas para tu zona</span>
-             <span class="ruta-text">El carro va martes y viernes. Actualizamos esta info cada semana.</span>
-           </div>
            <a href="#" class="tienda"><i class="fa-solid fa-cart-shopping tienda-icon"></i> Tienda Virtual</a>
         
 
@@ -88,6 +85,16 @@
              <!-- BUSCADOR -->
         <input class="buscador" type="text" placeholder="Buscar productos...">
            <!-- FRANJA METODOS DE PAGO -->
+     </div>
+     <div class="banner-side">
+       <div class="ruta-banner" aria-live="polite">
+         <span class="ruta-title">Rutas para tu zona</span>
+         <span class="ruta-text">El carro va martes y viernes. Actualizamos esta info cada semana.</span>
+       </div>
+       <div class="qr-catalogo">
+         <img class="qr-img" alt="QR catálogo">
+         <span class="qr-label">Escanea y abre el catálogo</span>
+       </div>
      </div>
     </div>
     
@@ -362,7 +369,7 @@
           </div>
         </div>
         <button type="submit" class="btn-primary">Crear cuenta</button>
-        <small class="form-note">Recuerda tu contrase&ntilde;a. Guardamos direcci&oacute;n, observaciones y m&eacute;todo de pago para pedidos r&aacute;pidos.</small>
+        <small class="form-note">Recuerda tu contraseña. Guardamos direcci&oacute;n, observaciones y m&eacute;todo de pago para pedidos r&aacute;pidos.</small>
       </form>
     </div>
     <div class="login-footer">
@@ -584,9 +591,15 @@ const bannerLine = bannerGreeting ? bannerGreeting.querySelector(".saludo-banner
 const bannerText = bannerGreeting ? bannerGreeting.querySelector(".saludo-banner-text") : null;
 const loginForm = document.getElementById("loginForm");
 const rutaTextEls = document.querySelectorAll(".ruta-text");
+const qrImg = document.querySelector(".qr-img");
 let greetTimer;
 let bannerTimer;
 let rutaTimer;
+
+if (qrImg) {
+    const catalogoUrl = `${window.location.origin}/catalogo`;
+    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(catalogoUrl)}`;
+}
 
 const updateUserUI = (user) => {
     const isLogged = !!(user && user.loggedIn);
