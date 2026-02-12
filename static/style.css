@@ -2328,7 +2328,8 @@ section.nosotros p{
     padding:10px 12px;
     font-size:13px;
     line-height:1.6;
-    color:#334155;
+    color:#0f172a;
+    font-weight:500;
     box-shadow:0 12px 26px rgba(0,0,0,.2);
     z-index:120;
     backdrop-filter:blur(12px);
@@ -3016,5 +3017,6 @@ body.dark .logout-modal{
     border-color:#1e2a40;
     color:#e2e8f0;
 }
+
 
 
