@@ -3017,6 +3017,8 @@ body.dark .logout-modal{
     border-color:#1e2a40;
     color:#e2e8f0;
 }
-
-
-
+@media(max-width:768px){
+    body.pagina-cuenta .fila-inferior{
+        display:none;
+    }
+}
