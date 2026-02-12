@@ -195,6 +195,7 @@ justify-content:center;
 
 
 
+
 /* TEXTO FINO */
 .nit::before{
     content:"🧾 ";
@@ -481,33 +482,22 @@ flex-direction: row;
     background:linear-gradient(90deg,#103b7c,#1888f8);
     padding:20px;
     border-radius:5px;
-    display:grid;
-    grid-template-columns:minmax(0, 1fr) minmax(160px, 260px);
-    column-gap:14px;
-    row-gap:10px;
-    align-items:start;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    text-align:center;
     overflow:visible;
 }
 .banner-info > .saludo-banner{
-    grid-column:1 / -1;
+    align-self:stretch;
 }
 .banner-info > .tienda{
-    grid-column:1;
-    margin-top:6px;
+    margin-top:12px;
 }
 .banner-info > .buscador-categorias{
-    grid-column:1;
-    margin-top:4px;
-}
-.banner-info > .banner-side{
-    grid-column:2;
-    grid-row:2 / span 2;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    align-self:stretch;
-    align-items:center;
-    justify-content:center;
+    margin-top:8px;
+    width:min(560px, 100%);
 }
 /* CONTENEDOR INVISIBLE */
 .franja-pagos{
@@ -656,22 +646,6 @@ flex-direction: row;
     .banner-info > .buscador-categorias{
         order:2;
     }
-    .banner-info > .banner-side{
-        order:3;
-        align-self:stretch;
-        width:100%;
-        align-items:center;
-        justify-content:center;
-    }
-    .qr-catalogo{
-        align-items:center;
-        max-width:200px;
-        padding:10px 8px;
-    }
-    .qr-img{
-        width:104px;
-        height:104px;
-    }
 .tienda{
         font-size:15px;
         padding:6px 8px;
@@ -762,38 +736,10 @@ body.logged-in .saludo-banner{
     padding-top:2px;
     margin:0;
     max-width:100%;
+    text-align:center;
 }
 body.logged-in .ruta-banner{
     display:block;
-}
-.qr-catalogo{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:6px;
-    width:100%;
-    max-width:220px;
-    padding:12px 10px;
-    border-radius:16px;
-    background:rgba(255,255,255,0.16);
-    border:1px solid rgba(255,255,255,0.35);
-    box-shadow:0 12px 24px rgba(0,0,0,0.18);
-    backdrop-filter:blur(6px);
-}
-.qr-img{
-    width:110px;
-    height:110px;
-    border-radius:14px;
-    background:#f8fafc;
-    box-shadow:0 8px 18px rgba(0,0,0,0.22);
-    object-fit:cover;
-}
-.qr-label{
-    font-size:12px;
-    color:#f0f6ff;
-    text-align:center;
-    font-weight:600;
-    letter-spacing:0.2px;
 }
 .ruta-title{
     display:block;
@@ -2083,6 +2029,7 @@ section.nosotros p{
         padding:8px 9px;
         font-size:11px;
         line-height:1.4;
+        background:rgba(238,242,248,.2);
     }
 }
 
@@ -2140,7 +2087,7 @@ section.nosotros p{
     transform:translateY(-50%);
     width:200px;
     max-width:calc(100vw - 120px);
-    background:rgba(238,242,248,.58);
+    background:rgba(238,242,248,.24);
     border:1px solid rgba(120,130,145,.2);
     border-radius:12px;
     padding:10px 12px;
@@ -2458,6 +2405,18 @@ body.dark .acciones .modo-nocturno{
     background:rgba(255,255,255,0.12);
     border-color:rgba(255,255,255,0.4);
     color:#f8fafc;
+}
+body.dark .dropdown-contenido{
+    background:#0f2a4a;
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow:0 6px 18px rgba(0,0,0,0.45);
+}
+body.dark .dropdown-contenido a{
+    background:#0f2a4a;
+    color:#e6f0ff;
+}
+body.dark .dropdown-contenido a:hover{
+    background:linear-gradient(90deg,#0b1f38,#0f3a66);
 }
 
 /* ===== MODAL LOGIN ===== */
