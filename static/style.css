@@ -1673,7 +1673,7 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     border-radius:16px;
     box-shadow:0 12px 26px rgba(16,59,124,.14);
     display:grid;
-    grid-template-columns:1.1fr 1fr;
+    grid-template-columns:1fr;
     gap:16px;
     align-items:center;
 }
@@ -1687,6 +1687,16 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     margin:0 0 10px;
     color:#1f2937;
     font-size:15px;
+}
+.cuenta-saludo{
+    margin:0 0 6px;
+    font-size:15px;
+    font-weight:600;
+    color:#1e3a8a;
+    letter-spacing:.2px;
+}
+.cuenta-saludo.activo{
+    color:#0f172a;
 }
 .cuenta-status{
     display:inline-flex;
@@ -1705,19 +1715,6 @@ background:linear-gradient(90deg,#103b7c,#1888f8);
     background:rgba(37,211,102,.16);
     border-color:rgba(37,211,102,.35);
     color:#0f5132;
-}
-.cuenta-tienda{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    align-items:center;
-}
-.cuenta-tienda .tienda{
-    font-size:22px;
-    padding:6px 12px;
-}
-.cuenta-tienda .buscador-categorias{
-    width:min(560px, 100%);
 }
 .cuenta-resumen{
     margin-top:14px;
@@ -2556,6 +2553,9 @@ body.dark .cuenta-hero{
 body.dark .cuenta-identidad p{
     color:#cbd5f5;
 }
+body.dark .cuenta-saludo{
+    color:#e6f0ff;
+}
 body.dark .cuenta-status{
     background:rgba(125,160,255,.16);
     border-color:rgba(125,160,255,.35);
@@ -2607,9 +2607,6 @@ body.dark .cuenta-datos dt{
     .cuenta-hero{
         grid-template-columns:1fr;
         text-align:center;
-    }
-    .cuenta-tienda{
-        align-items:stretch;
     }
     .cuenta-resumen{
         grid-template-columns:repeat(2, minmax(0, 1fr));

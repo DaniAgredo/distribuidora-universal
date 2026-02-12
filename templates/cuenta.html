@@ -53,24 +53,9 @@
   <section class="cuenta-hero">
     <div class="cuenta-identidad">
       <h1>Mi cuenta</h1>
+      <p class="cuenta-saludo" id="cuentaSaludo">Hola</p>
       <p>Administra tus pedidos, puntos y facturas en un solo lugar.</p>
       <div class="cuenta-status" id="cuentaStatus">Cuenta en revisi&#243;n</div>
-    </div>
-    <div class="cuenta-tienda">
-      <a href="/" class="tienda"><i class="fa-solid fa-cart-shopping tienda-icon"></i> Tienda Virtual</a>
-      <div class="buscador-categorias">
-        <div class="dropdown">
-          <button class="btn-categorias" aria-expanded="false">&#9776;</button>
-          <div class="dropdown-contenido">
-            <a href="/drogueria">&#128138; Droguer&#237;a</a>
-            <a href="/aseo">&#129529; Aseo</a>
-            <a href="/ferreteria">&#128295; Ferreter&#237;a</a>
-            <a href="/papeleria">&#128213; Papeler&#237;a</a>
-            <a href="/jabones">&#129530; Varios</a>
-          </div>
-        </div>
-        <input class="buscador" type="text" placeholder="Buscar productos...">
-      </div>
     </div>
   </section>
 
@@ -537,7 +522,7 @@
         updateUserUI(null);
         renderCuenta();
       }
-      window.location.href = "/";
+      window.location.replace("/");
     });
   });
   logoutHeaderBtns.forEach((btn) => {
@@ -560,7 +545,7 @@
         updateUserUI(null);
         renderCuenta();
       }
-      window.location.href = "/";
+      window.location.replace("/");
     });
   });
 
@@ -589,6 +574,7 @@
 
   const renderCuenta = () => {
     const statusEl = document.getElementById("cuentaStatus");
+    const saludoEl = document.getElementById("cuentaSaludo");
     const userRaw = localStorage.getItem(USER_KEY);
     let user = null;
     if (userRaw) {
@@ -613,6 +599,15 @@
     if (statusEl) {
       statusEl.textContent = isLogged ? "Cuenta activa" : "Inicia sesi&#243;n para ver tus datos";
       statusEl.classList.toggle("activo", isLogged);
+    }
+    if (saludoEl) {
+      if (isLogged && user && user.nombre) {
+        saludoEl.textContent = `Hola, ${user.nombre}`;
+        saludoEl.classList.add("activo");
+      } else {
+        saludoEl.textContent = "Hola";
+        saludoEl.classList.remove("activo");
+      }
     }
 
     const pedidos = ensureStore("du_pedidos", []);
@@ -698,4 +693,3 @@
 
 </body>
 </html>
-
