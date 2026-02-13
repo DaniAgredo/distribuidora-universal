@@ -244,6 +244,7 @@
   <section class="tienda-grid" aria-label="Listado de productos">
     {% set added_revita = false %}
     {% set added_fab = false %}
+    {% set added_3d = false %}
     {% if items %}
       {% for item in items %}
       {% set producto_nombre = (item.producto or '')|lower %}
@@ -252,21 +253,25 @@
       {% set is_ariel = 'detergente' in producto_nombre and 'aseo' in producto_categoria %}
       {% set is_revita = 'revita' in producto_nombre or 'revitacolor' in producto_nombre %}
       {% set is_fab = 'fab' in producto_nombre and 'fabuloso' not in producto_nombre %}
+      {% set is_3d = '3d' in producto_nombre %}
       {% if is_revita %}
         {% set producto_imagen = '/static/images/ariel-revita.jpg' %}
         {% set added_revita = true %}
       {% elif is_fab %}
         {% set producto_imagen = '/static/images/fab.jpg' %}
         {% set added_fab = true %}
+      {% elif is_3d %}
+        {% set producto_imagen = '/static/images/3d.jpg' %}
+        {% set added_3d = true %}
       {% elif is_ariel %}
         {% set producto_imagen = '/static/images/ariel.jpg' %}
       {% endif %}
       {% set producto_variantes = variants_by_product.get(item.producto_id, []) %}
-      <a class="tienda-card {% if is_ariel or is_revita or is_fab %}focusable quick-view{% endif %}"
+      <a class="tienda-card {% if is_ariel or is_revita or is_fab or is_3d %}focusable quick-view{% endif %}"
          href="/producto/{{ item.producto_id }}"
          data-producto="{{ item.producto }}"
          data-categoria="{{ item.categoria }}"
-         data-quick-type="{% if is_revita %}revita{% elif is_fab %}fab{% elif is_ariel %}ariel{% endif %}"
+         data-quick-type="{% if is_revita %}revita{% elif is_fab %}fab{% elif is_3d %}3d{% elif is_ariel %}ariel{% endif %}"
          data-variantes='{{ producto_variantes|tojson }}'>
         <div class="tienda-img">
           <img src="{{ producto_imagen }}" alt="{{ item.producto }}" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
@@ -275,17 +280,18 @@
           <h3>
             {% if is_revita %}Ariel Revita Color
             {% elif is_fab %}Fab Lavado Perfecto
+            {% elif is_3d %}3D Multiusos
             {% elif is_ariel %}Ariel Triple Poder
             {% else %}{{ item.producto }}
             {% endif %}
           </h3>
           <p>
-            {% if is_revita or is_ariel or is_fab %}
+            {% if is_revita or is_ariel or is_fab or is_3d %}
             {% else %}
               {{ item.categoria }} &middot; {% if item.marcas == 1 %}1 marca{% else %}{{ item.marcas }} marcas{% endif %}
             {% endif %}
           </p>
-          {% if not (is_revita or is_ariel or is_fab) %}
+          {% if not (is_revita or is_ariel or is_fab or is_3d) %}
           <span>Desde {{ item.precio_desde|cop }}</span>
           {% endif %}
         </div>
@@ -319,6 +325,21 @@
         </div>
         <div class="tienda-info">
           <h3>Fab Lavado Perfecto</h3>
+        </div>
+      </a>
+      {% endif %}
+      {% if not added_3d and (not cat or cat == 'aseo') %}
+      <a class="tienda-card focusable quick-view"
+         href="/producto/0"
+         data-producto="3D Multiusos"
+         data-categoria="Aseo"
+         data-quick-type="3d"
+         data-variantes='[]'>
+        <div class="tienda-img">
+          <img src="/static/images/3d.jpg" alt="3D Multiusos" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+        </div>
+        <div class="tienda-info">
+          <h3>3D Multiusos</h3>
         </div>
       </a>
       {% endif %}
@@ -554,6 +575,13 @@
     { id: '800g', label: '800 g', match: '800g', img: '/static/images/ariel-revita.jpg', x: 40, y: 32, w: 22, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.1 },
     { id: '450g', label: '450 g', match: '450g', img: '/static/images/ariel-revita.jpg', x: 66, y: 36, w: 20, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.1 }
   ];
+  const threeDHotspots = [
+    { id: '2kg', label: '2 kg', match: '2kg', img: '/static/images/3d.jpg', x: 2, y: 14, w: 36, hit: '6px', hitArea: '8px', scale: 1.4, scaleMobile: 1.8, lift: '-10px', liftMobile: '-12px' },
+    { id: '1kg', label: '1 kg', match: '1kg', img: '/static/images/3d.jpg', x: 40, y: 18, w: 28, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.0 },
+    { id: '500g', label: '500 g', match: '500g', img: '/static/images/3d.jpg', x: 70, y: 18, w: 24, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.0 },
+    { id: '250g', label: '250 g', match: '250g', img: '/static/images/3d.jpg', x: 44, y: 62, w: 22, hit: '6px', hitArea: '8px', scale: 1.8, scaleMobile: 2.3 },
+    { id: '125g', label: '125 g', match: '125g', img: '/static/images/3d.jpg', x: 72, y: 66, w: 16, hit: '6px', hitArea: '8px', scale: 1.9, scaleMobile: 2.4, lift: '-8px', liftMobile: '-10px' }
+  ];
   const fabHotspots = [
     { id: '3_5kg', label: '3.5 kg', match: '3.5', img: '/static/images/fab.jpg', x: 3, y: 18, w: 30, hit: '6px', hitArea: '8px', scale: 1.35, scaleMobile: 1.7, lift: '-10px', liftMobile: '-12px' },
     { id: '2kg', label: '2 kg', match: '2kg', img: '/static/images/fab.jpg', x: 36, y: 20, w: 24, hit: '6px', hitArea: '8px', scale: 1.55, scaleMobile: 1.9 },
@@ -581,6 +609,13 @@
       '800g': 10600,
       '450g': 5800
     },
+    '3d': {
+      '2kg': 18550,
+      '1kg': 9450,
+      '500g': 4980,
+      '250g': 2800,
+      '125g': 1500
+    },
     fab: {
       '3_5kg': 25990,
       '2kg': 22050,
@@ -604,6 +639,13 @@
       img: '/static/images/ariel-revita.jpg',
       hotspots: revitaHotspots,
       priceMap: priceMaps.revita
+    },
+    '3d': {
+      name: '3D Multiusos',
+      brand: '3D',
+      img: '/static/images/3d.jpg',
+      hotspots: threeDHotspots,
+      priceMap: priceMaps['3d']
     },
     fab: {
       name: 'FAB Lavado Perfecto',
