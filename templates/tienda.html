@@ -250,7 +250,7 @@
       {% set producto_nombre = (item.producto or '')|lower %}
       {% set producto_categoria = (item.categoria or '')|lower %}
       {% set producto_imagen = item.imagen or '/static/images/placeholder.svg' %}
-      {% set is_ariel = 'detergente' in producto_nombre and 'aseo' in producto_categoria %}
+      {% set is_ariel = 'ariel' in producto_nombre %}
       {% set is_revita = 'revita' in producto_nombre or 'revitacolor' in producto_nombre %}
       {% set is_fab = 'fab' in producto_nombre and 'fabuloso' not in producto_nombre %}
       {% set is_3d = '3d' in producto_nombre %}
@@ -296,53 +296,7 @@
           {% endif %}
         </div>
       </a>
-      {% if is_ariel and not added_revita %}
-      {% set added_revita = true %}
-      <a class="tienda-card focusable quick-view"
-         href="/producto/{{ item.producto_id }}"
-         data-producto="Ariel Revita Color"
-         data-categoria="Aseo"
-         data-quick-type="revita"
-         data-variantes='[]'>
-        <div class="tienda-img">
-          <img src="/static/images/ariel-revita.jpg" alt="Ariel Revita Color" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
-        </div>
-        <div class="tienda-info">
-          <h3>Ariel Revita Color</h3>
-        </div>
-      </a>
-      {% endif %}
       {% endfor %}
-      {% if not added_fab and (not cat or cat == 'aseo') %}
-      <a class="tienda-card focusable quick-view"
-         href="/producto/0"
-         data-producto="Fab Lavado Perfecto"
-         data-categoria="Aseo"
-         data-quick-type="fab"
-         data-variantes='[]'>
-        <div class="tienda-img">
-          <img src="/static/images/fab.jpg" alt="Fab Lavado Perfecto" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
-        </div>
-        <div class="tienda-info">
-          <h3>Fab Lavado Perfecto</h3>
-        </div>
-      </a>
-      {% endif %}
-      {% if not added_3d and (not cat or cat == 'aseo') %}
-      <a class="tienda-card focusable quick-view"
-         href="/producto/0"
-         data-producto="3D Multiusos"
-         data-categoria="Aseo"
-         data-quick-type="3d"
-         data-variantes='[]'>
-        <div class="tienda-img">
-          <img src="/static/images/3d.jpg" alt="3D Multiusos" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
-        </div>
-        <div class="tienda-info">
-          <h3>3D Multiusos</h3>
-        </div>
-      </a>
-      {% endif %}
     {% else %}
       <div class="tienda-empty">
         <strong>No encontramos resultados.</strong>
