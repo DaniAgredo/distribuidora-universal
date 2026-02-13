@@ -61,8 +61,25 @@
   </nav>
 
   <nav class="aseo-knobs" aria-label="Subcategorias de aseo">
+    <a href="/tienda" class="aseo-knob aseo-knob-back">
+      <span class="knob-circle" aria-hidden="true">&#8592;</span>
+      <span class="knob-name">Devolver</span>
+    </a>
     {% for section in sections %}
-    <a href="#{{ section['slug'] }}" class="aseo-knob">{{ section['title'] }}</a>
+    {% set knob_img = '/static/images/banner1.jpg' %}
+    {% if section['slug'] == 'lava-lozas' %}
+      {% set knob_img = '/static/images/banner2.jpg' %}
+    {% elif section['slug'] == 'limpidos' %}
+      {% set knob_img = '/static/images/banner4.jpg' %}
+    {% elif section['slug'] == 'jabones' %}
+      {% set knob_img = '/static/images/banner3.jpg' %}
+    {% elif section['slug'] == 'otros' %}
+      {% set knob_img = '/static/images/banner8.jpg' %}
+    {% endif %}
+    <a href="#{{ section['slug'] }}" class="aseo-knob">
+      <span class="knob-circle"><img src="{{ knob_img }}" alt="{{ section['title'] }}" loading="lazy" decoding="async"></span>
+      <span class="knob-name">{{ section['title'] }}</span>
+    </a>
     {% endfor %}
   </nav>
 
@@ -157,6 +174,16 @@
     });
   }
 
+  const knobCats = document.querySelectorAll(".aseo-knob");
+  if (knobCats.length) {
+    knobCats.forEach((knob) => {
+      knob.addEventListener("touchstart", () => {
+        knobCats.forEach((k) => k.classList.remove("is-focus"));
+        knob.classList.add("is-focus");
+      }, { passive: true });
+    });
+  }
+
   const CART_KEY = "du_cart";
   const quickModal = document.getElementById("aseoQuickModal");
   const quickImg = document.getElementById("aseoQuickImg");
@@ -213,7 +240,7 @@
     activeItem = item;
     if (quickImg) quickImg.src = item.imagen || "/static/images/placeholder.svg";
     if (quickName) quickName.textContent = item.producto || "Producto";
-    if (quickSub) quickSub.textContent = `${item.subcat || "Aseo"} · ${item.presentacion || ""} ${item.contenido || ""}`.trim();
+    if (quickSub) quickSub.textContent = `${item.subcat || "Aseo"} - ${item.presentacion || ""} ${item.contenido || ""}`.trim();
     if (quickPrice) quickPrice.textContent = formatCOP(item.unit || 0);
     if (quickView) quickView.href = `/producto/${item.producto_id || ""}`;
     if (quickQty) quickQty.value = 1;

@@ -142,32 +142,80 @@ body.modal-open{
 
 .aseo-knobs{
     display:flex;
-    gap:10px;
+    gap:12px;
     overflow-x:auto;
-    padding:6px 4px 12px;
+    padding:2px 2px 14px;
     scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch;
+    scroll-behavior:smooth;
 }
 
 .aseo-knob{
     flex:0 0 auto;
     scroll-snap-align:start;
     text-decoration:none;
-    color:#0b3d89;
-    background:#e8f1ff;
-    border:1px solid #bdd1f5;
-    border-radius:999px;
-    padding:8px 14px;
-    font-weight:600;
-    font-size:13px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    color:#0f172a;
     transform-origin:center;
-    transition:transform .18s ease, box-shadow .18s ease;
+    transition:transform .2s ease;
 }
 
-.aseo-knob:hover,
-.aseo-knob:focus-visible{
-    transform:scale(1.06);
-    box-shadow:0 8px 18px rgba(16,59,124,.15);
+.aseo-knob .knob-circle{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    border:2px solid #d4e2fb;
+    background:#f4f8ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    box-shadow:0 8px 14px rgba(16,59,124,.08);
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.aseo-knob .knob-circle img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.aseo-knob .knob-name{
+    font-size:12px;
+    font-weight:600;
+    line-height:1.1;
+    text-align:center;
+    max-width:86px;
+    color:#0f172a;
+}
+
+.aseo-knob:hover .knob-circle,
+.aseo-knob:focus-visible .knob-circle,
+.aseo-knob.is-focus .knob-circle{
+    transform:translateY(-2px) scale(1.06);
+    box-shadow:0 12px 22px rgba(16,59,124,.22);
+    border-color:#0d84fc;
+}
+
+.aseo-knob:hover .knob-name,
+.aseo-knob:focus-visible .knob-name,
+.aseo-knob.is-focus .knob-name{
+    color:#0d3f86;
+}
+
+.aseo-knob-back .knob-circle{
+    background:linear-gradient(135deg,#0d84fc,#42a5f5);
+    border-color:#0d84fc;
+    color:#ffffff;
+    font-size:28px;
+    font-weight:700;
+}
+
+.aseo-knob-back .knob-name{
+    color:#0d3f86;
 }
 
 .aseo-section{
@@ -468,9 +516,21 @@ body.dark .aseo-actions a{
 }
 
 body.dark .aseo-knob{
+    color:#e6efff;
+}
+
+body.dark .aseo-knob .knob-circle{
     background:#122039;
     border-color:#253652;
+}
+
+body.dark .aseo-knob .knob-name{
     color:#e6efff;
+}
+
+body.dark .aseo-knob-back .knob-circle{
+    background:linear-gradient(135deg,#1b4f91,#2f78c8);
+    border-color:#2f78c8;
 }
 
 body.dark .aseo-main-cat{
@@ -579,6 +639,14 @@ body.dark .aseo-empty-row{
     }
     .aseo-section h2{
         font-size:15px;
+    }
+    .aseo-knob .knob-circle{
+        width:62px;
+        height:62px;
+    }
+    .aseo-knob .knob-name{
+        font-size:11px;
+        max-width:74px;
     }
     .aseo-card{
         flex-basis:156px;
