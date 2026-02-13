@@ -33,6 +33,33 @@
     <p>No se pudo cargar el catalogo de aseo.</p>
   </div>
   {% else %}
+  <nav class="aseo-main-cats" aria-label="Categorias principales">
+    <a class="aseo-main-cat active" href="/aseo">
+      <span class="cat-circle"><img src="/static/images/banner1.jpg" alt="Aseo" loading="lazy" decoding="async"></span>
+      <span class="cat-name">Aseo</span>
+    </a>
+    <a class="aseo-main-cat" href="/tienda?cat=drogueria">
+      <span class="cat-circle"><img src="/static/images/banner6.jpg" alt="Drogueria" loading="lazy" decoding="async"></span>
+      <span class="cat-name">Drogueria</span>
+    </a>
+    <a class="aseo-main-cat" href="/tienda?cat=ferreteria">
+      <span class="cat-circle"><img src="/static/images/banner3.jpg" alt="Ferreteria" loading="lazy" decoding="async"></span>
+      <span class="cat-name">Ferreteria</span>
+    </a>
+    <a class="aseo-main-cat" href="/tienda?cat=papeleria">
+      <span class="cat-circle"><img src="/static/images/banner8.jpg" alt="Papeleria" loading="lazy" decoding="async"></span>
+      <span class="cat-name">Papeleria</span>
+    </a>
+    <a class="aseo-main-cat" href="/tienda?cat=comestibles">
+      <span class="cat-circle"><img src="/static/images/banner2.jpg" alt="Abarrotes" loading="lazy" decoding="async"></span>
+      <span class="cat-name">Abarrotes</span>
+    </a>
+    <a class="aseo-main-cat" href="/tienda?cat=insecticidas">
+      <span class="cat-circle"><img src="/static/images/banner4.jpg" alt="Insecticidas" loading="lazy" decoding="async"></span>
+      <span class="cat-name">Insecticidas</span>
+    </a>
+  </nav>
+
   <nav class="aseo-knobs" aria-label="Subcategorias de aseo">
     {% for section in sections %}
     <a href="#{{ section['slug'] }}" class="aseo-knob">{{ section['title'] }}</a>
