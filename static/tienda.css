@@ -345,12 +345,12 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    height:160px;
+    height:170px;
     border-bottom:1px solid #dbe7ff;
 }
 .tienda-img img{
     max-width:100%;
-    max-height:140px;
+    max-height:150px;
     object-fit:contain;
 }
 .tienda-info{
@@ -549,7 +549,7 @@
 }
 .quick-close{
     position:absolute;
-    top:16px;
+    top:22px;
     right:16px;
     width:34px;
     height:34px;
@@ -614,11 +614,16 @@
     position:absolute;
     border:none;
     background:transparent;
-    padding:8px;
+    padding:12px;
     cursor:pointer;
     pointer-events:auto;
     opacity:0;
-    transition:transform .2s ease, filter .2s ease, opacity .2s ease;
+    transition:transform .35s ease, filter .35s ease, opacity .35s ease;
+}
+.bag-item::before{
+    content:"";
+    position:absolute;
+    inset:-18px;
 }
 .bag-item img{
     width:100%;
@@ -627,7 +632,7 @@
     filter:drop-shadow(0 10px 16px rgba(0,0,0,.35));
 }
 .bag-item.active{
-    transform:translateY(-30px) scale(2.5);
+    transform:translateY(-34px) scale(2.9);
     opacity:1;
     z-index:2;
 }
@@ -648,7 +653,7 @@
     transform:translateY(2px);
     pointer-events:none;
     transition:opacity .25s ease, transform .25s ease;
-    margin-top:-24px;
+    margin-top:-36px;
     line-height:1.35;
 }
 .price-main{
@@ -1123,10 +1128,10 @@ body.dark .quick-total strong{
         min-height:220px;
     }
     .tienda-img{
-        height:140px;
+        height:150px;
     }
     .tienda-img img{
-        max-height:120px;
+        max-height:130px;
     }
 }
 
@@ -1245,6 +1250,16 @@ body.dark .quick-total strong{
     .pagina-tienda{
         padding-top:4px;
     }
+    .pagina-tienda .tienda-title .nombre{
+        font-size:13px;
+    }
+    .tienda-left{
+        max-width:52%;
+    }
+    .tienda-acciones{
+        flex-wrap:wrap;
+        row-gap:4px;
+    }
     .pagina-tienda .tienda-header{
         padding:2px 8px 3px;
     }
@@ -1267,6 +1282,15 @@ body.dark .quick-total strong{
     }
     .tienda-acciones .carrito-link i{
         font-size:10px;
+    }
+    .tienda-acciones a{
+        width:24px;
+        height:24px;
+    }
+    .tienda-acciones .volver-circle,
+    .tienda-acciones .whatsapp{
+        width:24px;
+        height:24px;
     }
 }
 
