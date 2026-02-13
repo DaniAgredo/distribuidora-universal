@@ -255,16 +255,16 @@
       {% set is_fab = 'fab' in producto_nombre and 'fabuloso' not in producto_nombre %}
       {% set is_3d = '3d' in producto_nombre %}
       {% if is_revita %}
-        {% set producto_imagen = '/static/images/ariel-revita.jpg' %}
+        {% set producto_imagen = '/static/images/ariel100.jpg' %}
         {% set added_revita = true %}
       {% elif is_fab %}
-        {% set producto_imagen = '/static/images/fab.jpg' %}
+        {% set producto_imagen = '/static/images/fab-thumb.jpg' %}
         {% set added_fab = true %}
       {% elif is_3d %}
-        {% set producto_imagen = '/static/images/3d.jpg' %}
+        {% set producto_imagen = '/static/images/3d-thumb.jpg' %}
         {% set added_3d = true %}
       {% elif is_ariel %}
-        {% set producto_imagen = '/static/images/ariel.jpg' %}
+        {% set producto_imagen = '/static/images/ariel100.jpg' %}
       {% endif %}
       {% set producto_variantes = variants_by_product.get(item.producto_id, []) %}
       {% set is_quick = is_ariel or is_revita or is_fab or is_3d %}
@@ -275,7 +275,7 @@
          {% if is_quick %}data-quick-type="{% if is_revita %}revita{% elif is_fab %}fab{% elif is_3d %}3d{% elif is_ariel %}ariel{% endif %}"{% endif %}
          {% if is_quick %}data-variantes='{{ producto_variantes|tojson }}'{% endif %}>
         <div class="tienda-img">
-          <img src="{{ producto_imagen }}" alt="{{ item.producto }}" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+          <img src="{{ producto_imagen }}" alt="{{ item.producto }}" loading="lazy" decoding="async" fetchpriority="low" width="640" height="420" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
         </div>
       <div class="tienda-info">
           <h3>
