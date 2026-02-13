@@ -253,7 +253,7 @@
       {% set is_fab = 'fab' in producto_nombre and 'fabuloso' not in producto_nombre %}
       {% set is_3d = '3d' in producto_nombre %}
       {% if is_revita %}
-        {% set producto_imagen = '/static/images/ariel100.jpg' %}
+        {% set producto_imagen = '/static/images/ariel-revita-thumb.jpg' %}
         {% set added_revita = true %}
       {% elif is_fab %}
         {% set producto_imagen = '/static/images/fab-thumb.jpg' %}
@@ -262,7 +262,7 @@
         {% set producto_imagen = '/static/images/3d-thumb.jpg' %}
         {% set added_3d = true %}
       {% elif is_ariel %}
-        {% set producto_imagen = '/static/images/ariel100.jpg' %}
+        {% set producto_imagen = '/static/images/ariel-thumb.jpg' %}
       {% endif %}
       {% set producto_variantes = variants_by_product.get(item.producto_id, []) %}
       {% set is_quick = is_ariel or is_revita or is_fab or is_3d %}
