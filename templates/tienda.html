@@ -24,11 +24,6 @@
           
         </div>
       </div>
-      <form class="tienda-search tienda-search-inline" method="get" action="/tienda">
-        <input type="hidden" name="cat" value="{{ cat }}">
-        <button class="tienda-btn" type="submit">Buscar</button>
-        <input class="tienda-input" type="text" name="q" value="{{ q }}" placeholder="Buscar productos, marcas o categorias...">
-      </form>
     </div>
     <div class="acciones tienda-acciones">
       <a href="https://wa.me/573215485315" class="whatsapp" target="_blank" rel="noopener">
@@ -50,6 +45,10 @@
     <input type="hidden" name="cat" value="{{ cat }}">
     <button class="tienda-btn" type="submit">Buscar</button>
     <input class="tienda-input" type="text" name="q" value="{{ q }}" placeholder="Buscar productos, marcas o categorias...">
+    <button class="tienda-camera" type="button" aria-label="Buscar con camara">
+      <i class="fa-solid fa-camera"></i>
+    </button>
+    <input class="tienda-camera-input" type="file" accept="image/*" capture="environment">
   </form>
   {% set cat_images = [
     '/static/images/banner1.jpg',
@@ -65,8 +64,8 @@
     'comestibles': 'Abarrotes'
   } %}
   <section class="tienda-chips" aria-label="Categorias">
-    <div class="chips-story">
-      <a class="chip-story {% if not cat %}active{% endif %}" href="/tienda{% if q %}?q={{ q|urlencode }}{% endif %}">
+    <div class="chips-story" data-active-cat="{{ cat }}" data-current-q="{{ q }}">
+      <a class="chip-story {% if not cat %}active{% endif %}" data-cat="" href="/tienda{% if q %}?q={{ q|urlencode }}{% endif %}">
         <span class="chip-circle">
           <img src="/static/images/banner1.jpg" alt="Todos" loading="lazy">
         </span>
@@ -75,7 +74,7 @@
       {% if categorias %}
         {% for c in categorias %}
         {% set nombre_categoria = cat_labels.get(c.slug, c.nombre) %}
-        <a class="chip-story {% if cat == c.slug %}active{% endif %}" href="/tienda?cat={{ c.slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
+        <a class="chip-story {% if cat == c.slug %}active{% endif %}" data-cat="{{ c.slug }}" href="/tienda?cat={{ c.slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
           <span class="chip-circle">
             <img src="{{ cat_images[loop.index0 % cat_images|length] }}" alt="{{ nombre_categoria }}" loading="lazy">
           </span>
@@ -85,14 +84,16 @@
       {% else %}
         {% set fallback = [
           ('aseo','Aseo'),
-          ('drogueria','Droguería'),
-          ('ferreteria','Ferretería'),
-          ('papeleria','Papelería'),
+          ('drogueria','Droguer&iacute;a'),
+          ('ferreteria','Ferreter&iacute;a'),
+          ('papeleria','Papeler&iacute;a'),
+          ('cuidado-bebes','Cuidado beb&eacute;s'),
+          ('cuidado-adulto','Cuidado adulto'),
           ('abarrotes','Abarrotes'),
           ('varios','Varios')
         ] %}
         {% for slug, nombre in fallback %}
-        <a class="chip-story" href="/tienda?cat={{ slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
+        <a class="chip-story {% if cat == slug %}active{% endif %}" data-cat="{{ slug }}" href="/tienda?cat={{ slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
           <span class="chip-circle">
             <img src="{{ cat_images[loop.index0 % cat_images|length] }}" alt="{{ nombre }}" loading="lazy">
           </span>
@@ -134,6 +135,66 @@
       window.addEventListener('resize', updateFocus);
       updateFocus();
     }
+
+    const subcatImages = [
+      '/static/images/banner1.jpg',
+      '/static/images/banner2.jpg',
+      '/static/images/banner3.jpg',
+      '/static/images/banner4.jpg',
+      '/static/images/banner5.jpg',
+      '/static/images/banner6.jpg',
+      '/static/images/banner7.jpg',
+      '/static/images/banner8.jpg'
+    ];
+    const subcatsMap = {
+      'aseo': [
+        { label: 'Detergentes', q: 'detergente', img: '/static/images/banner1.jpg' },
+        { label: 'Lava loza', q: 'lava loza', img: '/static/images/banner2.jpg' },
+        { label: 'Limpieza pisos', q: 'limpieza', img: '/static/images/banner3.jpg' },
+        { label: 'Aromas', q: 'aroma', img: '/static/images/banner4.jpg' },
+        { label: 'Suavizantes', q: 'suavizante', img: '/static/images/banner5.jpg' }
+      ],
+      'drogueria': [
+        { label: 'Tabletas', q: 'tabletas', img: '/static/images/banner6.jpg' },
+        { label: 'Jarabes', q: 'jarabe', img: '/static/images/banner7.jpg' },
+        { label: 'Vitaminas', q: 'vitamina', img: '/static/images/banner8.jpg' },
+        { label: 'Termometros', q: 'termometro', img: '/static/images/banner9.jpg' },
+        { label: 'Curacion', q: 'curacion', img: '/static/images/banner10.jpg' }
+      ],
+      'cuidado-bebes': [
+        { label: 'Panales', q: 'panal', img: '/static/images/banner11.jpg' },
+        { label: 'Toallitas', q: 'toallitas', img: '/static/images/banner12.jpg' },
+        { label: 'Cremas', q: 'crema', img: '/static/images/banner13.jpg' }
+      ],
+      'cuidado-adulto': [
+        { label: 'Panales', q: 'panal', img: '/static/images/banner14.jpg' },
+        { label: 'Protectores', q: 'protector', img: '/static/images/banner15.jpg' },
+        { label: 'Humedas', q: 'toallitas', img: '/static/images/banner16.jpg' }
+      ]
+    };
+
+    if (chipsWrap) {
+      const activeCat = chipsWrap.dataset.activeCat || '';
+      const currentQ = chipsWrap.dataset.currentQ || '';
+      const list = subcatsMap[activeCat];
+      if (activeCat && list && list.length) {
+        chipsWrap.classList.add('subcats-only');
+        chipsWrap.innerHTML = '';
+        const volver = document.createElement('a');
+        volver.className = 'chip-story chip-volver';
+        volver.href = currentQ ? `/tienda?q=${encodeURIComponent(currentQ)}` : '/tienda';
+        volver.innerHTML = '<span class="chip-circle"><img src="/static/images/banner9.jpg" alt="Volver"></span><span class="chip-name">Categorias</span>';
+        chipsWrap.appendChild(volver);
+        list.forEach((item, idx) => {
+          const img = item.img || subcatImages[idx % subcatImages.length];
+          const a = document.createElement('a');
+          a.className = 'chip-story subcat';
+          a.href = `/tienda?cat=${encodeURIComponent(activeCat)}&q=${encodeURIComponent(item.q)}`;
+          a.innerHTML = `<span class="chip-circle"><img src="${img}" alt="${item.label}"></span><span class="chip-name">${item.label}</span>`;
+          chipsWrap.appendChild(a);
+        });
+      }
+    }
   </script>
 
   {% if db_missing %}
@@ -147,9 +208,20 @@
   <section class="tienda-grid" aria-label="Listado de productos">
     {% if items %}
       {% for item in items %}
-      <a class="tienda-card" href="/producto/{{ item.producto_id }}">
+      {% set producto_nombre = (item.producto or '')|lower %}
+      {% set producto_categoria = (item.categoria or '')|lower %}
+      {% set producto_imagen = item.imagen or '/static/images/placeholder.svg' %}
+      {% if 'detergente' in producto_nombre and 'aseo' in producto_categoria %}
+        {% set producto_imagen = '/static/images/ariel.jpg' %}
+      {% endif %}
+      {% set producto_variantes = variants_by_product.get(item.producto_id, []) %}
+      <a class="tienda-card {% if 'detergente' in producto_nombre and 'aseo' in producto_categoria %}focusable quick-view{% endif %}"
+         href="/producto/{{ item.producto_id }}"
+         data-producto="{{ item.producto }}"
+         data-categoria="{{ item.categoria }}"
+         data-variantes='{{ producto_variantes|tojson }}'>
         <div class="tienda-img">
-          <img src="{{ item.imagen or '/static/images/placeholder.svg' }}" alt="{{ item.producto }}" loading="lazy" onerror="this.src='/static/images/placeholder.svg'">
+          <img src="{{ producto_imagen }}" alt="{{ item.producto }}" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
         </div>
         <div class="tienda-info">
           <h3>{{ item.producto }}</h3>
@@ -177,6 +249,41 @@
   </div>
   {% endif %}
 </main>
+
+<div class="quick-modal" id="quickModal" aria-hidden="true">
+  <div class="quick-overlay" data-close></div>
+  <div class="quick-sheet" role="dialog" aria-modal="true">
+    <button class="quick-close" type="button" data-close aria-label="Cerrar">&times;</button>
+    <div class="quick-body">
+      <div class="quick-image">
+        <img id="quickImg" class="quick-base" src="/static/images/placeholder.svg" alt="Producto" data-fallback="/static/images/placeholder.svg" onerror="this.onerror=null; this.src=this.dataset.fallback || '/static/images/placeholder.svg';">
+        <div class="quick-hotspots quick-bags" id="quickHotspots"></div>
+      </div>
+      <div class="quick-details">
+        <span class="quick-tag" id="quickTag"></span>
+        <h2 id="quickName"></h2>
+        <p id="quickSize"></p>
+        <div class="quick-precios">
+          <h3>Precios por cantidad</h3>
+          <div class="precio-grid" id="quickPriceList"></div>
+        </div>
+        <div class="quick-qty">
+          <span>Cantidad</span>
+          <div class="qty-control quick-qty-control">
+            <button type="button" class="qty-btn" data-qty="-">-</button>
+            <input type="number" id="quickQty" min="1" value="1">
+            <button type="button" class="qty-btn" data-qty="+">+</button>
+          </div>
+        </div>
+        <div class="quick-total">
+          <span>Total</span>
+          <strong id="quickTotal">$0</strong>
+        </div>
+        <button class="tienda-btn" id="quickAdd">Agregar al carrito</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   const themeToggle = document.querySelector(".modo-nocturno");
@@ -219,7 +326,317 @@
   };
   updateCartCount();
   window.addEventListener('storage', updateCartCount);
+
+  document.querySelectorAll('.tienda-search').forEach((form) => {
+    const cameraBtn = form.querySelector('.tienda-camera');
+    const cameraInput = form.querySelector('.tienda-camera-input');
+    if (!cameraBtn || !cameraInput) return;
+    cameraBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      cameraInput.click();
+    });
+    cameraInput.addEventListener('change', () => {
+      if (cameraInput.files && cameraInput.files.length) {
+        alert('Busqueda por foto en desarrollo. Pronto habilitaremos esta funcion.');
+        cameraInput.value = '';
+      }
+    });
+  });
+
+  const grid = document.querySelector('.tienda-grid');
+  if (grid) {
+    const focusCards = Array.from(grid.querySelectorAll('.tienda-card.focusable'));
+    const activate = (card) => {
+      grid.classList.add('dimmed');
+      focusCards.forEach((c) => c.classList.remove('active'));
+      card.classList.add('active');
+    };
+    const clear = () => {
+      grid.classList.remove('dimmed');
+      focusCards.forEach((c) => c.classList.remove('active'));
+    };
+    focusCards.forEach((card) => {
+      card.addEventListener('mouseenter', () => activate(card));
+      card.addEventListener('mouseleave', clear);
+      card.addEventListener('touchstart', () => activate(card), { passive: true });
+      card.addEventListener('touchend', () => setTimeout(clear, 700), { passive: true });
+      card.addEventListener('focusin', () => activate(card));
+      card.addEventListener('focusout', clear);
+    });
+    document.addEventListener('click', (e) => {
+      if (!grid.contains(e.target)) clear();
+    });
+  }
+
+  const quickModal = document.getElementById('quickModal');
+  const quickImg = document.getElementById('quickImg');
+  const quickHotspots = document.getElementById('quickHotspots');
+  const quickTag = document.getElementById('quickTag');
+  const quickName = document.getElementById('quickName');
+  const quickSize = document.getElementById('quickSize');
+  const quickPriceList = document.getElementById('quickPriceList');
+  const quickAdd = document.getElementById('quickAdd');
+  const quickDetails = document.querySelector('.quick-details');
+  const quickQty = document.getElementById('quickQty');
+  const quickTotal = document.getElementById('quickTotal');
+  const zoomBase = 1.92;
+  const liftBase = -8;
+
+  const normalize = (text) => (text || '').toLowerCase().replace(/\\s+/g, '').replace(',', '.');
+  const formatCOP = (value) => {
+    const num = Number(value) || 0;
+    return `$${num.toLocaleString('es-CO')}`.replace(/,/g, '.');
+  };
+  const getUnitPrice = (precios, qty) => {
+    if (!precios || !precios.length) return 0;
+    const tiers = [...precios].sort((a, b) => a.min_cantidad - b.min_cantidad);
+    let chosen = tiers[0];
+    tiers.forEach((tier) => {
+      if (qty >= tier.min_cantidad) chosen = tier;
+    });
+    return Number(chosen.precio) || 0;
+  };
+  const updateQuickTotal = () => {
+    if (!quickQty || !quickTotal) return;
+    const qty = Math.max(1, parseInt(quickQty.value || '1', 10) || 1);
+    quickQty.value = qty;
+    const unit = activeVariant ? getUnitPrice(activeVariant.precios || [], qty) : 0;
+    if (activeVariant) renderPrices(activeVariant.precios || [], qty);
+    quickTotal.textContent = unit ? formatCOP(unit * qty) : '$0';
+  };
+  const renderPrices = (precios, qty = 1) => {
+    quickPriceList.innerHTML = '';
+    if (!precios || !precios.length) {
+      const empty = document.createElement('div');
+      empty.className = 'precio-card';
+      empty.textContent = 'Precio disponible pronto';
+      quickPriceList.appendChild(empty);
+      return;
+    }
+    const tiers = [...precios].sort((a, b) => a.min_cantidad - b.min_cantidad);
+    const base = tiers[0];
+    const chosen = tiers.reduce((acc, tier) => (qty >= tier.min_cantidad ? tier : acc), base);
+    const main = document.createElement('div');
+    main.className = 'price-main';
+    main.innerHTML = `<span>Valor unidad</span><strong>${formatCOP(chosen.precio)}</strong>`;
+    quickPriceList.appendChild(main);
+
+    const options = tiers.slice(1);
+    if (options.length) {
+      const wrap = document.createElement('div');
+      wrap.className = 'price-options';
+      options.forEach((tier) => {
+        const chip = document.createElement('span');
+        chip.className = `price-option${tier.min_cantidad <= qty ? ' active' : ''}`;
+        chip.innerHTML = `Mas de ${tier.min_cantidad} <strong>${formatCOP(tier.precio)}</strong>`;
+        wrap.appendChild(chip);
+      });
+      quickPriceList.appendChild(wrap);
+    }
+  };
+
+  const arielHotspots = [
+    { id: '4kg', label: '4 kg', match: '4kg', img: '/static/images/ariel4.jpg', x: 0, y: 18, w: 26 },
+    { id: '1kg', label: '1 kg', match: '1kg', img: '/static/images/ariel1.jpg', x: 24, y: 30, w: 20 },
+    { id: '450g', label: '450 g', match: '450g', img: '/static/images/ariel450.jpg', x: 45, y: 36, w: 16 },
+    { id: '225g', label: '225 g', match: '225g', img: '/static/images/ariel225.jpg', x: 63, y: 41, w: 16 },
+    { id: '100g', label: '100 g', match: '100g', img: '/static/images/ariel100.jpg', x: 38, y: 68, w: 14 }
+  ];
+
+  let activeVariant = null;
+  let bagAutoTimer = null;
+  const scheduleBagHide = () => {
+    if (!quickHotspots) return;
+    if (bagAutoTimer) clearTimeout(bagAutoTimer);
+    bagAutoTimer = setTimeout(() => {
+      quickHotspots.classList.remove('dimmed');
+      quickHotspots.querySelectorAll('.bag-item').forEach((el) => el.classList.remove('active'));
+    }, 6000);
+  };
+  const selectHotspot = (hotspot, variants) => {
+    if (quickHotspots) {
+      quickHotspots.classList.add('dimmed');
+      quickHotspots.querySelectorAll('.bag-item').forEach((el) => {
+        el.classList.toggle('active', el.dataset.id === hotspot.id);
+      });
+    }
+    const match = normalize(hotspot.match);
+    activeVariant = variants.find((v) => normalize(v.contenido).includes(match)) || null;
+    if (quickTag) quickTag.textContent = 'Aseo · Detergentes';
+    if (quickName) quickName.textContent = `Ariel ${hotspot.label}`;
+    if (quickSize) quickSize.textContent = `Presentacion: ${hotspot.label}`;
+    if (activeVariant) {
+      renderPrices(activeVariant.precios || [], 1);
+      if (quickAdd) {
+        quickAdd.disabled = false;
+        quickAdd.textContent = 'Agregar al carrito';
+      }
+      if (quickDetails) quickDetails.classList.add('show');
+    } else {
+      if (quickPriceList) quickPriceList.innerHTML = '';
+      if (quickAdd) {
+        quickAdd.disabled = true;
+        quickAdd.textContent = 'Agregar al carrito';
+      }
+      if (quickDetails) quickDetails.classList.add('show');
+    }
+    if (quickQty) quickQty.value = 1;
+    updateQuickTotal();
+    scheduleBagHide();
+    const quickImageWrap = quickImg.closest('.quick-image');
+    if (quickImageWrap) {
+      quickImageWrap.classList.add('focused');
+    }
+  };
+
+  const openQuick = (card) => {
+    if (!quickModal) return;
+    let variants = [];
+    try {
+      variants = JSON.parse(card.dataset.variantes || '[]');
+    } catch (e) {
+      variants = [];
+    }
+    quickImg.dataset.fallback = '/static/images/placeholder.svg';
+    quickImg.src = '/static/images/ariel.jpg';
+    if (quickTag) quickTag.textContent = '';
+    if (quickName) quickName.textContent = '';
+    if (quickSize) quickSize.textContent = '';
+    if (quickPriceList) quickPriceList.innerHTML = '';
+    if (quickAdd) {
+      quickAdd.disabled = true;
+      quickAdd.textContent = 'Agregar al carrito';
+    }
+    if (quickDetails) quickDetails.classList.remove('show');
+    if (quickQty) quickQty.value = 1;
+    if (quickTotal) quickTotal.textContent = '$0';
+    if (quickHotspots) {
+      quickHotspots.innerHTML = '';
+      quickHotspots.classList.remove('dimmed');
+      arielHotspots.forEach((spot) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bag-item';
+        btn.dataset.id = spot.id;
+        btn.style.left = `${spot.x}%`;
+        btn.style.top = `${spot.y}%`;
+        btn.style.width = `${spot.w}%`;
+        btn.innerHTML = `<img src="${spot.img}" alt="${spot.label}">`;
+        btn.addEventListener('click', () => selectHotspot(spot, variants));
+        btn.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          selectHotspot(spot, variants);
+        }, { passive: false });
+        quickHotspots.appendChild(btn);
+      });
+    }
+
+    document.body.classList.add('modal-open');
+    quickModal.classList.add('open');
+    quickModal.setAttribute('aria-hidden', 'false');
+  };
+
+  const closeQuick = () => {
+    if (!quickModal) return;
+    quickModal.classList.remove('open');
+    quickModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    quickImg.style.transform = '';
+    const quickImageWrap = quickImg.closest('.quick-image');
+    if (quickImageWrap) quickImageWrap.classList.remove('focused');
+    if (quickDetails) quickDetails.classList.remove('show');
+    if (quickPriceList) quickPriceList.innerHTML = '';
+    if (quickAdd) {
+      quickAdd.disabled = true;
+      quickAdd.textContent = 'Selecciona una bolsa';
+    }
+    if (quickTag) quickTag.textContent = '';
+    if (quickName) quickName.textContent = '';
+    if (quickSize) quickSize.textContent = '';
+    if (quickQty) quickQty.value = 1;
+    if (quickTotal) quickTotal.textContent = '$0';
+    if (bagAutoTimer) {
+      clearTimeout(bagAutoTimer);
+      bagAutoTimer = null;
+    }
+  };
+
+  document.querySelectorAll('.tienda-card.quick-view').forEach((card) => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      openQuick(card);
+    });
+    card.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      openQuick(card);
+    }, { passive: false });
+  });
+
+  if (quickModal) {
+    quickModal.querySelectorAll('[data-close]').forEach((el) => {
+      el.addEventListener('click', closeQuick);
+    });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeQuick();
+  });
+
+  if (quickAdd) {
+    quickAdd.addEventListener('click', () => {
+      if (!activeVariant) return;
+      const qty = quickQty ? Math.max(1, parseInt(quickQty.value || '1', 10) || 1) : 1;
+      const unit = getUnitPrice(activeVariant.precios || [], qty);
+      const item = {
+        id: activeVariant.presentacion_id,
+        producto: 'Ariel Detergente',
+        marca: activeVariant.marca || 'Ariel',
+        presentacion: activeVariant.presentacion,
+        contenido: activeVariant.contenido,
+        imagen: activeVariant.imagen,
+        qty,
+        unit
+      };
+      const stored = localStorage.getItem(CART_KEY);
+      let cart = [];
+      if (stored) {
+        try { cart = JSON.parse(stored); } catch (e) { cart = []; }
+      }
+      const idx = cart.findIndex((c) => c.id === item.id);
+      if (idx >= 0) {
+        cart[idx].qty += item.qty;
+      } else {
+        cart.push(item);
+      }
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      quickAdd.textContent = 'Agregado';
+      updateCartCount();
+      setTimeout(() => { quickAdd.textContent = 'Agregar al carrito'; }, 1400);
+    });
+  }
+
+  if (quickQty) {
+    quickQty.addEventListener('input', () => {
+      const value = Math.max(1, parseInt(quickQty.value || '1', 10) || 1);
+      quickQty.value = value;
+      updateQuickTotal();
+      scheduleBagHide();
+    });
+  }
+  document.querySelectorAll('.quick-qty-control .qty-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!quickQty) return;
+      const delta = btn.dataset.qty === '+' ? 1 : -1;
+      const value = Math.max(1, parseInt(quickQty.value || '1', 10) + delta);
+      quickQty.value = value;
+      updateQuickTotal();
+      scheduleBagHide();
+    });
+  });
+
 </script>
 
 </body>
 </html>
+
+
+
