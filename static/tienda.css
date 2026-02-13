@@ -38,6 +38,10 @@
     padding:4px 16px 40px;
     font-family:'Poppins', sans-serif;
 }
+.icon-inline{
+    font-style:normal;
+    line-height:1;
+}
 
 .tienda-left{
     display:flex;

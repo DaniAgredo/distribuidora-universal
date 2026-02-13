@@ -146,7 +146,7 @@ def tienda():
             page = max(1, int(request.args.get("page", 1)))
         except ValueError:
             page = 1
-        per_page = 24
+        per_page = 16
         offset = (page - 1) * per_page
 
         where = [

@@ -8,8 +8,6 @@
 
 <link rel="stylesheet" href="/static/style.css">
 <link rel="stylesheet" href="/static/tienda.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body class="pagina-tienda">
@@ -28,28 +26,28 @@
         <input type="hidden" name="cat" value="{{ cat }}">
         <button class="tienda-btn" type="submit">Buscar</button>
         <button class="tienda-lupa" type="submit" aria-label="Buscar">
-          <i class="fa-solid fa-magnifying-glass"></i>
+          <i class="icon-inline" aria-hidden="true">&#128269;</i>
         </button>
         <input class="tienda-input" type="text" name="q" value="{{ q }}" placeholder="Buscar productos, marcas o categorias...">
         <button class="tienda-clear" type="button" aria-label="Borrar">
-          <i class="fa-solid fa-xmark"></i>
+          <i class="icon-inline" aria-hidden="true">&times;</i>
         </button>
         <button class="tienda-camera" type="button" aria-label="Buscar con camara">
-          <i class="fa-solid fa-camera"></i>
+          <i class="icon-inline" aria-hidden="true">&#128247;</i>
         </button>
         <input class="tienda-camera-input" type="file" accept="image/*" capture="environment">
       </form>
     </div>
     <div class="acciones tienda-acciones">
       <a href="https://wa.me/573215485315" class="whatsapp" target="_blank" rel="noopener">
-        <i class="fa-brands fa-whatsapp"></i>
+        <i class="icon-inline" aria-hidden="true">W</i>
         <span class="whatsapp-saludo">WhatsApp</span>
       </a>
       <a href="/" class="volver volver-circle" aria-label="Volver">&#8592;</a>
-      <a href="/carrito" class="carrito-link"><i class="fa-solid fa-bag-shopping"></i> Carrito <span id="cartCount">0</span></a>
-      <a href="/cuenta" class="login"><i class="fa-solid fa-user login-icon"></i> <span class="login-text">Cuenta</span></a>
+      <a href="/carrito" class="carrito-link"><i class="icon-inline" aria-hidden="true">&#128722;</i> Carrito <span id="cartCount">0</span></a>
+      <a href="/cuenta" class="login"><i class="icon-inline login-icon" aria-hidden="true">&#128100;</i> <span class="login-text">Cuenta</span></a>
       <a href="#" class="modo-nocturno" aria-label="Modo nocturno">
-        <i class="fa-solid fa-moon"></i>
+        <i class="icon-inline" aria-hidden="true">&#9789;</i>
       </a>
     </div>
   </div>
@@ -360,10 +358,7 @@
     document.body.classList.toggle("dark", isDark);
     if (themeToggle) themeToggle.classList.toggle("active", isDark);
     if (themeIcon) {
-      themeIcon.classList.toggle("fa-moon", !isDark);
-      themeIcon.classList.toggle("fa-sun", isDark);
-      themeIcon.classList.toggle("fa-solid", !isDark);
-      themeIcon.classList.toggle("fa-regular", isDark);
+      themeIcon.innerHTML = isDark ? "&#9728;" : "&#9789;";
     }
     localStorage.setItem("tema", isDark ? "dark" : "light");
   };
