@@ -742,12 +742,33 @@
   };
 
   document.querySelectorAll('.tienda-card.quick-view').forEach((card) => {
+    let touchMeta = null;
     card.addEventListener('click', (e) => {
+      const openedByTouchAt = Number(card.dataset.touchOpenAt || 0);
+      if (openedByTouchAt && (Date.now() - openedByTouchAt) < 700) {
+        e.preventDefault();
+        return;
+      }
       e.preventDefault();
       openQuick(card);
     });
     card.addEventListener('touchstart', (e) => {
+      const touch = e.changedTouches && e.changedTouches[0];
+      if (!touch) return;
+      touchMeta = { x: touch.clientX, y: touch.clientY, t: Date.now() };
+    }, { passive: true });
+    card.addEventListener('touchend', (e) => {
+      if (!touchMeta) return;
+      const touch = e.changedTouches && e.changedTouches[0];
+      if (!touch) return;
+      const dx = Math.abs(touch.clientX - touchMeta.x);
+      const dy = Math.abs(touch.clientY - touchMeta.y);
+      const dt = Date.now() - touchMeta.t;
+      touchMeta = null;
+      // Prevent accidental open while vertical scrolling.
+      if (dx > 10 || dy > 10 || dt > 550) return;
       e.preventDefault();
+      card.dataset.touchOpenAt = String(Date.now());
       openQuick(card);
     }, { passive: false });
   });
@@ -778,10 +799,11 @@
         best = spot;
       }
     });
-    const limit = window.innerWidth <= 768 ? 320 : 230;
+    const limit = window.innerWidth <= 768 ? 110 : 180;
     if (best && bestDist <= limit) selectHotspot(best, currentVariants);
   };
   if (quickImageWrap) {
+    let touchPick = null;
     quickImageWrap.addEventListener('click', (e) => {
       if (e.target.closest('.bag-item')) return;
       tryPickNearest(e.clientX, e.clientY);
@@ -790,8 +812,20 @@
       if (e.target.closest('.bag-item')) return;
       const touch = e.touches && e.touches[0];
       if (!touch) return;
-      tryPickNearest(touch.clientX, touch.clientY);
+      touchPick = { x: touch.clientX, y: touch.clientY };
     }, { passive: true });
+    quickImageWrap.addEventListener('touchend', (e) => {
+      if (e.target.closest('.bag-item')) return;
+      if (!touchPick) return;
+      const touch = e.changedTouches && e.changedTouches[0];
+      if (!touch) return;
+      const dx = Math.abs(touch.clientX - touchPick.x);
+      const dy = Math.abs(touch.clientY - touchPick.y);
+      touchPick = null;
+      if (dx > 10 || dy > 10) return;
+      e.preventDefault();
+      tryPickNearest(touch.clientX, touch.clientY);
+    }, { passive: false });
   }
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeQuick();
