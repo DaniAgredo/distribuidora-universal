@@ -249,6 +249,30 @@
     document.body.classList.add("modal-open");
   };
 
+  document.querySelectorAll(".aseo-row").forEach((row) => {
+    const cards = Array.from(row.querySelectorAll(".aseo-card"));
+    const activate = (card) => {
+      row.classList.add("dimmed");
+      cards.forEach((c) => c.classList.remove("active"));
+      card.classList.add("active");
+    };
+    const clear = () => {
+      row.classList.remove("dimmed");
+      cards.forEach((c) => c.classList.remove("active"));
+    };
+    cards.forEach((card) => {
+      card.addEventListener("mouseenter", () => activate(card));
+      card.addEventListener("mouseleave", clear);
+      card.addEventListener("focusin", () => activate(card));
+      card.addEventListener("focusout", clear);
+      card.addEventListener("touchstart", () => activate(card), { passive: true });
+      card.addEventListener("touchend", () => setTimeout(clear, 700), { passive: true });
+    });
+    document.addEventListener("click", (e) => {
+      if (!row.contains(e.target)) clear();
+    });
+  });
+
   document.querySelectorAll(".quick-card").forEach((card) => {
     let touch = null;
     const readItem = () => {
@@ -275,13 +299,18 @@
     if (addBtn) addBtn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); addFromCard(); });
 
     card.addEventListener("click", (e) => {
+      const openedByTouchAt = Number(card.dataset.touchOpenAt || 0);
+      if (openedByTouchAt && (Date.now() - openedByTouchAt) < 700) {
+        e.preventDefault();
+        return;
+      }
       if (e.target.closest(".aseo-mini-btn") || e.target.closest(".aseo-mini-link")) return;
       openFromCard();
     });
     card.addEventListener("touchstart", (e) => {
       const t = e.changedTouches && e.changedTouches[0];
       if (!t) return;
-      touch = { x: t.clientX, y: t.clientY };
+      touch = { x: t.clientX, y: t.clientY, at: Date.now() };
     }, { passive: true });
     card.addEventListener("touchend", (e) => {
       if (!touch) return;
@@ -289,10 +318,12 @@
       if (!t) return;
       const dx = Math.abs(t.clientX - touch.x);
       const dy = Math.abs(t.clientY - touch.y);
+      const dt = Date.now() - touch.at;
       touch = null;
-      if (dx > 10 || dy > 10) return;
+      if (dx > 12 || dy > 12 || dt > 550) return;
       if (e.target.closest(".aseo-mini-btn") || e.target.closest(".aseo-mini-link")) return;
       e.preventDefault();
+      card.dataset.touchOpenAt = String(Date.now());
       openFromCard();
     }, { passive: false });
   });
