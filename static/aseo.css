@@ -1,0 +1,261 @@
+.pagina-aseo{
+    background:linear-gradient(180deg,#eaf2ff 0%, #f5f9ff 100%);
+    min-height:100vh;
+    padding-top:132px;
+}
+
+.aseo-header-wrap{
+    position:fixed;
+    inset:0 0 auto 0;
+    z-index:1200;
+}
+
+.aseo-header{
+    width:min(1320px, 98%);
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.aseo-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.aseo-title .icono{
+    font-size:28px;
+}
+
+.aseo-title .nombre{
+    font-size:24px;
+    letter-spacing:0.6px;
+    font-weight:700;
+    color:#103b7c;
+}
+
+.aseo-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:nowrap;
+}
+
+.aseo-actions a{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    border:1px solid #b8cdf0;
+    color:#103b7c;
+    background:#f8fbff;
+    font-weight:700;
+    font-size:14px;
+}
+
+.aseo-actions a:hover{
+    transform:translateY(-1px);
+}
+
+.aseo-main{
+    width:min(1320px, 98%);
+    margin:0 auto;
+    padding:12px 10px 24px;
+}
+
+.aseo-knobs{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding:6px 4px 12px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+}
+
+.aseo-knob{
+    flex:0 0 auto;
+    scroll-snap-align:start;
+    text-decoration:none;
+    color:#0b3d89;
+    background:#e8f1ff;
+    border:1px solid #bdd1f5;
+    border-radius:999px;
+    padding:8px 14px;
+    font-weight:600;
+    font-size:13px;
+    transform-origin:center;
+    transition:transform .18s ease, box-shadow .18s ease;
+}
+
+.aseo-knob:hover,
+.aseo-knob:focus-visible{
+    transform:scale(1.06);
+    box-shadow:0 8px 18px rgba(16,59,124,.15);
+}
+
+.aseo-section{
+    margin:10px 0 16px;
+}
+
+.aseo-section h2{
+    margin:0 0 8px;
+    font-size:18px;
+    color:#0d2f66;
+    letter-spacing:0.2px;
+}
+
+.aseo-row{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding:2px 2px 8px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+}
+
+.aseo-card{
+    scroll-snap-align:start;
+    flex:0 0 180px;
+    text-decoration:none;
+    border:1px solid #d2e1fa;
+    border-radius:14px;
+    background:#fbfdff;
+    box-shadow:0 8px 16px rgba(16,59,124,.08);
+    overflow:hidden;
+    color:#0f172a;
+    transition:transform .2s ease, box-shadow .2s ease;
+}
+
+.aseo-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 20px rgba(16,59,124,.15);
+}
+
+.aseo-card-img{
+    height:122px;
+    background:#f1f7ff;
+    border-bottom:1px solid #d2e1fa;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px;
+}
+
+.aseo-card-img img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+}
+
+.aseo-card-info{
+    padding:8px 9px 10px;
+}
+
+.aseo-card-info h3{
+    margin:0;
+    font-size:13px;
+    line-height:1.28;
+    min-height:32px;
+}
+
+.aseo-card-info span{
+    display:block;
+    margin-top:4px;
+    color:#0d84fc;
+    font-weight:700;
+    font-size:12px;
+}
+
+.aseo-empty,
+.aseo-empty-row{
+    border:1px dashed #b9cdf0;
+    border-radius:12px;
+    background:#f5f9ff;
+    padding:10px 12px;
+    color:#334155;
+    font-size:13px;
+}
+
+body.dark.pagina-aseo{
+    background:linear-gradient(180deg,#0e1a2b 0%, #15263d 100%);
+}
+
+body.dark .aseo-title .nombre{
+    color:#e6efff;
+}
+
+body.dark .aseo-actions a{
+    background:#122039;
+    color:#e6efff;
+    border-color:#22314d;
+}
+
+body.dark .aseo-knob{
+    background:#122039;
+    border-color:#253652;
+    color:#e6efff;
+}
+
+body.dark .aseo-card{
+    background:#0f1b33;
+    border-color:#1d2d47;
+    color:#e6efff;
+}
+
+body.dark .aseo-card-img{
+    background:#122039;
+    border-bottom-color:#1d2d47;
+}
+
+body.dark .aseo-empty,
+body.dark .aseo-empty-row{
+    background:#122039;
+    border-color:#253652;
+    color:#d5e1f9;
+}
+
+@media (max-width:650px){
+    .pagina-aseo{
+        padding-top:86px;
+    }
+    .aseo-header{
+        width:100%;
+        padding:10px 10px 12px;
+    }
+    .aseo-title .icono{
+        font-size:19px;
+    }
+    .aseo-title .nombre{
+        font-size:16px;
+    }
+    .aseo-actions{
+        gap:5px;
+    }
+    .aseo-actions a{
+        width:28px;
+        height:28px;
+        font-size:12px;
+    }
+    .aseo-main{
+        width:100%;
+        padding:8px 8px 18px;
+    }
+    .aseo-section h2{
+        font-size:15px;
+    }
+    .aseo-card{
+        flex-basis:156px;
+    }
+    .aseo-card-img{
+        height:104px;
+    }
+    .aseo-card-info h3{
+        font-size:12px;
+        min-height:30px;
+    }
+}

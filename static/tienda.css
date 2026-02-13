@@ -1318,7 +1318,8 @@ body.dark .quick-total strong{
         margin-left:auto;
         width:auto;
         justify-content:flex-end;
-        gap:8px;
+        gap:6px;
+        flex-wrap:nowrap;
         max-width:none;
     }
     .tienda-acciones .carrito-link{
@@ -1412,13 +1413,14 @@ body.dark .quick-total strong{
         font-size:13px;
     }
     .tienda-left{
-        max-width:52%;
+        max-width:58%;
     }
     .tienda-acciones{
-        flex-wrap:wrap;
-        row-gap:4px;
-        align-items:flex-start;
-        margin-top:-2px;
+        flex-wrap:nowrap;
+        row-gap:0;
+        align-items:center;
+        margin-top:0;
+        gap:4px;
     }
     .pagina-tienda .tienda-header{
         padding:2px 8px 3px;
@@ -1442,13 +1444,13 @@ body.dark .quick-total strong{
         font-size:10px;
     }
     .tienda-acciones a{
-        width:28px;
-        height:28px;
+        width:26px;
+        height:26px;
     }
     .tienda-acciones .volver-circle,
     .tienda-acciones .whatsapp{
-        width:28px;
-        height:28px;
+        width:26px;
+        height:26px;
     }
 }
 

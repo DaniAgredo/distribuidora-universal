@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aseo - Distribuidora Universal</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="/static/aseo.css">
+</head>
+<body class="pagina-aseo">
+
+<header class="header aseo-header-wrap">
+  <div class="fila-superior aseo-header">
+    <div class="aseo-title">
+      <span class="icono">&#127758;</span>
+      <div class="nombre">Aseo</div>
+    </div>
+    <div class="acciones aseo-actions">
+      <a href="https://wa.me/573215485315" class="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp">W</a>
+      <a href="/" class="volver" aria-label="Volver">&#8592;</a>
+      <a href="/tienda" class="carrito-mini" aria-label="Tienda">&#128722;</a>
+      <a href="/cuenta" class="login" aria-label="Cuenta">&#128100;</a>
+      <a href="#" class="modo-nocturno" aria-label="Modo nocturno">&#9789;</a>
+    </div>
+  </div>
+</header>
+
+<main class="aseo-main">
+  {% if db_missing %}
+  <div class="aseo-empty">
+    <strong>Base de datos no encontrada.</strong>
+    <p>No se pudo cargar el catalogo de aseo.</p>
+  </div>
+  {% else %}
+  <nav class="aseo-knobs" aria-label="Subcategorias de aseo">
+    {% for section in sections %}
+    <a href="#{{ section['slug'] }}" class="aseo-knob">{{ section['title'] }}</a>
+    {% endfor %}
+  </nav>
+
+  {% for section in sections %}
+  <section class="aseo-section" id="{{ section['slug'] }}">
+    <h2>{{ section['title'] }}</h2>
+    {% if section['items'] %}
+    <div class="aseo-row">
+      {% for item in section['items'] %}
+      <a class="aseo-card" href="/producto/{{ item.producto_id }}">
+        <div class="aseo-card-img">
+          <img src="{{ item.imagen }}" alt="{{ item.producto }}" loading="lazy" decoding="async" fetchpriority="low" width="320" height="210" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+        </div>
+        <div class="aseo-card-info">
+          <h3>{{ item.producto }}</h3>
+          {% if item.precio_desde %}
+          <span>Desde {{ item.precio_desde|cop }}</span>
+          {% else %}
+          <span>Precio por confirmar</span>
+          {% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="aseo-empty-row">Pronto agregaremos productos de {{ section['title']|lower }}.</div>
+    {% endif %}
+  </section>
+  {% endfor %}
+  {% endif %}
+</main>
+
+<script>
+  const themeToggle = document.querySelector(".modo-nocturno");
+  const setTheme = (isDark) => {
+    document.body.classList.toggle("dark", isDark);
+    if (themeToggle) themeToggle.innerHTML = isDark ? "&#9728;" : "&#9789;";
+    localStorage.setItem("tema", isDark ? "dark" : "light");
+  };
+  const storedTheme = localStorage.getItem("tema");
+  if (storedTheme) setTheme(storedTheme === "dark");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      setTheme(!document.body.classList.contains("dark"));
+    });
+  }
+</script>
+
+</body>
+</html>
