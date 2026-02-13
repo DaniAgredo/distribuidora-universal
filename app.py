@@ -7,6 +7,12 @@ DB_PATH = Path(__file__).resolve().parent / "data" / "catalogo.db"
 
 
 def resolve_db_path():
+    root_db = Path(__file__).resolve().parent / "catalogo.db"
+    if root_db.exists():
+        return root_db
+    cwd_root_db = Path.cwd() / "catalogo.db"
+    if cwd_root_db.exists():
+        return cwd_root_db
     if DB_PATH.exists():
         return DB_PATH
     alt = Path.cwd() / "data" / "catalogo.db"
