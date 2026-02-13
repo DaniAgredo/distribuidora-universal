@@ -267,12 +267,13 @@
         {% set producto_imagen = '/static/images/ariel.jpg' %}
       {% endif %}
       {% set producto_variantes = variants_by_product.get(item.producto_id, []) %}
-      <a class="tienda-card {% if is_ariel or is_revita or is_fab or is_3d %}focusable quick-view{% endif %}"
+      {% set is_quick = is_ariel or is_revita or is_fab or is_3d %}
+      <a class="tienda-card {% if is_quick %}focusable quick-view{% endif %}"
          href="/producto/{{ item.producto_id }}"
          data-producto="{{ item.producto }}"
          data-categoria="{{ item.categoria }}"
-         data-quick-type="{% if is_revita %}revita{% elif is_fab %}fab{% elif is_3d %}3d{% elif is_ariel %}ariel{% endif %}"
-         data-variantes='{{ producto_variantes|tojson }}'>
+         {% if is_quick %}data-quick-type="{% if is_revita %}revita{% elif is_fab %}fab{% elif is_3d %}3d{% elif is_ariel %}ariel{% endif %}"{% endif %}
+         {% if is_quick %}data-variantes='{{ producto_variantes|tojson }}'{% endif %}>
         <div class="tienda-img">
           <img src="{{ producto_imagen }}" alt="{{ item.producto }}" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
         </div>

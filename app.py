@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g, abort
+from flask import Flask, render_template, request, g, abort, redirect
 from pathlib import Path
 import sqlite3
 
@@ -80,6 +80,26 @@ def pagos():
 @app.route("/cuenta")
 def cuenta():
     return render_template("cuenta.html")
+
+
+@app.route("/aseo")
+def aseo_redirect():
+    return redirect("/tienda?cat=aseo")
+
+
+@app.route("/drogueria")
+def drogueria_redirect():
+    return redirect("/tienda?cat=drogueria")
+
+
+@app.route("/ferreteria")
+def ferreteria_redirect():
+    return redirect("/tienda?cat=ferreteria")
+
+
+@app.route("/papeleria")
+def papeleria_redirect():
+    return redirect("/tienda?cat=papeleria")
 
 
 @app.route("/tienda")
@@ -205,57 +225,9 @@ def tienda():
             params + [per_page, offset],
         )
 
-        categorias = query_db(
-            "SELECT nombre, slug FROM categoria ORDER BY nombre"
-        )
+        categorias = query_db("SELECT nombre, slug FROM categoria ORDER BY nombre")
+        # Keep the catalog lightweight on mobile: variants are loaded in dedicated product pages.
         variants_by_product = {}
-        if items:
-            product_ids = [row["producto_id"] for row in items]
-            placeholders = ",".join(["?"] * len(product_ids))
-            present_rows = query_db(
-                f"""
-                SELECT
-                    pz.producto_id AS producto_id,
-                    pz.id AS presentacion_id,
-                    pz.nombre AS presentacion,
-                    pz.contenido AS contenido,
-                    pz.imagen AS imagen,
-                    m.nombre AS marca
-                FROM presentacion pz
-                JOIN marca m ON m.id = pz.marca_id
-                WHERE pz.activo = 1 AND pz.producto_id IN ({placeholders})
-                ORDER BY pz.producto_id, m.nombre, pz.nombre
-                """,
-                product_ids,
-            )
-            pres_ids = [row["presentacion_id"] for row in present_rows]
-            precios_by_pres = {}
-            if pres_ids:
-                pres_placeholders = ",".join(["?"] * len(pres_ids))
-                precio_rows = query_db(
-                    f"""
-                    SELECT presentacion_id, min_cantidad, precio
-                    FROM precio_escalonado
-                    WHERE presentacion_id IN ({pres_placeholders})
-                    ORDER BY min_cantidad ASC
-                    """,
-                    pres_ids,
-                )
-                for row in precio_rows:
-                    precios_by_pres.setdefault(row["presentacion_id"], []).append(
-                        {"min_cantidad": row["min_cantidad"], "precio": row["precio"]}
-                    )
-            for row in present_rows:
-                variants_by_product.setdefault(row["producto_id"], []).append(
-                    {
-                        "presentacion_id": row["presentacion_id"],
-                        "presentacion": row["presentacion"],
-                        "contenido": row["contenido"],
-                        "imagen": row["imagen"],
-                        "marca": row["marca"],
-                        "precios": precios_by_pres.get(row["presentacion_id"], []),
-                    }
-                )
 
         return render_template(
             "tienda.html",
