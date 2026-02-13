@@ -68,7 +68,21 @@ def cuenta():
 
 @app.route("/tienda")
 def tienda():
-    if not DB_PATH.exists():
+    try:
+        if not DB_PATH.exists():
+            return render_template(
+                "tienda.html",
+                categorias=[],
+                items=[],
+                page=1,
+                pages=1,
+                q="",
+                cat="",
+                total=0,
+                db_missing=True,
+                variants_by_product={},
+            )
+    except Exception:
         return render_template(
             "tienda.html",
             categorias=[],
@@ -79,155 +93,251 @@ def tienda():
             cat="",
             total=0,
             db_missing=True,
+            variants_by_product={},
         )
 
-    q = (request.args.get("q") or "").strip()
-    cat = (request.args.get("cat") or "").strip()
     try:
-        page = max(1, int(request.args.get("page", 1)))
-    except ValueError:
-        page = 1
-    per_page = 24
-    offset = (page - 1) * per_page
-
-    where = [
-        "EXISTS (SELECT 1 FROM presentacion pz WHERE pz.producto_id = prod.id AND pz.activo = 1)"
-    ]
-    params = []
-    if cat:
-        where.append("cat.slug = ?")
-        params.append(cat)
-    if q:
-        like = f"%{q}%"
-        where.append(
-            """
-            (
-                prod.nombre LIKE ?
-                OR cat.nombre LIKE ?
-                OR EXISTS (
-                    SELECT 1
-                    FROM presentacion pz
-                    JOIN marca m ON m.id = pz.marca_id
-                    WHERE pz.producto_id = prod.id
-                      AND pz.activo = 1
-                      AND (pz.nombre LIKE ? OR m.nombre LIKE ?)
-                )
-            )
-            """
-        )
-        params.extend([like, like, like, like])
-
-    where_sql = " AND ".join(where)
-
-    total_row = query_db(
-        f"""
-        SELECT COUNT(*) as total
-        FROM producto prod
-        JOIN categoria cat ON cat.id = prod.categoria_id
-        WHERE {where_sql}
-        """,
-        params,
-        one=True,
-    )
-    total = total_row["total"] if total_row else 0
-    pages = max(1, (total + per_page - 1) // per_page)
-    if page > pages:
-        page = pages
+        q = (request.args.get("q") or "").strip()
+        cat = (request.args.get("cat") or "").strip()
+        try:
+            page = max(1, int(request.args.get("page", 1)))
+        except ValueError:
+            page = 1
+        per_page = 24
         offset = (page - 1) * per_page
 
-    items = query_db(
-        f"""
-        SELECT
-            prod.id AS producto_id,
-            prod.nombre AS producto,
-            cat.nombre AS categoria,
-            cat.slug AS categoria_slug,
-            (
-                SELECT imagen
-                FROM presentacion pz
-                WHERE pz.producto_id = prod.id
-                  AND pz.activo = 1
-                  AND pz.imagen IS NOT NULL
-                ORDER BY pz.id
-                LIMIT 1
-            ) AS imagen,
-            (
-                SELECT MIN(pe.precio)
-                FROM presentacion pz
-                JOIN precio_escalonado pe ON pe.presentacion_id = pz.id
-                WHERE pz.producto_id = prod.id
-                  AND pz.activo = 1
-            ) AS precio_desde,
-            (
-                SELECT COUNT(DISTINCT pz.marca_id)
-                FROM presentacion pz
-                WHERE pz.producto_id = prod.id
-                  AND pz.activo = 1
-            ) AS marcas
-        FROM producto prod
-        JOIN categoria cat ON cat.id = prod.categoria_id
-        WHERE {where_sql}
-        ORDER BY prod.nombre
-        LIMIT ? OFFSET ?
-        """,
-        params + [per_page, offset],
-    )
+        where = [
+            "EXISTS (SELECT 1 FROM presentacion pz WHERE pz.producto_id = prod.id AND pz.activo = 1)"
+        ]
+        params = []
+        if cat:
+            where.append("cat.slug = ?")
+            params.append(cat)
+        if q:
+            like = f"%{q}%"
+            where.append(
+                """
+                (
+                    prod.nombre LIKE ?
+                    OR cat.nombre LIKE ?
+                    OR EXISTS (
+                        SELECT 1
+                        FROM presentacion pz
+                        JOIN marca m ON m.id = pz.marca_id
+                        WHERE pz.producto_id = prod.id
+                          AND pz.activo = 1
+                          AND (pz.nombre LIKE ? OR m.nombre LIKE ?)
+                    )
+                )
+                """
+            )
+            params.extend([like, like, like, like])
 
-    categorias = query_db(
-        "SELECT nombre, slug FROM categoria ORDER BY nombre"
-    )
+        where_sql = " AND ".join(where)
 
-    return render_template(
-        "tienda.html",
-        categorias=categorias,
-        items=items,
-        page=page,
-        pages=pages,
-        q=q,
-        cat=cat,
-        total=total,
-        db_missing=False,
-    )
+        total_row = query_db(
+            f"""
+            SELECT COUNT(*) as total
+            FROM producto prod
+            JOIN categoria cat ON cat.id = prod.categoria_id
+            WHERE {where_sql}
+            """,
+            params,
+            one=True,
+        )
+        total = total_row["total"] if total_row else 0
+        pages = max(1, (total + per_page - 1) // per_page)
+        if page > pages:
+            page = pages
+            offset = (page - 1) * per_page
+
+        items = query_db(
+            f"""
+            SELECT
+                prod.id AS producto_id,
+                prod.nombre AS producto,
+                cat.nombre AS categoria,
+                cat.slug AS categoria_slug,
+                (
+                    SELECT imagen
+                    FROM presentacion pz
+                    WHERE pz.producto_id = prod.id
+                      AND pz.activo = 1
+                      AND pz.imagen IS NOT NULL
+                    ORDER BY pz.id
+                    LIMIT 1
+                ) AS imagen,
+                (
+                    SELECT MIN(pe.precio)
+                    FROM presentacion pz
+                    JOIN precio_escalonado pe ON pe.presentacion_id = pz.id
+                    WHERE pz.producto_id = prod.id
+                      AND pz.activo = 1
+                ) AS precio_desde,
+                (
+                    SELECT COUNT(DISTINCT pz.marca_id)
+                    FROM presentacion pz
+                    WHERE pz.producto_id = prod.id
+                      AND pz.activo = 1
+                ) AS marcas
+            FROM producto prod
+            JOIN categoria cat ON cat.id = prod.categoria_id
+            WHERE {where_sql}
+            ORDER BY prod.nombre
+            LIMIT ? OFFSET ?
+            """,
+            params + [per_page, offset],
+        )
+
+        categorias = query_db(
+            "SELECT nombre, slug FROM categoria ORDER BY nombre"
+        )
+        variants_by_product = {}
+        if items:
+            product_ids = [row["producto_id"] for row in items]
+            placeholders = ",".join(["?"] * len(product_ids))
+            present_rows = query_db(
+                f"""
+                SELECT
+                    pz.producto_id AS producto_id,
+                    pz.id AS presentacion_id,
+                    pz.nombre AS presentacion,
+                    pz.contenido AS contenido,
+                    pz.imagen AS imagen,
+                    m.nombre AS marca
+                FROM presentacion pz
+                JOIN marca m ON m.id = pz.marca_id
+                WHERE pz.activo = 1 AND pz.producto_id IN ({placeholders})
+                ORDER BY pz.producto_id, m.nombre, pz.nombre
+                """,
+                product_ids,
+            )
+            pres_ids = [row["presentacion_id"] for row in present_rows]
+            precios_by_pres = {}
+            if pres_ids:
+                pres_placeholders = ",".join(["?"] * len(pres_ids))
+                precio_rows = query_db(
+                    f"""
+                    SELECT presentacion_id, min_cantidad, precio
+                    FROM precio_escalonado
+                    WHERE presentacion_id IN ({pres_placeholders})
+                    ORDER BY min_cantidad ASC
+                    """,
+                    pres_ids,
+                )
+                for row in precio_rows:
+                    precios_by_pres.setdefault(row["presentacion_id"], []).append(
+                        {"min_cantidad": row["min_cantidad"], "precio": row["precio"]}
+                    )
+            for row in present_rows:
+                variants_by_product.setdefault(row["producto_id"], []).append(
+                    {
+                        "presentacion_id": row["presentacion_id"],
+                        "presentacion": row["presentacion"],
+                        "contenido": row["contenido"],
+                        "imagen": row["imagen"],
+                        "marca": row["marca"],
+                        "precios": precios_by_pres.get(row["presentacion_id"], []),
+                    }
+                )
+
+        return render_template(
+            "tienda.html",
+            categorias=categorias,
+            items=items,
+            page=page,
+            pages=pages,
+            q=q,
+            cat=cat,
+            total=total,
+            db_missing=False,
+            variants_by_product=variants_by_product,
+        )
+    except sqlite3.Error:
+        return render_template(
+            "tienda.html",
+            categorias=[],
+            items=[],
+            page=1,
+            pages=1,
+            q="",
+            cat="",
+            total=0,
+            db_missing=True,
+            variants_by_product={},
+        )
 
 
 @app.route("/producto/<int:producto_id>")
 def producto_marcas(producto_id):
-    if not DB_PATH.exists():
+    try:
+        if not DB_PATH.exists():
+            abort(404)
+    except Exception:
         abort(404)
 
-    producto = query_db(
-        """
-        SELECT
-            prod.id AS producto_id,
-            prod.nombre AS producto,
-            cat.nombre AS categoria,
-            cat.slug AS categoria_slug
-        FROM producto prod
-        JOIN categoria cat ON cat.id = prod.categoria_id
-        WHERE prod.id = ?
-        """,
-        (producto_id,),
-        one=True,
-    )
+    try:
+        producto = query_db(
+            """
+            SELECT
+                prod.id AS producto_id,
+                prod.nombre AS producto,
+                cat.nombre AS categoria,
+                cat.slug AS categoria_slug
+            FROM producto prod
+            JOIN categoria cat ON cat.id = prod.categoria_id
+            WHERE prod.id = ?
+            """,
+            (producto_id,),
+            one=True,
+        )
+    except sqlite3.Error:
+        abort(404)
     if not producto:
         abort(404)
 
-    presentaciones = query_db(
-        """
-        SELECT
-            pz.id AS presentacion_id,
-            marca.nombre AS marca,
-            pz.nombre AS presentacion,
-            pz.contenido AS contenido,
-            pz.imagen AS imagen,
-            (SELECT MIN(precio) FROM precio_escalonado pe WHERE pe.presentacion_id = pz.id) AS precio_desde
-        FROM presentacion pz
-        JOIN marca ON marca.id = pz.marca_id
-        WHERE pz.producto_id = ? AND pz.activo = 1
-        ORDER BY marca.nombre, pz.nombre
-        """,
-        (producto_id,),
-    )
+    try:
+        presentaciones_rows = query_db(
+            """
+            SELECT
+                pz.id AS presentacion_id,
+                marca.nombre AS marca,
+                pz.nombre AS presentacion,
+                pz.contenido AS contenido,
+                pz.imagen AS imagen,
+                (SELECT MIN(precio) FROM precio_escalonado pe WHERE pe.presentacion_id = pz.id) AS precio_desde
+            FROM presentacion pz
+            JOIN marca ON marca.id = pz.marca_id
+            WHERE pz.producto_id = ? AND pz.activo = 1
+            ORDER BY marca.nombre, pz.nombre
+            """,
+            (producto_id,),
+        )
+    except sqlite3.Error:
+        abort(404)
+    presentaciones = [dict(row) for row in presentaciones_rows]
+    precios_map = {}
+    if presentaciones:
+        ids = [p["presentacion_id"] for p in presentaciones]
+        placeholders = ",".join(["?"] * len(ids))
+        try:
+            precios_rows = query_db(
+                f"""
+                SELECT presentacion_id, min_cantidad, precio
+                FROM precio_escalonado
+                WHERE presentacion_id IN ({placeholders})
+                ORDER BY min_cantidad ASC
+                """,
+                ids,
+            )
+        except sqlite3.Error:
+            precios_rows = []
+        for row in precios_rows:
+            precios_map.setdefault(row["presentacion_id"], []).append(
+                {"min_cantidad": row["min_cantidad"], "precio": row["precio"]}
+            )
+    for p in presentaciones:
+        p["precios"] = precios_map.get(p["presentacion_id"], [])
 
     return render_template(
         "producto_marcas.html",
@@ -238,63 +348,75 @@ def producto_marcas(producto_id):
 
 @app.route("/presentacion/<int:presentacion_id>")
 def producto_detalle(presentacion_id):
-    if not DB_PATH.exists():
+    try:
+        if not DB_PATH.exists():
+            abort(404)
+    except Exception:
         abort(404)
 
-    item = query_db(
-        """
-        SELECT
-            pz.id AS presentacion_id,
-            prod.nombre AS producto,
-            prod.id AS producto_id,
-            marca.nombre AS marca,
-            cat.nombre AS categoria,
-            cat.slug AS categoria_slug,
-            pz.nombre AS presentacion,
-            pz.contenido AS contenido,
-            pz.imagen AS imagen
-        FROM presentacion pz
-        JOIN producto prod ON prod.id = pz.producto_id
-        JOIN marca ON marca.id = pz.marca_id
-        JOIN categoria cat ON cat.id = prod.categoria_id
-        WHERE pz.id = ?
-        """,
-        (presentacion_id,),
-        one=True,
-    )
+    try:
+        item = query_db(
+            """
+            SELECT
+                pz.id AS presentacion_id,
+                prod.nombre AS producto,
+                prod.id AS producto_id,
+                marca.nombre AS marca,
+                cat.nombre AS categoria,
+                cat.slug AS categoria_slug,
+                pz.nombre AS presentacion,
+                pz.contenido AS contenido,
+                pz.imagen AS imagen
+            FROM presentacion pz
+            JOIN producto prod ON prod.id = pz.producto_id
+            JOIN marca ON marca.id = pz.marca_id
+            JOIN categoria cat ON cat.id = prod.categoria_id
+            WHERE pz.id = ?
+            """,
+            (presentacion_id,),
+            one=True,
+        )
+    except sqlite3.Error:
+        abort(404)
     if not item:
         abort(404)
 
-    precios_rows = query_db(
-        """
-        SELECT min_cantidad, precio
-        FROM precio_escalonado
-        WHERE presentacion_id = ?
-        ORDER BY min_cantidad ASC
-        """,
-        (presentacion_id,),
-    )
+    try:
+        precios_rows = query_db(
+            """
+            SELECT min_cantidad, precio
+            FROM precio_escalonado
+            WHERE presentacion_id = ?
+            ORDER BY min_cantidad ASC
+            """,
+            (presentacion_id,),
+        )
+    except sqlite3.Error:
+        precios_rows = []
     precios = [dict(row) for row in precios_rows]
 
-    relacionados = query_db(
-        """
-        SELECT
-            pz.id AS presentacion_id,
-            prod.nombre AS producto,
-            marca.nombre AS marca,
-            pz.nombre AS presentacion,
-            pz.contenido AS contenido,
-            pz.imagen AS imagen,
-            (SELECT MIN(precio) FROM precio_escalonado pe WHERE pe.presentacion_id = pz.id) AS precio_desde
-        FROM presentacion pz
-        JOIN producto prod ON prod.id = pz.producto_id
-        JOIN marca ON marca.id = pz.marca_id
-        WHERE pz.producto_id = ? AND pz.id != ?
-        ORDER BY pz.nombre
-        LIMIT 6
-        """,
-        (item["producto_id"], presentacion_id),
-    )
+    try:
+        relacionados = query_db(
+            """
+            SELECT
+                pz.id AS presentacion_id,
+                prod.nombre AS producto,
+                marca.nombre AS marca,
+                pz.nombre AS presentacion,
+                pz.contenido AS contenido,
+                pz.imagen AS imagen,
+                (SELECT MIN(precio) FROM precio_escalonado pe WHERE pe.presentacion_id = pz.id) AS precio_desde
+            FROM presentacion pz
+            JOIN producto prod ON prod.id = pz.producto_id
+            JOIN marca ON marca.id = pz.marca_id
+            WHERE pz.producto_id = ? AND pz.id != ?
+            ORDER BY pz.nombre
+            LIMIT 6
+            """,
+            (item["producto_id"], presentacion_id),
+        )
+    except sqlite3.Error:
+        relacionados = []
 
     return render_template(
         "producto.html",
