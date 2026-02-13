@@ -27,7 +27,8 @@ def resolve_db_path():
 def get_db():
     if "db" not in g:
         db_path = resolve_db_path().resolve()
-        db_uri = f"file:{db_path.as_posix()}?mode=ro"
+        # immutable=1 avoids WAL/SHM write attempts on read-only runtimes (e.g. Vercel)
+        db_uri = f"file:{db_path.as_posix()}?mode=ro&immutable=1"
         g.db = sqlite3.connect(db_uri, uri=True)
         g.db.row_factory = sqlite3.Row
     return g.db
