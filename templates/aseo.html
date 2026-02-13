@@ -72,7 +72,8 @@
     {% if section['items'] %}
     <div class="aseo-row">
       {% for item in section['items'] %}
-      <a class="aseo-card" href="/producto/{{ item.producto_id }}">
+      <article class="aseo-card quick-card"
+               data-item='{{ {"id": item.presentacion_id or ("aseo-" ~ item.producto_id), "producto": item.producto, "marca": item.marca, "presentacion": item.presentacion, "contenido": item.contenido, "imagen": item.imagen, "unit": item.precio_unit, "producto_id": item.producto_id, "subcat": section["title"]}|tojson|safe }}'>
         <div class="aseo-card-img">
           <img src="{{ item.imagen }}" alt="{{ item.producto }}" loading="lazy" decoding="async" fetchpriority="low" width="320" height="210" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
         </div>
@@ -85,7 +86,12 @@
           <span>Precio por confirmar</span>
           {% endif %}
         </div>
-      </a>
+        <div class="aseo-card-actions">
+          <button type="button" class="aseo-mini-btn js-open">Detalle</button>
+          <button type="button" class="aseo-mini-btn js-add">Carrito</button>
+          <a href="/producto/{{ item.producto_id }}" class="aseo-mini-link">Ver</a>
+        </div>
+      </article>
       {% endfor %}
     </div>
     {% else %}
@@ -95,6 +101,32 @@
   {% endfor %}
   {% endif %}
 </main>
+
+<div class="aseo-quick-modal" id="aseoQuickModal" aria-hidden="true">
+  <div class="aseo-quick-overlay" data-close></div>
+  <div class="aseo-quick-sheet" role="dialog" aria-modal="true">
+    <button class="aseo-quick-close" type="button" data-close aria-label="Cerrar">&times;</button>
+    <div class="aseo-quick-body">
+      <div class="aseo-quick-image">
+        <img id="aseoQuickImg" src="/static/images/placeholder.svg" alt="Producto" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+      </div>
+      <div class="aseo-quick-info">
+        <h3 id="aseoQuickName"></h3>
+        <p id="aseoQuickSub"></p>
+        <strong id="aseoQuickPrice">$0</strong>
+        <div class="aseo-quick-qty">
+          <button type="button" data-qty="-">-</button>
+          <input type="number" id="aseoQuickQty" min="1" value="1">
+          <button type="button" data-qty="+">+</button>
+        </div>
+        <div class="aseo-quick-actions">
+          <button type="button" id="aseoQuickAdd">Agregar al carrito</button>
+          <a id="aseoQuickView" href="/tienda">Ver detalle</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   const themeToggle = document.querySelector(".modo-nocturno");
@@ -109,6 +141,163 @@
     themeToggle.addEventListener("click", (e) => {
       e.preventDefault();
       setTheme(!document.body.classList.contains("dark"));
+    });
+  }
+
+  const mainCats = document.querySelectorAll(".aseo-main-cat");
+  if (mainCats.length) {
+    const setFocus = (el) => {
+      mainCats.forEach((c) => c.classList.remove("is-focus"));
+      if (el) el.classList.add("is-focus");
+    };
+    mainCats.forEach((cat) => {
+      cat.addEventListener("mouseenter", () => setFocus(cat));
+      cat.addEventListener("focusin", () => setFocus(cat));
+      cat.addEventListener("touchstart", () => setFocus(cat), { passive: true });
+    });
+  }
+
+  const CART_KEY = "du_cart";
+  const quickModal = document.getElementById("aseoQuickModal");
+  const quickImg = document.getElementById("aseoQuickImg");
+  const quickName = document.getElementById("aseoQuickName");
+  const quickSub = document.getElementById("aseoQuickSub");
+  const quickPrice = document.getElementById("aseoQuickPrice");
+  const quickQty = document.getElementById("aseoQuickQty");
+  const quickAdd = document.getElementById("aseoQuickAdd");
+  const quickView = document.getElementById("aseoQuickView");
+  let activeItem = null;
+
+  const formatCOP = (value) => {
+    const num = Number(value) || 0;
+    return `$${num.toLocaleString("es-CO")}`.replace(/,/g, ".");
+  };
+
+  const addToCart = (item, qty) => {
+    const stored = localStorage.getItem(CART_KEY);
+    let cart = [];
+    if (stored) {
+      try { cart = JSON.parse(stored); } catch (e) { cart = []; }
+    }
+    const payload = {
+      id: String(item.id || `aseo-${item.producto_id}`),
+      producto: item.producto || "Producto",
+      marca: item.marca || "Marca",
+      presentacion: item.presentacion || "Presentacion",
+      contenido: item.contenido || "",
+      imagen: item.imagen || "/static/images/placeholder.svg",
+      qty: qty,
+      unit: Number(item.unit) || 0
+    };
+    const idx = cart.findIndex((c) => String(c.id) === String(payload.id));
+    if (idx >= 0) {
+      cart[idx].qty += payload.qty;
+      cart[idx].unit = payload.unit;
+    } else {
+      cart.push(payload);
+    }
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  };
+
+  const closeQuick = () => {
+    if (!quickModal) return;
+    quickModal.classList.remove("open");
+    quickModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+    activeItem = null;
+    if (quickQty) quickQty.value = 1;
+  };
+
+  const openQuick = (item) => {
+    if (!quickModal || !item) return;
+    activeItem = item;
+    if (quickImg) quickImg.src = item.imagen || "/static/images/placeholder.svg";
+    if (quickName) quickName.textContent = item.producto || "Producto";
+    if (quickSub) quickSub.textContent = `${item.subcat || "Aseo"} · ${item.presentacion || ""} ${item.contenido || ""}`.trim();
+    if (quickPrice) quickPrice.textContent = formatCOP(item.unit || 0);
+    if (quickView) quickView.href = `/producto/${item.producto_id || ""}`;
+    if (quickQty) quickQty.value = 1;
+    quickModal.classList.add("open");
+    quickModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+  };
+
+  document.querySelectorAll(".quick-card").forEach((card) => {
+    let touch = null;
+    const readItem = () => {
+      try { return JSON.parse(card.dataset.item || "{}"); } catch (e) { return null; }
+    };
+
+    const openFromCard = () => {
+      const item = readItem();
+      if (!item) return;
+      openQuick(item);
+    };
+
+    const addFromCard = () => {
+      const item = readItem();
+      if (!item) return;
+      addToCart(item, 1);
+      card.classList.add("added");
+      setTimeout(() => card.classList.remove("added"), 700);
+    };
+
+    const openBtn = card.querySelector(".js-open");
+    const addBtn = card.querySelector(".js-add");
+    if (openBtn) openBtn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openFromCard(); });
+    if (addBtn) addBtn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); addFromCard(); });
+
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".aseo-mini-btn") || e.target.closest(".aseo-mini-link")) return;
+      openFromCard();
+    });
+    card.addEventListener("touchstart", (e) => {
+      const t = e.changedTouches && e.changedTouches[0];
+      if (!t) return;
+      touch = { x: t.clientX, y: t.clientY };
+    }, { passive: true });
+    card.addEventListener("touchend", (e) => {
+      if (!touch) return;
+      const t = e.changedTouches && e.changedTouches[0];
+      if (!t) return;
+      const dx = Math.abs(t.clientX - touch.x);
+      const dy = Math.abs(t.clientY - touch.y);
+      touch = null;
+      if (dx > 10 || dy > 10) return;
+      if (e.target.closest(".aseo-mini-btn") || e.target.closest(".aseo-mini-link")) return;
+      e.preventDefault();
+      openFromCard();
+    }, { passive: false });
+  });
+
+  if (quickModal) {
+    quickModal.querySelectorAll("[data-close]").forEach((el) => el.addEventListener("click", closeQuick));
+    quickModal.addEventListener("click", (e) => {
+      if (!e.target.closest(".aseo-quick-sheet")) closeQuick();
+    });
+  }
+
+  if (quickQty) {
+    quickQty.addEventListener("input", () => {
+      const n = Math.max(1, parseInt(quickQty.value || "1", 10) || 1);
+      quickQty.value = n;
+    });
+  }
+  document.querySelectorAll(".aseo-quick-qty button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!quickQty) return;
+      const d = btn.dataset.qty === "+" ? 1 : -1;
+      const n = Math.max(1, parseInt(quickQty.value || "1", 10) + d);
+      quickQty.value = n;
+    });
+  });
+  if (quickAdd) {
+    quickAdd.addEventListener("click", () => {
+      if (!activeItem) return;
+      const qty = quickQty ? Math.max(1, parseInt(quickQty.value || "1", 10) || 1) : 1;
+      addToCart(activeItem, qty);
+      quickAdd.textContent = "Agregado";
+      setTimeout(() => { quickAdd.textContent = "Agregar al carrito"; }, 900);
     });
   }
 </script>

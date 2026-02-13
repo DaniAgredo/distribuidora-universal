@@ -119,6 +119,49 @@ def aseo():
                     WHERE pz.producto_id = prod.id
                       AND pz.activo = 1
                 ) AS precio_desde,
+                (
+                    SELECT pz.id
+                    FROM presentacion pz
+                    WHERE pz.producto_id = prod.id
+                      AND pz.activo = 1
+                    ORDER BY pz.id
+                    LIMIT 1
+                ) AS presentacion_id,
+                (
+                    SELECT m.nombre
+                    FROM presentacion pz
+                    JOIN marca m ON m.id = pz.marca_id
+                    WHERE pz.producto_id = prod.id
+                      AND pz.activo = 1
+                    ORDER BY pz.id
+                    LIMIT 1
+                ) AS marca,
+                (
+                    SELECT pz.nombre
+                    FROM presentacion pz
+                    WHERE pz.producto_id = prod.id
+                      AND pz.activo = 1
+                    ORDER BY pz.id
+                    LIMIT 1
+                ) AS presentacion,
+                (
+                    SELECT pz.contenido
+                    FROM presentacion pz
+                    WHERE pz.producto_id = prod.id
+                      AND pz.activo = 1
+                    ORDER BY pz.id
+                    LIMIT 1
+                ) AS contenido,
+                (
+                    SELECT pe.precio
+                    FROM presentacion pz
+                    JOIN precio_escalonado pe ON pe.presentacion_id = pz.id
+                    WHERE pz.producto_id = prod.id
+                      AND pz.activo = 1
+                      AND pe.min_cantidad = 1
+                    ORDER BY pz.id
+                    LIMIT 1
+                ) AS precio_unit,
                 LOWER(
                     prod.nombre || ' ' ||
                     COALESCE((
@@ -166,6 +209,11 @@ def aseo():
                     "producto": row["producto"],
                     "imagen": img,
                     "precio_desde": row["precio_desde"],
+                    "presentacion_id": row["presentacion_id"],
+                    "marca": row["marca"] or "",
+                    "presentacion": row["presentacion"] or "",
+                    "contenido": row["contenido"] or "",
+                    "precio_unit": row["precio_unit"] or row["precio_desde"] or 0,
                     "searchable": row["searchable"] or "",
                 }
             )
