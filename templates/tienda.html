@@ -24,6 +24,21 @@
           
         </div>
       </div>
+      <form class="tienda-search tienda-search-mobile" method="get" action="/tienda">
+        <input type="hidden" name="cat" value="{{ cat }}">
+        <button class="tienda-btn" type="submit">Buscar</button>
+        <button class="tienda-lupa" type="submit" aria-label="Buscar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <input class="tienda-input" type="text" name="q" value="{{ q }}" placeholder="Buscar productos, marcas o categorias...">
+        <button class="tienda-clear" type="button" aria-label="Borrar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button class="tienda-camera" type="button" aria-label="Buscar con camara">
+          <i class="fa-solid fa-camera"></i>
+        </button>
+        <input class="tienda-camera-input" type="file" accept="image/*" capture="environment">
+      </form>
     </div>
     <div class="acciones tienda-acciones">
       <a href="https://wa.me/573215485315" class="whatsapp" target="_blank" rel="noopener">
@@ -41,15 +56,6 @@
 </header>
 
 <main class="tienda-main">
-  <form class="tienda-search tienda-search-mobile" method="get" action="/tienda">
-    <input type="hidden" name="cat" value="{{ cat }}">
-    <button class="tienda-btn" type="submit">Buscar</button>
-    <input class="tienda-input" type="text" name="q" value="{{ q }}" placeholder="Buscar productos, marcas o categorias...">
-    <button class="tienda-camera" type="button" aria-label="Buscar con camara">
-      <i class="fa-solid fa-camera"></i>
-    </button>
-    <input class="tienda-camera-input" type="file" accept="image/*" capture="environment">
-  </form>
   {% set cat_images = [
     '/static/images/banner1.jpg',
     '/static/images/banner2.jpg',
@@ -61,7 +67,10 @@
     '/static/images/banner8.jpg'
   ] %}
   {% set cat_labels = {
-    'comestibles': 'Abarrotes'
+    'comestibles': 'Abarrotes',
+    'cuidado-adulto': 'Cuidado adulto',
+    'insecticidas': 'Insecticidas y venenos',
+    'juegos': 'Juegos'
   } %}
   <section class="tienda-chips" aria-label="Categorias">
     <div class="chips-story" data-active-cat="{{ cat }}" data-current-q="{{ q }}">
@@ -72,6 +81,7 @@
         <span class="chip-name">Todos</span>
       </a>
       {% if categorias %}
+        {% set existing = categorias|map(attribute='slug')|list %}
         {% for c in categorias %}
         {% set nombre_categoria = cat_labels.get(c.slug, c.nombre) %}
         <a class="chip-story {% if cat == c.slug %}active{% endif %}" data-cat="{{ c.slug }}" href="/tienda?cat={{ c.slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
@@ -81,6 +91,30 @@
           <span class="chip-name">{{ nombre_categoria }}</span>
         </a>
         {% endfor %}
+        {% if 'juegos' not in existing %}
+        <a class="chip-story {% if cat == 'juegos' %}active{% endif %}" data-cat="juegos" href="/tienda?cat=juegos{% if q %}&q={{ q|urlencode }}{% endif %}">
+          <span class="chip-circle">
+            <img src="{{ cat_images[0] }}" alt="Juegos" loading="lazy">
+          </span>
+          <span class="chip-name">Juegos</span>
+        </a>
+        {% endif %}
+        {% if 'cuidado-adulto' not in existing %}
+        <a class="chip-story {% if cat == 'cuidado-adulto' %}active{% endif %}" data-cat="cuidado-adulto" href="/tienda?cat=cuidado-adulto{% if q %}&q={{ q|urlencode }}{% endif %}">
+          <span class="chip-circle">
+            <img src="{{ cat_images[1] }}" alt="Cuidado adulto" loading="lazy">
+          </span>
+          <span class="chip-name">Cuidado adulto</span>
+        </a>
+        {% endif %}
+        {% if 'insecticidas' not in existing %}
+        <a class="chip-story {% if cat == 'insecticidas' %}active{% endif %}" data-cat="insecticidas" href="/tienda?cat=insecticidas{% if q %}&q={{ q|urlencode }}{% endif %}">
+          <span class="chip-circle">
+            <img src="{{ cat_images[2] }}" alt="Insecticidas y venenos" loading="lazy">
+          </span>
+          <span class="chip-name">Insecticidas y venenos</span>
+        </a>
+        {% endif %}
       {% else %}
         {% set fallback = [
           ('aseo','Aseo'),
@@ -90,6 +124,8 @@
           ('cuidado-bebes','Cuidado beb&eacute;s'),
           ('cuidado-adulto','Cuidado adulto'),
           ('abarrotes','Abarrotes'),
+          ('juegos','Juegos'),
+          ('insecticidas','Insecticidas y venenos'),
           ('varios','Varios')
         ] %}
         {% for slug, nombre in fallback %}
@@ -206,30 +242,86 @@
 
   {% if not db_missing %}
   <section class="tienda-grid" aria-label="Listado de productos">
+    {% set added_revita = false %}
+    {% set added_fab = false %}
     {% if items %}
       {% for item in items %}
       {% set producto_nombre = (item.producto or '')|lower %}
       {% set producto_categoria = (item.categoria or '')|lower %}
       {% set producto_imagen = item.imagen or '/static/images/placeholder.svg' %}
-      {% if 'detergente' in producto_nombre and 'aseo' in producto_categoria %}
+      {% set is_ariel = 'detergente' in producto_nombre and 'aseo' in producto_categoria %}
+      {% set is_revita = 'revita' in producto_nombre or 'revitacolor' in producto_nombre %}
+      {% set is_fab = 'fab' in producto_nombre and 'fabuloso' not in producto_nombre %}
+      {% if is_revita %}
+        {% set producto_imagen = '/static/images/ariel-revita.jpg' %}
+        {% set added_revita = true %}
+      {% elif is_fab %}
+        {% set producto_imagen = '/static/images/fab.jpg' %}
+        {% set added_fab = true %}
+      {% elif is_ariel %}
         {% set producto_imagen = '/static/images/ariel.jpg' %}
       {% endif %}
       {% set producto_variantes = variants_by_product.get(item.producto_id, []) %}
-      <a class="tienda-card {% if 'detergente' in producto_nombre and 'aseo' in producto_categoria %}focusable quick-view{% endif %}"
+      <a class="tienda-card {% if is_ariel or is_revita or is_fab %}focusable quick-view{% endif %}"
          href="/producto/{{ item.producto_id }}"
          data-producto="{{ item.producto }}"
          data-categoria="{{ item.categoria }}"
+         data-quick-type="{% if is_revita %}revita{% elif is_fab %}fab{% elif is_ariel %}ariel{% endif %}"
          data-variantes='{{ producto_variantes|tojson }}'>
         <div class="tienda-img">
           <img src="{{ producto_imagen }}" alt="{{ item.producto }}" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
         </div>
-        <div class="tienda-info">
-          <h3>{{ item.producto }}</h3>
-          <p>{{ item.categoria }} &middot; {% if item.marcas == 1 %}1 marca{% else %}{{ item.marcas }} marcas{% endif %}</p>
+      <div class="tienda-info">
+          <h3>
+            {% if is_revita %}Ariel Revita Color
+            {% elif is_fab %}Fab Lavado Perfecto
+            {% elif is_ariel %}Ariel Triple Poder
+            {% else %}{{ item.producto }}
+            {% endif %}
+          </h3>
+          <p>
+            {% if is_revita or is_ariel or is_fab %}
+            {% else %}
+              {{ item.categoria }} &middot; {% if item.marcas == 1 %}1 marca{% else %}{{ item.marcas }} marcas{% endif %}
+            {% endif %}
+          </p>
+          {% if not (is_revita or is_ariel or is_fab) %}
           <span>Desde {{ item.precio_desde|cop }}</span>
+          {% endif %}
         </div>
       </a>
+      {% if is_ariel and not added_revita %}
+      {% set added_revita = true %}
+      <a class="tienda-card focusable quick-view"
+         href="/producto/{{ item.producto_id }}"
+         data-producto="Ariel Revita Color"
+         data-categoria="Aseo"
+         data-quick-type="revita"
+         data-variantes='[]'>
+        <div class="tienda-img">
+          <img src="/static/images/ariel-revita.jpg" alt="Ariel Revita Color" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+        </div>
+        <div class="tienda-info">
+          <h3>Ariel Revita Color</h3>
+        </div>
+      </a>
+      {% endif %}
       {% endfor %}
+      {% if not added_fab and (not cat or cat == 'aseo') %}
+      <a class="tienda-card focusable quick-view"
+         href="/producto/0"
+         data-producto="Fab Lavado Perfecto"
+         data-categoria="Aseo"
+         data-quick-type="fab"
+         data-variantes='[]'>
+        <div class="tienda-img">
+          <img src="/static/images/fab.jpg" alt="Fab Lavado Perfecto" loading="lazy" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+        </div>
+        <div class="tienda-info">
+          <h3>Fab Lavado Perfecto</h3>
+        </div>
+      </a>
+      {% endif %}
     {% else %}
       <div class="tienda-empty">
         <strong>No encontramos resultados.</strong>
@@ -264,7 +356,7 @@
         <h2 id="quickName"></h2>
         <p id="quickSize"></p>
         <div class="quick-precios">
-          <h3>Precios por cantidad</h3>
+          <h3>Precio unitario</h3>
           <div class="precio-grid" id="quickPriceList"></div>
         </div>
         <div class="quick-qty">
@@ -330,7 +422,13 @@
   document.querySelectorAll('.tienda-search').forEach((form) => {
     const cameraBtn = form.querySelector('.tienda-camera');
     const cameraInput = form.querySelector('.tienda-camera-input');
+    const clearBtn = form.querySelector('.tienda-clear');
+    const input = form.querySelector('.tienda-input');
     if (!cameraBtn || !cameraInput) return;
+    const toggleClear = () => {
+      if (!input) return;
+      form.classList.toggle('has-text', input.value.trim().length > 0);
+    };
     cameraBtn.addEventListener('click', (e) => {
       e.preventDefault();
       cameraInput.click();
@@ -341,6 +439,15 @@
         cameraInput.value = '';
       }
     });
+    if (clearBtn && input) {
+      toggleClear();
+      input.addEventListener('input', toggleClear);
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        toggleClear();
+        input.focus();
+      });
+    }
   });
 
   const grid = document.querySelector('.tienda-grid');
@@ -369,6 +476,7 @@
   }
 
   const quickModal = document.getElementById('quickModal');
+  const quickSheet = quickModal ? quickModal.querySelector('.quick-sheet') : null;
   const quickImg = document.getElementById('quickImg');
   const quickHotspots = document.getElementById('quickHotspots');
   const quickTag = document.getElementById('quickTag');
@@ -400,8 +508,8 @@
     if (!quickQty || !quickTotal) return;
     const qty = Math.max(1, parseInt(quickQty.value || '1', 10) || 1);
     quickQty.value = qty;
-    const unit = activeVariant ? getUnitPrice(activeVariant.precios || [], qty) : 0;
-    if (activeVariant) renderPrices(activeVariant.precios || [], qty);
+    const unit = activePriceTiers.length ? getUnitPrice(activePriceTiers, qty) : 0;
+    if (activePriceTiers.length) renderPrices(activePriceTiers, qty);
     quickTotal.textContent = unit ? formatCOP(unit * qty) : '$0';
   };
   const renderPrices = (precios, qty = 1) => {
@@ -414,21 +522,20 @@
       return;
     }
     const tiers = [...precios].sort((a, b) => a.min_cantidad - b.min_cantidad);
-    const base = tiers[0];
-    const chosen = tiers.reduce((acc, tier) => (qty >= tier.min_cantidad ? tier : acc), base);
+    const chosen = tiers.reduce((acc, tier) => (qty >= tier.min_cantidad ? tier : acc), tiers[0]);
     const main = document.createElement('div');
     main.className = 'price-main';
     main.innerHTML = `<span>Valor unidad</span><strong>${formatCOP(chosen.precio)}</strong>`;
     quickPriceList.appendChild(main);
-
-    const options = tiers.slice(1);
+    const options = tiers.filter((tier) => tier.min_cantidad !== chosen.min_cantidad);
     if (options.length) {
       const wrap = document.createElement('div');
       wrap.className = 'price-options';
       options.forEach((tier) => {
         const chip = document.createElement('span');
-        chip.className = `price-option${tier.min_cantidad <= qty ? ' active' : ''}`;
-        chip.innerHTML = `Mas de ${tier.min_cantidad} <strong>${formatCOP(tier.precio)}</strong>`;
+        chip.className = 'price-option';
+        const label = tier.min_cantidad >= 12 ? '12+' : '6+';
+        chip.innerHTML = `<span class="price-label">${label}</span><strong>${formatCOP(tier.precio)}</strong>`;
         wrap.appendChild(chip);
       });
       quickPriceList.appendChild(wrap);
@@ -436,22 +543,90 @@
   };
 
   const arielHotspots = [
-    { id: '4kg', label: '4 kg', match: '4kg', img: '/static/images/ariel4.jpg', x: 0, y: 18, w: 30 },
-    { id: '1kg', label: '1 kg', match: '1kg', img: '/static/images/ariel1.jpg', x: 22, y: 30, w: 24 },
-    { id: '450g', label: '450 g', match: '450g', img: '/static/images/ariel450.jpg', x: 44, y: 36, w: 20 },
-    { id: '225g', label: '225 g', match: '225g', img: '/static/images/ariel225.jpg', x: 62, y: 41, w: 20 },
-    { id: '100g', label: '100 g', match: '100g', img: '/static/images/ariel100.jpg', x: 36, y: 68, w: 18 }
+    { id: '4kg', label: '4 kg', match: '4kg', img: '/static/images/ariel4.jpg', x: 6, y: 28, w: 28, hit: '6px', hitArea: '8px', scale: 1.4, scaleMobile: 1.8, lift: '-10px', liftMobile: '-12px' },
+    { id: '1kg', label: '1 kg', match: '1kg', img: '/static/images/ariel1.jpg', x: 30, y: 28, w: 20, hit: '6px', hitArea: '8px', scale: 2.0, scaleMobile: 2.6 },
+    { id: '450g', label: '450 g', match: '450g', img: '/static/images/ariel450.jpg', x: 54, y: 34, w: 20, hit: '8px', hitArea: '10px', scale: 2.0, scaleMobile: 2.6 },
+    { id: '225g', label: '225 g', match: '225g', img: '/static/images/ariel225.jpg', x: 74, y: 38, w: 18, hit: '6px', hitArea: '8px', scale: 2.0, scaleMobile: 2.6 },
+    { id: '100g', label: '100 g', match: '100g', img: '/static/images/ariel100.jpg', x: 42, y: 56, w: 18, hit: '6px', hitArea: '8px', scale: 1.9, scaleMobile: 2.2, lift: '-8px', liftMobile: '-10px' }
+  ];
+  const revitaHotspots = [
+    { id: '2kg', label: '2 kg', match: '2kg', img: '/static/images/ariel-revita.jpg', x: 8, y: 26, w: 28, hit: '6px', hitArea: '8px', scale: 1.35, scaleMobile: 1.7, lift: '-10px', liftMobile: '-12px' },
+    { id: '800g', label: '800 g', match: '800g', img: '/static/images/ariel-revita.jpg', x: 40, y: 32, w: 22, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.1 },
+    { id: '450g', label: '450 g', match: '450g', img: '/static/images/ariel-revita.jpg', x: 66, y: 36, w: 20, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.1 }
+  ];
+  const fabHotspots = [
+    { id: '3_5kg', label: '3.5 kg', match: '3.5', img: '/static/images/fab.jpg', x: 3, y: 18, w: 30, hit: '6px', hitArea: '8px', scale: 1.35, scaleMobile: 1.7, lift: '-10px', liftMobile: '-12px' },
+    { id: '2kg', label: '2 kg', match: '2kg', img: '/static/images/fab.jpg', x: 36, y: 20, w: 24, hit: '6px', hitArea: '8px', scale: 1.55, scaleMobile: 1.9 },
+    { id: '800g', label: '800 g', match: '800g', img: '/static/images/fab.jpg', x: 30, y: 62, w: 28, hit: '6px', hitArea: '8px', scale: 1.8, scaleMobile: 2.3 },
+    { id: '450g', label: '450 g', match: '450g', img: '/static/images/fab.jpg', x: 65, y: 46, w: 16, hit: '6px', hitArea: '8px', scale: 1.7, scaleMobile: 2.2 },
+    { id: '225g', label: '225 g', match: '225g', img: '/static/images/fab.jpg', x: 60, y: 58, w: 14, hit: '6px', hitArea: '8px', scale: 1.7, scaleMobile: 2.2 },
+    { id: '100g', label: '100 g', match: '100g', img: '/static/images/fab.jpg', x: 66, y: 70, w: 16, hit: '6px', hitArea: '8px', scale: 1.9, scaleMobile: 2.4, lift: '-8px', liftMobile: '-10px' }
   ];
 
+  const buildPriceTiers = (unit) => ([
+    { min_cantidad: 1, precio: unit },
+    { min_cantidad: 6, precio: Math.max(1, Math.round(unit * 0.95)) },
+    { min_cantidad: 12, precio: Math.max(1, Math.round(unit * 0.9)) }
+  ]);
+  const priceMaps = {
+    ariel: {
+      '4kg': 46500,
+      '1kg': 12240,
+      '450g': 5900,
+      '225g': 3100,
+      '100g': 1500
+    },
+    revita: {
+      '2kg': 25900,
+      '800g': 10600,
+      '450g': 5800
+    },
+    fab: {
+      '3_5kg': 25990,
+      '2kg': 22050,
+      '800g': 14350,
+      '450g': 6150,
+      '225g': 2800,
+      '100g': 1500
+    }
+  };
+  const quickConfigs = {
+    ariel: {
+      name: 'Ariel T. Poder',
+      brand: 'Ariel',
+      img: '/static/images/ariel.jpg',
+      hotspots: arielHotspots,
+      priceMap: priceMaps.ariel
+    },
+    revita: {
+      name: 'Ariel Revita Color',
+      brand: 'Ariel',
+      img: '/static/images/ariel-revita.jpg',
+      hotspots: revitaHotspots,
+      priceMap: priceMaps.revita
+    },
+    fab: {
+      name: 'FAB Lavado Perfecto',
+      brand: 'FAB',
+      img: '/static/images/fab.jpg',
+      hotspots: fabHotspots,
+      priceMap: priceMaps.fab
+    }
+  };
+
   let activeVariant = null;
+  let currentVariants = [];
+  let activePriceTiers = [];
   let bagAutoTimer = null;
+  let currentQuick = quickConfigs.ariel;
+  let currentQuickType = 'ariel';
   const scheduleBagHide = () => {
     if (!quickHotspots) return;
     if (bagAutoTimer) clearTimeout(bagAutoTimer);
     bagAutoTimer = setTimeout(() => {
       quickHotspots.classList.remove('dimmed');
       quickHotspots.querySelectorAll('.bag-item').forEach((el) => el.classList.remove('active'));
-    }, 6000);
+    }, 900);
   };
   const selectHotspot = (hotspot, variants) => {
     if (quickHotspots) {
@@ -462,24 +637,27 @@
     }
     const match = normalize(hotspot.match);
     activeVariant = variants.find((v) => normalize(v.contenido).includes(match)) || null;
-    if (quickTag) quickTag.textContent = 'Aseo · Detergentes';
-    if (quickName) quickName.textContent = `Ariel ${hotspot.label}`;
-    if (quickSize) quickSize.textContent = `Presentacion: ${hotspot.label}`;
-    if (activeVariant) {
-      renderPrices(activeVariant.precios || [], 1);
-      if (quickAdd) {
-        quickAdd.disabled = false;
-        quickAdd.textContent = 'Agregar al carrito';
-      }
-      if (quickDetails) quickDetails.classList.add('show');
-    } else {
-      if (quickPriceList) quickPriceList.innerHTML = '';
-      if (quickAdd) {
-        quickAdd.disabled = true;
-        quickAdd.textContent = 'Agregar al carrito';
-      }
-      if (quickDetails) quickDetails.classList.add('show');
+    const quickNameBase = currentQuick ? currentQuick.name : 'Producto';
+    if (quickName) quickName.textContent = `${quickNameBase} ${hotspot.label}`;
+    if (quickTag) quickTag.textContent = '';
+    if (quickSize) quickSize.textContent = '';
+    const manualUnit = currentQuick && currentQuick.priceMap ? currentQuick.priceMap[hotspot.id] : null;
+    if (!activeVariant && manualUnit) {
+      activeVariant = {
+        presentacion_id: `${currentQuickType}-${hotspot.id}`,
+        marca: currentQuick && currentQuick.brand ? currentQuick.brand : (currentQuick ? currentQuick.name : 'Producto'),
+        presentacion: currentQuick ? currentQuick.name : 'Producto',
+        contenido: hotspot.label,
+        imagen: currentQuick ? currentQuick.img : '/static/images/placeholder.svg'
+      };
     }
+    activePriceTiers = manualUnit ? buildPriceTiers(manualUnit) : (activeVariant ? (activeVariant.precios || []) : []);
+    renderPrices(activePriceTiers, 1);
+    if (quickAdd) {
+      quickAdd.disabled = !activeVariant;
+      quickAdd.textContent = 'Agregar al carrito';
+    }
+    if (quickDetails) quickDetails.classList.add('show');
     if (quickQty) quickQty.value = 1;
     updateQuickTotal();
     scheduleBagHide();
@@ -497,8 +675,10 @@
     } catch (e) {
       variants = [];
     }
+    currentQuickType = card.dataset.quickType || 'ariel';
+    currentQuick = quickConfigs[currentQuickType] || quickConfigs.ariel;
     quickImg.dataset.fallback = '/static/images/placeholder.svg';
-    quickImg.src = '/static/images/ariel.jpg';
+    quickImg.src = currentQuick.img;
     if (quickTag) quickTag.textContent = '';
     if (quickName) quickName.textContent = '';
     if (quickSize) quickSize.textContent = '';
@@ -508,12 +688,14 @@
       quickAdd.textContent = 'Agregar al carrito';
     }
     if (quickDetails) quickDetails.classList.remove('show');
+    activePriceTiers = [];
     if (quickQty) quickQty.value = 1;
     if (quickTotal) quickTotal.textContent = '$0';
     if (quickHotspots) {
       quickHotspots.innerHTML = '';
       quickHotspots.classList.remove('dimmed');
-      arielHotspots.forEach((spot) => {
+      currentVariants = variants;
+      currentQuick.hotspots.forEach((spot) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'bag-item';
@@ -521,6 +703,12 @@
         btn.style.left = `${spot.x}%`;
         btn.style.top = `${spot.y}%`;
         btn.style.width = `${spot.w}%`;
+        if (spot.hit) btn.style.setProperty('--hit', spot.hit);
+        if (spot.hitArea) btn.style.setProperty('--hit-area', spot.hitArea);
+        if (spot.scale) btn.style.setProperty('--scale', spot.scale);
+        if (spot.scaleMobile) btn.style.setProperty('--scale-mobile', spot.scaleMobile);
+        if (spot.lift) btn.style.setProperty('--lift', spot.lift);
+        if (spot.liftMobile) btn.style.setProperty('--lift-mobile', spot.liftMobile);
         btn.innerHTML = `<img src="${spot.img}" alt="${spot.label}">`;
         btn.addEventListener('click', () => selectHotspot(spot, variants));
         btn.addEventListener('touchstart', (e) => {
@@ -576,6 +764,42 @@
     quickModal.querySelectorAll('[data-close]').forEach((el) => {
       el.addEventListener('click', closeQuick);
     });
+    quickModal.addEventListener('click', (e) => {
+      if (!e.target.closest('.quick-body')) closeQuick();
+    });
+  }
+  const quickImageWrap = quickImg ? quickImg.closest('.quick-image') : null;
+  const tryPickNearest = (clientX, clientY) => {
+    if (!quickImageWrap || !quickModal || !quickModal.classList.contains('open')) return;
+    const rect = quickImageWrap.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    let best = null;
+    let bestDist = Infinity;
+    const spots = currentQuick ? currentQuick.hotspots : arielHotspots;
+    spots.forEach((spot) => {
+      const cx = rect.width * (spot.x + spot.w / 2) / 100;
+      const cy = rect.height * (spot.y + spot.w / 2) / 100;
+      const dist = Math.hypot(cx - x, cy - y);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = spot;
+      }
+    });
+    const limit = window.innerWidth <= 768 ? 320 : 230;
+    if (best && bestDist <= limit) selectHotspot(best, currentVariants);
+  };
+  if (quickImageWrap) {
+    quickImageWrap.addEventListener('click', (e) => {
+      if (e.target.closest('.bag-item')) return;
+      tryPickNearest(e.clientX, e.clientY);
+    });
+    quickImageWrap.addEventListener('touchstart', (e) => {
+      if (e.target.closest('.bag-item')) return;
+      const touch = e.touches && e.touches[0];
+      if (!touch) return;
+      tryPickNearest(touch.clientX, touch.clientY);
+    }, { passive: true });
   }
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeQuick();
@@ -585,13 +809,13 @@
     quickAdd.addEventListener('click', () => {
       if (!activeVariant) return;
       const qty = quickQty ? Math.max(1, parseInt(quickQty.value || '1', 10) || 1) : 1;
-      const unit = getUnitPrice(activeVariant.precios || [], qty);
+      const unit = activePriceTiers.length ? getUnitPrice(activePriceTiers, qty) : 0;
       const item = {
         id: activeVariant.presentacion_id,
-        producto: 'Ariel Detergente',
+        producto: currentQuick ? currentQuick.name : 'Producto',
         marca: activeVariant.marca || 'Ariel',
         presentacion: activeVariant.presentacion,
-        contenido: activeVariant.contenido,
+          contenido: activeVariant.contenido,
         imagen: activeVariant.imagen,
         qty,
         unit
