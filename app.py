@@ -17,7 +17,9 @@ def resolve_db_path():
 
 def get_db():
     if "db" not in g:
-        g.db = sqlite3.connect(resolve_db_path())
+        db_path = resolve_db_path().resolve()
+        db_uri = f"file:{db_path.as_posix()}?mode=ro"
+        g.db = sqlite3.connect(db_uri, uri=True)
         g.db.row_factory = sqlite3.Row
     return g.db
 
