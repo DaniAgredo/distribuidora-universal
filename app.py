@@ -38,7 +38,9 @@ def query_db(query, params=(), one=False):
     cur = get_db().execute(query, params)
     rows = cur.fetchall()
     cur.close()
-    return rows[0] if one else rows
+    if one:
+        return rows[0] if rows else None
+    return rows
 
 
 @app.template_filter("cop")
