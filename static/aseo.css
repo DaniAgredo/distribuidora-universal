@@ -211,7 +211,14 @@
     margin:0;
     font-size:13px;
     line-height:1.28;
-    min-height:32px;
+    min-height:30px;
+}
+
+.aseo-card-info p{
+    margin:4px 0 0;
+    font-size:11px;
+    color:#64748b;
+    min-height:14px;
 }
 
 .aseo-card-info span{
@@ -265,6 +272,10 @@ body.dark .aseo-card{
     background:#0f1b33;
     border-color:#1d2d47;
     color:#e6efff;
+}
+
+body.dark .aseo-card-info p{
+    color:#b8c7e6;
 }
 
 body.dark .aseo-card-img{

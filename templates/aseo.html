@@ -78,6 +78,7 @@
         </div>
         <div class="aseo-card-info">
           <h3>{{ item.producto }}</h3>
+          <p>{{ section['title'] }}</p>
           {% if item.precio_desde %}
           <span>Desde {{ item.precio_desde|cop }}</span>
           {% else %}
