@@ -6,9 +6,18 @@ app = Flask(__name__)
 DB_PATH = Path(__file__).resolve().parent / "data" / "catalogo.db"
 
 
+def resolve_db_path():
+    if DB_PATH.exists():
+        return DB_PATH
+    alt = Path.cwd() / "data" / "catalogo.db"
+    if alt.exists():
+        return alt
+    return DB_PATH
+
+
 def get_db():
     if "db" not in g:
-        g.db = sqlite3.connect(DB_PATH)
+        g.db = sqlite3.connect(resolve_db_path())
         g.db.row_factory = sqlite3.Row
     return g.db
 
@@ -69,7 +78,7 @@ def cuenta():
 @app.route("/tienda")
 def tienda():
     try:
-        if not DB_PATH.exists():
+        if not resolve_db_path().exists():
             return render_template(
                 "tienda.html",
                 categorias=[],
@@ -271,7 +280,7 @@ def tienda():
 @app.route("/producto/<int:producto_id>")
 def producto_marcas(producto_id):
     try:
-        if not DB_PATH.exists():
+        if not resolve_db_path().exists():
             abort(404)
     except Exception:
         abort(404)
@@ -349,7 +358,7 @@ def producto_marcas(producto_id):
 @app.route("/presentacion/<int:presentacion_id>")
 def producto_detalle(presentacion_id):
     try:
-        if not DB_PATH.exists():
+        if not resolve_db_path().exists():
             abort(404)
     except Exception:
         abort(404)
