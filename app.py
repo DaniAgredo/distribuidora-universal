@@ -12,6 +12,9 @@ def resolve_db_path():
     alt = Path.cwd() / "data" / "catalogo.db"
     if alt.exists():
         return alt
+    static_db = Path(__file__).resolve().parent / "static" / "data" / "catalogo.db"
+    if static_db.exists():
+        return static_db
     return DB_PATH
 
 
