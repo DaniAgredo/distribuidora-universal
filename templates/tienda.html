@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
@@ -6,8 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tienda - Distribuidora Universal</title>
 
-<link rel="stylesheet" href="/static/style.css">
-<link rel="stylesheet" href="/static/tienda.css">
+<link rel="stylesheet" href="/static/style.css?v=20260214">
+<link rel="stylesheet" href="/static/tienda.css?v=20260214">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -327,10 +327,7 @@
           }
           e.preventDefault();
           navLocked = true;
-          link.classList.add('is-nav');
-          setTimeout(() => {
-            window.location.assign(href);
-          }, 70);
+          window.location.assign(href);
         });
       });
     };
@@ -365,7 +362,7 @@
         {
           key: 'lava-lozas',
           title: 'Lava lozas',
-          test: (name) => /(lava ?loza|lavaloza|lavaplat|lozacrem|axion|dona ?lupe|doña ?lupe|lupe)/.test(name),
+          test: (name) => /(lava ?loza|lavaloza|lavaplat|lozacrem|axion|dona ?lupe|doÃ±a ?lupe|lupe)/.test(name),
           fallback: [
             {
               key: 'lozacrem',
@@ -634,7 +631,7 @@
       {% set is_axion = 'axion' in producto_nombre %}
       {% set is_lozacrem = 'lozacrem' in producto_nombre %}
       {% set is_limpido = 'limpido' in producto_nombre %}
-      {% set is_donalupe = 'dona lupe' in producto_nombre or 'doña lupe' in producto_nombre or 'donalupe' in producto_nombre %}
+      {% set is_donalupe = 'dona lupe' in producto_nombre or 'doÃ±a lupe' in producto_nombre or 'donalupe' in producto_nombre %}
       {% if is_revita %}
         {% set producto_imagen = '/static/images/ariel-revita-thumb.jpg' %}
         {% set added_revita = true %}
@@ -1453,3 +1450,4 @@
 
 </body>
 </html>
+
