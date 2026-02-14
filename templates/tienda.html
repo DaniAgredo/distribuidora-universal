@@ -216,11 +216,8 @@
         { label: 'Desinfectantes', img: '/static/images/limpido.png', anchor: 'sub-otros' }
       ],
       'drogueria': [
-        { label: 'Tabletas', q: 'tabletas', img: '/static/images/banner6.jpg' },
-        { label: 'Jarabes', q: 'jarabe', img: '/static/images/banner7.jpg' },
-        { label: 'Vitaminas', q: 'vitamina', img: '/static/images/banner8.jpg' },
-        { label: 'Termometros', q: 'termometro', img: '/static/images/banner9.jpg' },
-        { label: 'Curacion', q: 'curacion', img: '/static/images/banner10.jpg' }
+        { label: 'Advil', img: '/static/images/advils.png', anchor: 'sub-analgesicos' },
+        { label: 'Jarabe niños', img: '/static/images/acetaminfen-jara.png', anchor: 'sub-jarabes-ninos' }
       ],
       'cuidado-bebes': [
         { label: 'Panales', q: 'panal', img: '/static/images/banner11.jpg' },
@@ -336,13 +333,11 @@
     const buildAseoMobileSections = () => {
       if (!chipsWrap) return;
       const activeCat = chipsWrap.dataset.activeCat || '';
-      if (activeCat !== 'aseo') return;
+      if (!['aseo', 'drogueria'].includes(activeCat)) return;
       const grid = document.querySelector('.tienda-grid');
       if (!grid || document.querySelector('.aseo-mobile-sections')) return;
       const cards = Array.from(grid.querySelectorAll('.tienda-card'));
-      if (!cards.length) return;
-
-      const defs = [
+      const aseoDefs = [
         {
           key: 'detergentes',
           title: 'Detergentes',
@@ -393,6 +388,15 @@
               quickType: 'donalupe',
               variantes: [
                 { presentacion_id: 'donalupe-900', marca: 'Dona Lupe', presentacion: 'Dona Lupe', contenido: '900 g' }
+              ]
+            },
+            {
+              key: 'supremo-barra',
+              nombre: 'Supremo Barra',
+              imagen: '/static/images/supremo-ba.png',
+              quickType: 'supremo-barra',
+              variantes: [
+                { presentacion_id: 'supremo-barra-500', marca: 'Supremo', presentacion: 'Supremo Barra', contenido: '500 g' }
               ]
             }
           ]
@@ -500,13 +504,53 @@
           ]
         }
       ];
+      const drogueriaDefs = [
+        {
+          key: 'analgesicos',
+          title: 'Analgésicos',
+          test: (name) => /(advil|analges|ibuprof)/.test(name),
+          fallback: [
+            {
+              key: 'advil',
+              nombre: 'Advil',
+              imagen: '/static/images/advils.png',
+              quickType: 'advil',
+              variantes: [
+                { presentacion_id: 'advil-ref1', marca: 'Advil', presentacion: 'Advil', contenido: 'Ref 1' },
+                { presentacion_id: 'advil-ref2', marca: 'Advil', presentacion: 'Advil', contenido: 'Ref 2' },
+                { presentacion_id: 'advil-ref3', marca: 'Advil', presentacion: 'Advil', contenido: 'Ref 3' },
+                { presentacion_id: 'advil-ref4', marca: 'Advil', presentacion: 'Advil', contenido: 'Ref 4' }
+              ]
+            }
+          ]
+        },
+        {
+          key: 'jarabes-ninos',
+          title: 'Jarabes niños',
+          test: (name) => /(jarab|nino|niñ|acetaminof|pediatr)/.test(name),
+          fallback: [
+            {
+              key: 'jarabe-ninos',
+              nombre: 'Jarabe para niños',
+              imagen: '/static/images/acetaminfen-jara.png',
+              quickType: 'jarabe-ninos',
+              variantes: [
+                { presentacion_id: 'jarabe-ninos-120', marca: 'Acetaminofén', presentacion: 'Jarabe pediátrico', contenido: '120 ml' }
+              ]
+            }
+          ]
+        }
+      ];
+      const defs = activeCat === 'aseo' ? aseoDefs : drogueriaDefs;
+      if (!cards.length && !defs.some((d) => d.fallback && d.fallback.length)) return;
 
-      const buckets = { detergentes: [], 'lava-lozas': [], 'jabon-liquido': [], suavizantes: [], otros: [] };
+      const buckets = {};
+      defs.forEach((def) => { buckets[def.key] = []; });
       cards.forEach((card) => {
         const name = (card.dataset.producto || '').toLowerCase();
         const def = defs.find((d) => d.key !== 'otros' && d.test(name));
         if (def) buckets[def.key].push(card);
-        else buckets.otros.push(card);
+        else if (buckets.otros) buckets.otros.push(card);
       });
 
       const wrap = document.createElement('section');
@@ -524,11 +568,14 @@
           else if (imgKey.includes('limpido')) type = 'limpido';
           else if (imgKey.includes('ak1')) type = 'ak1polvo';
           else if (imgKey.includes('suavitel')) type = 'suavitel-tarro';
+          else if (imgKey.includes('supremo')) type = 'supremo-barra';
+          else if (imgKey.includes('advil')) type = 'advil';
+          else if (imgKey.includes('acetamin') || imgKey.includes('jara')) type = 'jarabe-ninos';
         }
         card.className = `tienda-card focusable quick-view lava-preview-card lava-${type}`;
         card.dataset.quickType = item.quickType || type;
         card.dataset.producto = cleanName;
-        card.dataset.categoria = 'Aseo';
+        card.dataset.categoria = activeCat === 'aseo' ? 'Aseo' : 'Drogueria';
         card.dataset.variantes = JSON.stringify(item.variantes || []);
         card.tabIndex = 0;
         card.innerHTML = `
@@ -984,6 +1031,18 @@
     { id: 'suavitel-con-t-primavera', label: 'Primavera', match: 'primavera', img: '/static/images/suavitel-con-t.png', x: 54, y: 14, w: 22, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' },
     { id: 'suavitel-con-t-brisa', label: 'Brisa', match: 'brisa', img: '/static/images/suavitel-con-t.png', x: 78, y: 14, w: 18, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' }
   ];
+  const supremoHotspots = [
+    { id: 'supremo-barra-500', label: '500 g', match: '500', img: '/static/images/supremo-ba.png', x: 22, y: 18, w: 56, hit: '10px', hitArea: '12px', scale: 1.55, scaleMobile: 2.0, lift: '-10px', liftMobile: '-12px' }
+  ];
+  const advilHotspots = [
+    { id: 'advil-ref1', label: 'Ref 1', match: 'ref1', img: '/static/images/advils.png', x: 8, y: 18, w: 22, hit: '10px', hitArea: '12px', scale: 1.6, scaleMobile: 2.05, lift: '-10px', liftMobile: '-12px' },
+    { id: 'advil-ref2', label: 'Ref 2', match: 'ref2', img: '/static/images/advils.png', x: 32, y: 18, w: 22, hit: '10px', hitArea: '12px', scale: 1.6, scaleMobile: 2.05, lift: '-10px', liftMobile: '-12px' },
+    { id: 'advil-ref3', label: 'Ref 3', match: 'ref3', img: '/static/images/advils.png', x: 56, y: 18, w: 22, hit: '10px', hitArea: '12px', scale: 1.6, scaleMobile: 2.05, lift: '-10px', liftMobile: '-12px' },
+    { id: 'advil-ref4', label: 'Ref 4', match: 'ref4', img: '/static/images/advils.png', x: 80, y: 18, w: 16, hit: '10px', hitArea: '12px', scale: 1.6, scaleMobile: 2.05, lift: '-10px', liftMobile: '-12px' }
+  ];
+  const jarabeNinosHotspots = [
+    { id: 'jarabe-ninos-120', label: '120 ml', match: '120', img: '/static/images/acetaminfen-jara.png', x: 20, y: 18, w: 60, hit: '10px', hitArea: '12px', scale: 1.55, scaleMobile: 2.0, lift: '-10px', liftMobile: '-12px' }
+  ];
 
   const buildPriceTiers = (unit) => ([
     { min_cantidad: 1, precio: unit },
@@ -1062,6 +1121,18 @@
       'suavitel-con-t-lavanda': 9200,
       'suavitel-con-t-primavera': 9200,
       'suavitel-con-t-brisa': 9200
+    },
+    'supremo-barra': {
+      'supremo-barra-500': 5200
+    },
+    'advil': {
+      'advil-ref1': 6800,
+      'advil-ref2': 8900,
+      'advil-ref3': 11200,
+      'advil-ref4': 13500
+    },
+    'jarabe-ninos': {
+      'jarabe-ninos-120': 8700
     }
   };
   const quickConfigs = {
@@ -1169,6 +1240,27 @@
       img: '/static/images/suavitel-con-t.png',
       hotspots: suavitelConTHotspots,
       priceMap: priceMaps['suavitel-con-t']
+    },
+    'supremo-barra': {
+      name: 'Supremo Barra',
+      brand: 'Supremo',
+      img: '/static/images/supremo-ba.png',
+      hotspots: supremoHotspots,
+      priceMap: priceMaps['supremo-barra']
+    },
+    'advil': {
+      name: 'Advil',
+      brand: 'Advil',
+      img: '/static/images/advils.png',
+      hotspots: advilHotspots,
+      priceMap: priceMaps.advil
+    },
+    'jarabe-ninos': {
+      name: 'Jarabe para niños',
+      brand: 'Pediátrico',
+      img: '/static/images/acetaminfen-jara.png',
+      hotspots: jarabeNinosHotspots,
+      priceMap: priceMaps['jarabe-ninos']
     }
   };
 

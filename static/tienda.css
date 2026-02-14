@@ -1525,12 +1525,21 @@ body.dark .quick-total strong{
 .aseo-mobile-row .lava-preview-card.lava-losa-crem-liq .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-3d-liquido .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-ak1-liquido .tienda-img img,
+.aseo-mobile-row .lava-preview-card.lava-supremo-barra .tienda-img img,
+.aseo-mobile-row .lava-preview-card.lava-advil .tienda-img img,
+.aseo-mobile-row .lava-preview-card.lava-jarabe-ninos .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-suavitel-tarro .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-suavitel-sin-t .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-suavitel-con-t .tienda-img img{
     object-fit:contain;
     object-position:center;
     transform:scale(1.02);
+}
+.aseo-mobile-row .lava-preview-card.lava-supremo-barra .tienda-img img{
+    transform:scale(1.16);
+}
+.aseo-mobile-row .lava-preview-card.lava-advil .tienda-img img{
+    transform:scale(1.12);
 }
 .aseo-mobile-row .lava-preview-card.lava-suavitel-tarro .tienda-img img{
     object-position:center 42%;
