@@ -1646,6 +1646,25 @@ body.dark .quick-total strong{
     .tienda-chips{
         margin:0 0 4px;
     }
+    .chips-story{
+        gap:12px;
+        min-height:94px;
+        padding:4px 3px 10px;
+    }
+    .chip-story{
+        min-width:78px;
+    }
+    .chip-circle{
+        width:64px;
+        height:64px;
+        box-shadow:0 8px 16px rgba(16,59,124,.18);
+        border:1px solid rgba(13,132,252,.22);
+    }
+    .chip-name{
+        font-size:8px;
+        padding:3px 6px;
+        letter-spacing:.35px;
+    }
     .pagina-tienda .header{
         gap:0;
         padding:0;
@@ -1776,6 +1795,14 @@ body.dark .quick-total strong{
     }
     .pagina-tienda .tienda-title .nombre{
         font-size:13px;
+    }
+    .chip-circle{
+        width:60px;
+        height:60px;
+    }
+    .chip-name{
+        font-size:7.8px;
+        padding:3px 6px;
     }
     .tienda-left{
         max-width:58%;

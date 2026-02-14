@@ -213,7 +213,7 @@
         { label: 'Lava loza', img: '/static/images/axion.jpg', anchor: 'sub-lava-lozas' },
         { label: 'Jabon liquido', img: '/static/images/losa-crem.jpg', anchor: 'sub-jabon-liquido' },
         { label: 'Suavizantes', img: '/static/images/suavitel-tarro.png', anchor: 'sub-suavizantes' },
-        { label: 'Limpidos', img: '/static/images/limpido.png', anchor: 'sub-otros' }
+        { label: 'Desinfectantes', img: '/static/images/limpido.png', anchor: 'sub-otros' }
       ],
       'drogueria': [
         { label: 'Tabletas', q: 'tabletas', img: '/static/images/banner6.jpg' },
@@ -474,7 +474,7 @@
         },
         {
           key: 'otros',
-          title: 'Limpidos',
+          title: 'Desinfectantes',
           test: () => true,
           fallback: [
             {
@@ -556,8 +556,15 @@
         if (list.length) {
           list.forEach((card) => row.appendChild(card));
         }
-        if (def.fallback && def.fallback.length && (def.key === 'otros' || def.key === 'detergentes' || def.key === 'jabon-liquido' || def.key === 'suavizantes' || !list.length)) {
-          def.fallback.forEach((item) => row.appendChild(makePreviewCard(item)));
+        if (def.fallback && def.fallback.length) {
+          const existingNames = new Set(
+            Array.from(row.querySelectorAll('.tienda-card')).map((card) => (card.dataset.producto || '').toLowerCase().trim())
+          );
+          def.fallback.forEach((item) => {
+            const keyName = (item.nombre || '').toLowerCase().trim();
+            if (keyName && existingNames.has(keyName)) return;
+            row.appendChild(makePreviewCard(item));
+          });
         }
         if (!row.children.length) {
           const empty = document.createElement('div');
