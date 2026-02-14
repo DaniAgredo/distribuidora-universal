@@ -101,7 +101,7 @@
         {% set existing = categorias|map(attribute='slug')|list %}
         {% for c in categorias %}
         {% set nombre_categoria = cat_labels.get(c.slug, c.nombre) %}
-        <a class="chip-story {% if cat == c.slug %}active{% endif %}" data-cat="{{ c.slug }}" href="{% if c.slug == 'aseo' %}/aseo{% else %}/tienda?cat={{ c.slug }}{% if q %}&q={{ q|urlencode }}{% endif %}{% endif %}">
+        <a class="chip-story {% if cat == c.slug %}active{% endif %}" data-cat="{{ c.slug }}" href="/tienda?cat={{ c.slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
           <span class="chip-circle">
             <img src="{{ cat_images[loop.index0 % cat_images|length] }}" alt="{{ nombre_categoria }}" loading="lazy">
           </span>
@@ -146,7 +146,7 @@
           ('varios','Varios')
         ] %}
         {% for slug, nombre in fallback %}
-        <a class="chip-story {% if cat == slug %}active{% endif %}" data-cat="{{ slug }}" href="{% if slug == 'aseo' %}/aseo{% else %}/tienda?cat={{ slug }}{% if q %}&q={{ q|urlencode }}{% endif %}{% endif %}">
+        <a class="chip-story {% if cat == slug %}active{% endif %}" data-cat="{{ slug }}" href="/tienda?cat={{ slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">
           <span class="chip-circle">
             <img src="{{ cat_images[loop.index0 % cat_images|length] }}" alt="{{ nombre }}" loading="lazy">
           </span>
