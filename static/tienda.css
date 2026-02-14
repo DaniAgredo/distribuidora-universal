@@ -16,6 +16,8 @@
 .pagina-tienda .tienda-title .nombre{
     font-size:22px;
     letter-spacing:0.6px;
+    font-family:'Trebuchet MS','Poppins',sans-serif;
+    font-weight:700;
 }
 .pagina-tienda .tienda-title small{
     font-size:11px;
@@ -40,8 +42,8 @@
 }
 .pagina-tienda .tienda-main,
 .pagina-tienda .tienda-chips{
-    transition:none;
-    will-change:auto;
+    transition:opacity .12s ease, transform .12s ease;
+    will-change:opacity, transform;
 }
 .pagina-tienda.is-switching .tienda-main,
 .pagina-tienda.is-switching .tienda-chips{
@@ -52,6 +54,11 @@
 .pagina-tienda.is-entering .tienda-main,
 .pagina-tienda.is-entering .tienda-chips{
     animation:none;
+}
+.pagina-tienda.cat-switch-soft .tienda-main,
+.pagina-tienda.cat-switch-soft .tienda-chips{
+    opacity:.92;
+    transform:translateY(1px);
 }
 @media (prefers-reduced-motion: reduce){
     .pagina-tienda .tienda-main,
@@ -1526,8 +1533,9 @@ body.dark .quick-total strong{
 .aseo-mobile-row .lava-preview-card.lava-3d-liquido .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-ak1-liquido .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-supremo-barra .tienda-img img,
-.aseo-mobile-row .lava-preview-card.lava-advil .tienda-img img,
-.aseo-mobile-row .lava-preview-card.lava-jarabe-ninos .tienda-img img,
+.aseo-mobile-row .lava-preview-card.lava-barrigon .tienda-img img,
+.aseo-mobile-row .lava-preview-card.lava-coco .tienda-img img,
+.aseo-mobile-row .lava-preview-card.lava-vel-rosa .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-suavitel-tarro .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-suavitel-sin-t .tienda-img img,
 .aseo-mobile-row .lava-preview-card.lava-suavitel-con-t .tienda-img img{
@@ -1538,8 +1546,10 @@ body.dark .quick-total strong{
 .aseo-mobile-row .lava-preview-card.lava-supremo-barra .tienda-img img{
     transform:scale(1.16);
 }
-.aseo-mobile-row .lava-preview-card.lava-advil .tienda-img img{
-    transform:scale(1.12);
+.aseo-mobile-row .lava-preview-card.lava-barrigon .tienda-img img,
+.aseo-mobile-row .lava-preview-card.lava-coco .tienda-img img,
+.aseo-mobile-row .lava-preview-card.lava-vel-rosa .tienda-img img{
+    transform:scale(1.14);
 }
 .aseo-mobile-row .lava-preview-card.lava-suavitel-tarro .tienda-img img{
     object-position:center 42%;
@@ -1692,11 +1702,13 @@ body.dark .quick-total strong{
         gap:0;
     }
     .pagina-tienda .tienda-title .nombre{
-        font-size:15px;
-        line-height:1.05;
+        font-size:18px;
+        line-height:1.08;
+        letter-spacing:.2px;
+        font-family:'Trebuchet MS','Poppins',sans-serif;
     }
     .pagina-tienda .tienda-title .icono{
-        font-size:18px;
+        font-size:22px;
     }
     .tienda-left{
         display:flex;
@@ -1711,29 +1723,31 @@ body.dark .quick-total strong{
         margin-left:auto;
         width:auto;
         justify-content:flex-end;
-        gap:6px;
+        gap:8px;
         flex-wrap:nowrap;
         max-width:none;
     }
     .tienda-acciones .carrito-link{
         position:relative;
-        width:24px;
-        height:24px;
-        padding:0;
+        width:auto;
+        min-width:34px;
+        height:34px;
+        padding:0 8px;
         font-size:0;
         gap:0;
         justify-content:center;
         align-self:center;
+        border-radius:12px;
     }
     .tienda-acciones .carrito-link i{
-        font-size:11px;
+        font-size:14px;
     }
     .tienda-acciones .carrito-link span{
         position:absolute;
-        top:-4px;
-        right:-5px;
-        font-size:8px;
-        padding:1px 3px;
+        top:-5px;
+        right:-6px;
+        font-size:9px;
+        padding:1px 4px;
     }
     .pagina-tienda{
         padding-top:0;
@@ -1803,7 +1817,7 @@ body.dark .quick-total strong{
         padding-top:4px;
     }
     .pagina-tienda .tienda-title .nombre{
-        font-size:13px;
+        font-size:16px;
     }
     .chip-circle{
         width:60px;
@@ -1814,14 +1828,14 @@ body.dark .quick-total strong{
         padding:3px 6px;
     }
     .tienda-left{
-        max-width:58%;
+        max-width:68%;
     }
     .tienda-acciones{
         flex-wrap:nowrap;
         row-gap:0;
         align-items:center;
         margin-top:0;
-        gap:4px;
+        gap:6px;
     }
     .pagina-tienda .tienda-header{
         padding:2px 8px 3px;
@@ -1837,21 +1851,23 @@ body.dark .quick-total strong{
         padding-bottom:20px;
     }
     .tienda-acciones .carrito-link{
-        width:22px;
-        height:22px;
-        margin-top:-2px;
+        width:auto;
+        min-width:32px;
+        height:32px;
+        margin-top:0;
+        padding:0 7px;
     }
     .tienda-acciones .carrito-link i{
-        font-size:10px;
+        font-size:13px;
     }
     .tienda-acciones a{
-        width:26px;
-        height:26px;
+        width:30px;
+        height:30px;
     }
     .tienda-acciones .volver-circle,
     .tienda-acciones .whatsapp{
-        width:26px;
-        height:26px;
+        width:30px;
+        height:30px;
     }
     .floating-arrow{
         width:30px;

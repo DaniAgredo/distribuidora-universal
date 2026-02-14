@@ -216,8 +216,7 @@
         { label: 'Desinfectantes', img: '/static/images/limpido.png', anchor: 'sub-otros' }
       ],
       'drogueria': [
-        { label: 'Advil', img: '/static/images/advils.png', anchor: 'sub-analgesicos' },
-        { label: 'Jarabe niños', img: '/static/images/acetaminfen-jara.png', anchor: 'sub-jarabes-ninos' }
+        { label: 'Jabones en barra', img: '/static/images/barrigon.jpg', anchor: 'sub-jabones-barra' }
       ],
       'cuidado-bebes': [
         { label: 'Panales', q: 'panal', img: '/static/images/banner11.jpg' },
@@ -324,7 +323,10 @@
           }
           e.preventDefault();
           navLocked = true;
-          window.location.assign(href);
+          document.body.classList.add('cat-switch-soft');
+          setTimeout(() => {
+            window.location.assign(href);
+          }, 55);
         });
       });
     };
@@ -506,36 +508,35 @@
       ];
       const drogueriaDefs = [
         {
-          key: 'analgesicos',
-          title: 'Analgésicos',
-          test: (name) => /(advil|analges|ibuprof)/.test(name),
+          key: 'jabones-barra',
+          title: 'Jabones en barra',
+          test: (name) => /(barrigon|barrig[oó]n|coco|rosa|vel-?rosa|jabon barra|jab[oó]n barra)/.test(name),
           fallback: [
             {
-              key: 'advil',
-              nombre: 'Advil',
-              imagen: '/static/images/advils.png',
-              quickType: 'advil',
+              key: 'barrigon',
+              nombre: 'Barrigón',
+              imagen: '/static/images/barrigon.jpg',
+              quickType: 'barrigon',
               variantes: [
-                { presentacion_id: 'advil-ref1', marca: 'Advil', presentacion: 'Advil', contenido: 'Ref 1' },
-                { presentacion_id: 'advil-ref2', marca: 'Advil', presentacion: 'Advil', contenido: 'Ref 2' },
-                { presentacion_id: 'advil-ref3', marca: 'Advil', presentacion: 'Advil', contenido: 'Ref 3' },
-                { presentacion_id: 'advil-ref4', marca: 'Advil', presentacion: 'Advil', contenido: 'Ref 4' }
+                { presentacion_id: 'barrigon-300', marca: 'Barrigón', presentacion: 'Jabón Barrigón', contenido: '300 g' }
               ]
-            }
-          ]
-        },
-        {
-          key: 'jarabes-ninos',
-          title: 'Jarabes niños',
-          test: (name) => /(jarab|nino|niñ|acetaminof|pediatr)/.test(name),
-          fallback: [
+            },
             {
-              key: 'jarabe-ninos',
-              nombre: 'Jarabe para niños',
-              imagen: '/static/images/acetaminfen-jara.png',
-              quickType: 'jarabe-ninos',
+              key: 'coco',
+              nombre: 'Jabón Coco',
+              imagen: '/static/images/coco.jpg',
+              quickType: 'coco',
               variantes: [
-                { presentacion_id: 'jarabe-ninos-120', marca: 'Acetaminofén', presentacion: 'Jarabe pediátrico', contenido: '120 ml' }
+                { presentacion_id: 'coco-300', marca: 'Coco', presentacion: 'Jabón Coco', contenido: '300 g' }
+              ]
+            },
+            {
+              key: 'vel-rosa',
+              nombre: 'Vela Rosa',
+              imagen: '/static/images/vel-rosa.jpg',
+              quickType: 'vel-rosa',
+              variantes: [
+                { presentacion_id: 'vel-rosa-300', marca: 'Vela Rosa', presentacion: 'Jabón Vela Rosa', contenido: '300 g' }
               ]
             }
           ]
@@ -569,8 +570,9 @@
           else if (imgKey.includes('ak1')) type = 'ak1polvo';
           else if (imgKey.includes('suavitel')) type = 'suavitel-tarro';
           else if (imgKey.includes('supremo')) type = 'supremo-barra';
-          else if (imgKey.includes('advil')) type = 'advil';
-          else if (imgKey.includes('acetamin') || imgKey.includes('jara')) type = 'jarabe-ninos';
+          else if (imgKey.includes('barrigon')) type = 'barrigon';
+          else if (imgKey.includes('coco')) type = 'coco';
+          else if (imgKey.includes('vel-rosa') || imgKey.includes('rosa')) type = 'vel-rosa';
         }
         card.className = `tienda-card focusable quick-view lava-preview-card lava-${type}`;
         card.dataset.quickType = item.quickType || type;
@@ -1034,14 +1036,14 @@
   const supremoHotspots = [
     { id: 'supremo-barra-500', label: '500 g', match: '500', img: '/static/images/supremo-ba.png', x: 22, y: 18, w: 56, hit: '10px', hitArea: '12px', scale: 1.55, scaleMobile: 2.0, lift: '-10px', liftMobile: '-12px' }
   ];
-  const advilHotspots = [
-    { id: 'advil-ref1', label: 'Ref 1', match: 'ref1', img: '/static/images/advils.png', x: 8, y: 18, w: 22, hit: '10px', hitArea: '12px', scale: 1.6, scaleMobile: 2.05, lift: '-10px', liftMobile: '-12px' },
-    { id: 'advil-ref2', label: 'Ref 2', match: 'ref2', img: '/static/images/advils.png', x: 32, y: 18, w: 22, hit: '10px', hitArea: '12px', scale: 1.6, scaleMobile: 2.05, lift: '-10px', liftMobile: '-12px' },
-    { id: 'advil-ref3', label: 'Ref 3', match: 'ref3', img: '/static/images/advils.png', x: 56, y: 18, w: 22, hit: '10px', hitArea: '12px', scale: 1.6, scaleMobile: 2.05, lift: '-10px', liftMobile: '-12px' },
-    { id: 'advil-ref4', label: 'Ref 4', match: 'ref4', img: '/static/images/advils.png', x: 80, y: 18, w: 16, hit: '10px', hitArea: '12px', scale: 1.6, scaleMobile: 2.05, lift: '-10px', liftMobile: '-12px' }
+  const barrigonHotspots = [
+    { id: 'barrigon-300', label: '300 g', match: '300', img: '/static/images/barrigon.jpg', x: 22, y: 16, w: 56, hit: '10px', hitArea: '12px', scale: 1.58, scaleMobile: 2.04, lift: '-10px', liftMobile: '-12px' }
   ];
-  const jarabeNinosHotspots = [
-    { id: 'jarabe-ninos-120', label: '120 ml', match: '120', img: '/static/images/acetaminfen-jara.png', x: 20, y: 18, w: 60, hit: '10px', hitArea: '12px', scale: 1.55, scaleMobile: 2.0, lift: '-10px', liftMobile: '-12px' }
+  const cocoHotspots = [
+    { id: 'coco-300', label: '300 g', match: '300', img: '/static/images/coco.jpg', x: 22, y: 16, w: 56, hit: '10px', hitArea: '12px', scale: 1.58, scaleMobile: 2.04, lift: '-10px', liftMobile: '-12px' }
+  ];
+  const velRosaHotspots = [
+    { id: 'vel-rosa-300', label: '300 g', match: '300', img: '/static/images/vel-rosa.jpg', x: 22, y: 16, w: 56, hit: '10px', hitArea: '12px', scale: 1.58, scaleMobile: 2.04, lift: '-10px', liftMobile: '-12px' }
   ];
 
   const buildPriceTiers = (unit) => ([
@@ -1125,14 +1127,14 @@
     'supremo-barra': {
       'supremo-barra-500': 5200
     },
-    'advil': {
-      'advil-ref1': 6800,
-      'advil-ref2': 8900,
-      'advil-ref3': 11200,
-      'advil-ref4': 13500
+    'barrigon': {
+      'barrigon-300': 3200
     },
-    'jarabe-ninos': {
-      'jarabe-ninos-120': 8700
+    'coco': {
+      'coco-300': 3400
+    },
+    'vel-rosa': {
+      'vel-rosa-300': 3300
     }
   };
   const quickConfigs = {
@@ -1248,19 +1250,26 @@
       hotspots: supremoHotspots,
       priceMap: priceMaps['supremo-barra']
     },
-    'advil': {
-      name: 'Advil',
-      brand: 'Advil',
-      img: '/static/images/advils.png',
-      hotspots: advilHotspots,
-      priceMap: priceMaps.advil
+    'barrigon': {
+      name: 'Jabón Barrigón',
+      brand: 'Barrigón',
+      img: '/static/images/barrigon.jpg',
+      hotspots: barrigonHotspots,
+      priceMap: priceMaps.barrigon
     },
-    'jarabe-ninos': {
-      name: 'Jarabe para niños',
-      brand: 'Pediátrico',
-      img: '/static/images/acetaminfen-jara.png',
-      hotspots: jarabeNinosHotspots,
-      priceMap: priceMaps['jarabe-ninos']
+    'coco': {
+      name: 'Jabón Coco',
+      brand: 'Coco',
+      img: '/static/images/coco.jpg',
+      hotspots: cocoHotspots,
+      priceMap: priceMaps.coco
+    },
+    'vel-rosa': {
+      name: 'Jabón Vela Rosa',
+      brand: 'Vela Rosa',
+      img: '/static/images/vel-rosa.jpg',
+      hotspots: velRosaHotspots,
+      priceMap: priceMaps['vel-rosa']
     }
   };
 
