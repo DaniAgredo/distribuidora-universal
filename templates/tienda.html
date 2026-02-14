@@ -8,19 +8,34 @@
 
 <link rel="stylesheet" href="/static/style.css">
 <link rel="stylesheet" href="/static/tienda.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body class="pagina-tienda">
+{% set header_labels = {
+  'aseo': 'Aseo',
+  'drogueria': 'Drogueria',
+  'ferreteria': 'Ferreteria',
+  'papeleria': 'Papeleria',
+  'comestibles': 'Comestibles',
+  'cuidado-personal': 'Cuidado personal',
+  'cuidado-adulto': 'Cuidado adulto',
+  'insecticidas': 'Insecticidas y venenos',
+  'juegos': 'Juegos',
+  'varios': 'Varios'
+} %}
+{% if cat %}
+  {% set header_title = header_labels.get(cat, cat|replace('-', ' ')|title) %}
+{% else %}
+  {% set header_title = 'Tienda Universal' %}
+{% endif %}
 
 <header class="header">
   <div class="fila-superior tienda-header">
     <div class="tienda-left">
       <div class="titulo tienda-title">
         <span class="icono">&#127758;</span>
-        <div class="nombre">
-          Tienda Universal
-          
-        </div>
+        <div class="nombre">{{ header_title }}</div>
       </div>
       <form class="tienda-search tienda-search-mobile" method="get" action="/tienda">
         <input type="hidden" name="cat" value="{{ cat }}">
@@ -40,10 +55,9 @@
     </div>
     <div class="acciones tienda-acciones">
       <a href="https://wa.me/573215485315" class="whatsapp" target="_blank" rel="noopener">
-        <i class="icon-inline" aria-hidden="true">W</i>
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
         <span class="whatsapp-saludo">WhatsApp</span>
       </a>
-      <a href="/" class="volver volver-circle" aria-label="Volver">&#8592;</a>
       <a href="/carrito" class="carrito-link"><i class="icon-inline" aria-hidden="true">&#128722;</i> Carrito <span id="cartCount">0</span></a>
       <a href="/cuenta" class="login"><i class="icon-inline login-icon" aria-hidden="true">&#128100;</i> <span class="login-text">Cuenta</span></a>
       <a href="#" class="modo-nocturno" aria-label="Modo nocturno">
@@ -52,6 +66,11 @@
     </div>
   </div>
 </header>
+
+<nav class="floating-arrows" aria-label="Navegacion">
+  <a href="/" class="floating-arrow floating-arrow-left" aria-label="Volver al inicio">&#10094;</a>
+  <a href="/carrito" class="floating-arrow floating-arrow-right" aria-label="Ir al carrito">&#10095;</a>
+</nav>
 
 <main class="tienda-main">
   {% set cat_images = [
@@ -72,11 +91,11 @@
   } %}
   <section class="tienda-chips" aria-label="Categorias">
     <div class="chips-story" data-active-cat="{{ cat }}" data-current-q="{{ q }}">
-      <a class="chip-story {% if not cat %}active{% endif %}" data-cat="" href="/tienda{% if q %}?q={{ q|urlencode }}{% endif %}">
+      <a class="chip-story chip-home {% if not cat %}active{% endif %}" data-cat="" href="/tienda{% if q %}?q={{ q|urlencode }}{% endif %}">
         <span class="chip-circle">
-          <img src="/static/images/banner1.jpg" alt="Todos" loading="lazy">
+          <img src="/static/images/estante.jfif" alt="Todos" loading="lazy">
         </span>
-        <span class="chip-name">Todos</span>
+        <span class="chip-name">Catalogo</span>
       </a>
       {% if categorias %}
         {% set existing = categorias|map(attribute='slug')|list %}
@@ -143,6 +162,14 @@
     </div>
   </section>
   <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    const navEntry = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
+    if (navEntry && navEntry.type === 'reload') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+
     const chipsWrap = document.querySelector('.chips-story');
     if (chipsWrap) {
       const updateFocus = () => {
@@ -181,6 +208,13 @@
       '/static/images/banner8.jpg'
     ];
     const subcatsMap = {
+      'aseo': [
+        { label: 'Detergentes', img: '/static/images/ariel-thumb.jpg', anchor: 'sub-detergentes' },
+        { label: 'Lava loza', img: '/static/images/axion.jpg', anchor: 'sub-lava-lozas' },
+        { label: 'Jabon liquido', img: '/static/images/losa-crem.jpg', anchor: 'sub-jabon-liquido' },
+        { label: 'Suavizantes', img: '/static/images/suavitel-tarro.png', anchor: 'sub-suavizantes' },
+        { label: 'Limpidos', img: '/static/images/limpido.png', anchor: 'sub-otros' }
+      ],
       'drogueria': [
         { label: 'Tabletas', q: 'tabletas', img: '/static/images/banner6.jpg' },
         { label: 'Jarabes', q: 'jarabe', img: '/static/images/banner7.jpg' },
@@ -210,17 +244,369 @@
         const volver = document.createElement('a');
         volver.className = 'chip-story chip-volver';
         volver.href = currentQ ? `/tienda?q=${encodeURIComponent(currentQ)}` : '/tienda';
-        volver.innerHTML = '<span class="chip-circle"><img src="/static/images/banner9.jpg" alt="Volver"></span><span class="chip-name">Categorias</span>';
+        volver.innerHTML = '<span class="chip-circle"><img src="/static/images/estante.jfif" alt="Volver"></span><span class="chip-name">Secciones</span>';
         chipsWrap.appendChild(volver);
         list.forEach((item, idx) => {
           const img = item.img || subcatImages[idx % subcatImages.length];
           const a = document.createElement('a');
           a.className = 'chip-story subcat';
-          a.href = `/tienda?cat=${encodeURIComponent(activeCat)}&q=${encodeURIComponent(item.q)}`;
+          if (item.anchor) {
+            a.href = `/tienda?cat=${encodeURIComponent(activeCat)}#${encodeURIComponent(item.anchor)}`;
+          } else {
+            a.href = `/tienda?cat=${encodeURIComponent(activeCat)}&q=${encodeURIComponent(item.q)}`;
+          }
           a.innerHTML = `<span class="chip-circle"><img src="${img}" alt="${item.label}"></span><span class="chip-name">${item.label}</span>`;
           chipsWrap.appendChild(a);
         });
       }
+    }
+
+    const promoteSubcatChip = (chip) => {
+      if (!chipsWrap || !chip || !chip.classList.contains('subcat')) return;
+      const volver = chipsWrap.querySelector('.chip-volver');
+      if (volver && chip !== volver.nextElementSibling) {
+        chipsWrap.insertBefore(chip, volver.nextElementSibling);
+      }
+      chip.classList.add('is-picked');
+      setTimeout(() => chip.classList.remove('is-picked'), 360);
+      chipsWrap.scrollTo({ left: 0, behavior: 'smooth' });
+    };
+
+    const jumpToSubSection = (anchorId, chip = null) => {
+      if (!anchorId) return false;
+      if (typeof window.__prioritizeAseoSection === 'function') {
+        const done = window.__prioritizeAseoSection(anchorId, chip);
+        if (done) return true;
+      }
+      const target = document.getElementById(anchorId);
+      if (!target) return false;
+      if (chip) promoteSubcatChip(chip);
+      target.classList.remove('is-jump');
+      void target.offsetWidth;
+      target.classList.add('is-jump');
+      setTimeout(() => target.classList.remove('is-jump'), 420);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return true;
+    };
+
+    // Cambio de categoria sin parpadeo
+    const bindCategoryTransition = () => {
+      let navLocked = false;
+      const prefetched = new Set();
+      const prefetchDoc = (href) => {
+        if (!href || prefetched.has(href) || href.startsWith('#')) return;
+        prefetched.add(href);
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = href;
+        link.as = 'document';
+        document.head.appendChild(link);
+      };
+      document.querySelectorAll('.chips-story a').forEach((link) => {
+        const href = link.getAttribute('href');
+        if (href) {
+          link.addEventListener('mouseenter', () => prefetchDoc(href), { passive: true });
+          link.addEventListener('touchstart', () => prefetchDoc(href), { passive: true });
+        }
+        link.addEventListener('click', (e) => {
+          if (navLocked) return;
+          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          const href = link.getAttribute('href');
+          if (!href || href.startsWith('#')) return;
+          if (href.includes('#sub-')) {
+            const url = new URL(href, window.location.origin);
+            const targetCat = (url.searchParams.get('cat') || '').toLowerCase();
+            const activeCat = (chipsWrap?.dataset.activeCat || '').toLowerCase();
+            const anchorId = (url.hash || '').replace('#', '');
+            if (url.pathname === window.location.pathname && targetCat && targetCat === activeCat) {
+              e.preventDefault();
+              jumpToSubSection(anchorId, link);
+              history.replaceState(null, '', `${url.pathname}${url.search}`);
+            }
+            return;
+          }
+          e.preventDefault();
+          navLocked = true;
+          link.classList.add('is-nav');
+          setTimeout(() => {
+            window.location.assign(href);
+          }, 70);
+        });
+      });
+    };
+    bindCategoryTransition();
+
+    const buildAseoMobileSections = () => {
+      if (!chipsWrap) return;
+      const activeCat = chipsWrap.dataset.activeCat || '';
+      if (activeCat !== 'aseo') return;
+      const grid = document.querySelector('.tienda-grid');
+      if (!grid || document.querySelector('.aseo-mobile-sections')) return;
+      const cards = Array.from(grid.querySelectorAll('.tienda-card'));
+      if (!cards.length) return;
+
+      const defs = [
+        {
+          key: 'detergentes',
+          title: 'Detergentes',
+          test: (name) => /(deterg|ariel|fab|3d|multiusos)/.test(name),
+          fallback: [
+            {
+              key: 'ak1polvo',
+              nombre: 'AK1 Polvo',
+              imagen: '/static/images/ak1polvo.jpg',
+              quickType: 'ak1polvo',
+              variantes: [
+                { presentacion_id: 'ak1polvo-900', marca: 'AK1', presentacion: 'AK1 Polvo', contenido: '900 g' }
+              ]
+            },
+          ]
+        },
+        {
+          key: 'lava-lozas',
+          title: 'Lava lozas',
+          test: (name) => /(lava ?loza|lavaloza|lavaplat|lozacrem|axion|dona ?lupe|doña ?lupe|lupe)/.test(name),
+          fallback: [
+            {
+              key: 'lozacrem',
+              nombre: 'Lozacrem',
+              imagen: '/static/images/lozacrem.jpg',
+              quickType: 'lozacrem',
+              variantes: [
+                { presentacion_id: 'lozacrem-1500', marca: 'Lozacrem', presentacion: 'Lozacrem', contenido: '1.5 L' },
+                { presentacion_id: 'lozacrem-720', marca: 'Lozacrem', presentacion: 'Lozacrem', contenido: '720 ml' },
+                { presentacion_id: 'lozacrem-250', marca: 'Lozacrem', presentacion: 'Lozacrem', contenido: '250 g' }
+              ]
+            },
+            {
+              key: 'axion',
+              nombre: 'Axion',
+              imagen: '/static/images/axion.jpg',
+              quickType: 'axion',
+              variantes: [
+                { presentacion_id: 'axion-900', marca: 'Axion', presentacion: 'Axion', contenido: '900 g' },
+                { presentacion_id: 'axion-450', marca: 'Axion', presentacion: 'Axion', contenido: '450 g' },
+                { presentacion_id: 'axion-200', marca: 'Axion', presentacion: 'Axion', contenido: '200 g' }
+              ]
+            },
+            {
+              key: 'donalupe',
+              nombre: 'Dona Lupe',
+              imagen: '/static/images/do%C3%B1alupe.png',
+              quickType: 'donalupe',
+              variantes: [
+                { presentacion_id: 'donalupe-900', marca: 'Dona Lupe', presentacion: 'Dona Lupe', contenido: '900 g' }
+              ]
+            }
+          ]
+        },
+        {
+          key: 'jabon-liquido',
+          title: 'Jabon liquido',
+          test: (name) => /(jabon liq|liquido|losa-?crem|3d-?liquido|ak1)/.test(name),
+          fallback: [
+            {
+              key: 'losa-crem-liq',
+              nombre: 'Losa-Crem Liquido',
+              imagen: '/static/images/losa-crem.jpg',
+              quickType: 'losa-crem-liq',
+              variantes: [
+                { presentacion_id: 'losa-crem-liq-900', marca: 'Losa-Crem', presentacion: 'Losa-Crem Liquido', contenido: '900 ml' }
+              ]
+            },
+            {
+              key: '3d-liquido',
+              nombre: '3D Liquido',
+              imagen: '/static/images/3d-liquido.jpg',
+              quickType: '3d-liquido',
+              variantes: [
+                { presentacion_id: '3d-liquido-900', marca: '3D', presentacion: '3D Liquido', contenido: '900 ml' }
+              ]
+            },
+            {
+              key: 'ak1-liquido',
+              nombre: 'AK1 Liquido',
+              imagen: '/static/images/ak1.jpg',
+              quickType: 'ak1-liquido',
+              variantes: [
+                { presentacion_id: 'ak1-liquido-900', marca: 'AK1', presentacion: 'AK1 Liquido', contenido: '900 ml' }
+              ]
+            }
+          ]
+        },
+        {
+          key: 'suavizantes',
+          title: 'Suavizantes',
+          test: (name) => /(suavitel|suavizante|suavisante|suavizador)/.test(name),
+          fallback: [
+            {
+              key: 'suavitel-tarro',
+              nombre: 'Suavitel Tarro',
+              imagen: '/static/images/suavitel-tarro.png',
+              quickType: 'suavitel-tarro',
+              variantes: [
+                { presentacion_id: 'suavitel-tarro-frasco', marca: 'Suavitel', presentacion: 'Suavitel Tarro', contenido: 'Frasco 1 L' },
+                { presentacion_id: 'suavitel-tarro-rosas', marca: 'Suavitel', presentacion: 'Suavitel Bolsa Rosas', contenido: 'Bolsa Rosas 900 ml' }
+              ]
+            },
+            {
+              key: 'suavitel-sin-t',
+              nombre: 'Suavitel Repuesto',
+              imagen: '/static/images/suavitel-sin-t.png',
+              quickType: 'suavitel-sin-t',
+              variantes: [
+                { presentacion_id: 'suavitel-sin-t-rosas', marca: 'Suavitel', presentacion: 'Suavitel Repuesto', contenido: 'Rosas 900 ml' },
+                { presentacion_id: 'suavitel-sin-t-lavanda', marca: 'Suavitel', presentacion: 'Suavitel Repuesto', contenido: 'Lavanda 900 ml' },
+                { presentacion_id: 'suavitel-sin-t-primavera', marca: 'Suavitel', presentacion: 'Suavitel Repuesto', contenido: 'Primavera 900 ml' },
+                { presentacion_id: 'suavitel-sin-t-brisa', marca: 'Suavitel', presentacion: 'Suavitel Repuesto', contenido: 'Brisa 900 ml' }
+              ]
+            },
+            {
+              key: 'suavitel-con-t',
+              nombre: 'Suavitel Repuesto c/Tapa',
+              imagen: '/static/images/suavitel-con-t.png',
+              quickType: 'suavitel-con-t',
+              variantes: [
+                { presentacion_id: 'suavitel-con-t-rosas', marca: 'Suavitel', presentacion: 'Suavitel c/Tapa', contenido: 'Rosas 900 ml' },
+                { presentacion_id: 'suavitel-con-t-lavanda', marca: 'Suavitel', presentacion: 'Suavitel c/Tapa', contenido: 'Lavanda 900 ml' },
+                { presentacion_id: 'suavitel-con-t-primavera', marca: 'Suavitel', presentacion: 'Suavitel c/Tapa', contenido: 'Primavera 900 ml' },
+                { presentacion_id: 'suavitel-con-t-brisa', marca: 'Suavitel', presentacion: 'Suavitel c/Tapa', contenido: 'Brisa 900 ml' }
+              ]
+            }
+          ]
+        },
+        {
+          key: 'otros',
+          title: 'Limpidos',
+          test: () => true,
+          fallback: [
+            {
+              key: 'limpido-gde',
+              nombre: 'Limpido 1 L',
+              imagen: '/static/images/limpido.png',
+              quickType: 'limpido',
+              variantes: [
+                { presentacion_id: 'limpido-1000', marca: 'Limpido', presentacion: 'Limpido', contenido: '1 L' },
+                { presentacion_id: 'limpido-500', marca: 'Limpido', presentacion: 'Limpido', contenido: '500 ml' }
+              ]
+            },
+            {
+              key: 'limpido-peq',
+              nombre: 'Limpido 500 ml',
+              imagen: '/static/images/limpidopeq.png',
+              quickType: 'limpido',
+              variantes: [
+                { presentacion_id: 'limpido-1000', marca: 'Limpido', presentacion: 'Limpido', contenido: '1 L' },
+                { presentacion_id: 'limpido-500', marca: 'Limpido', presentacion: 'Limpido', contenido: '500 ml' }
+              ]
+            }
+          ]
+        }
+      ];
+
+      const buckets = { detergentes: [], 'lava-lozas': [], 'jabon-liquido': [], suavizantes: [], otros: [] };
+      cards.forEach((card) => {
+        const name = (card.dataset.producto || '').toLowerCase();
+        const def = defs.find((d) => d.key !== 'otros' && d.test(name));
+        if (def) buckets[def.key].push(card);
+        else buckets.otros.push(card);
+      });
+
+      const wrap = document.createElement('section');
+      wrap.className = 'aseo-mobile-sections';
+      const makePreviewCard = (item) => {
+        const card = document.createElement('article');
+        const imgKey = (item.imagen || '').toLowerCase();
+        const rawName = item.nombre || 'Producto';
+        const cleanName = /lupe/i.test(rawName) ? 'Dona Lupe' : rawName;
+        let type = item.quickType || 'item';
+        if (!item.quickType) {
+          if (imgKey.includes('axion')) type = 'axion';
+          else if (imgKey.includes('lozacrem')) type = 'lozacrem';
+          else if (imgKey.includes('lupe')) type = 'donalupe';
+          else if (imgKey.includes('limpido')) type = 'limpido';
+          else if (imgKey.includes('ak1')) type = 'ak1polvo';
+          else if (imgKey.includes('suavitel')) type = 'suavitel-tarro';
+        }
+        card.className = `tienda-card focusable quick-view lava-preview-card lava-${type}`;
+        card.dataset.quickType = item.quickType || type;
+        card.dataset.producto = cleanName;
+        card.dataset.categoria = 'Aseo';
+        card.dataset.variantes = JSON.stringify(item.variantes || []);
+        card.tabIndex = 0;
+        card.innerHTML = `
+          <div class="tienda-img">
+            <img src="${item.imagen}" alt="${cleanName}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+          </div>
+          <div class="tienda-info">
+            <h3>${cleanName}</h3>
+          </div>
+        `;
+        return card;
+      };
+
+      defs.forEach((def) => {
+        const list = buckets[def.key] || [];
+        if (!list.length && !(def.fallback && def.fallback.length)) return;
+
+        const section = document.createElement('section');
+        section.className = 'aseo-mobile-section';
+        section.id = `sub-${def.key}`;
+        section.innerHTML = `<h2>${def.title}</h2>`;
+        const row = document.createElement('div');
+        row.className = 'aseo-mobile-row';
+
+        if (list.length) {
+          list.forEach((card) => row.appendChild(card));
+        }
+        if (def.fallback && def.fallback.length && (def.key === 'otros' || def.key === 'detergentes' || def.key === 'jabon-liquido' || def.key === 'suavizantes' || !list.length)) {
+          def.fallback.forEach((item) => row.appendChild(makePreviewCard(item)));
+        }
+        if (!row.children.length) {
+          const empty = document.createElement('div');
+          empty.className = 'aseo-mobile-empty';
+          empty.textContent = `Pronto agregaremos productos de ${def.title.toLowerCase()}.`;
+          row.appendChild(empty);
+        }
+
+        section.appendChild(row);
+        wrap.appendChild(section);
+      });
+
+      const prioritizeAseoSection = (anchorId, chip = null) => {
+        if (!anchorId) return false;
+        const target = document.getElementById(anchorId);
+        if (!target || !wrap.contains(target)) return false;
+        if (chip) promoteSubcatChip(chip);
+        const first = wrap.querySelector('.aseo-mobile-section');
+        if (first && first !== target) {
+          target.classList.remove('is-priority');
+          wrap.insertBefore(target, first);
+        }
+        void target.offsetWidth;
+        target.classList.add('is-priority');
+        setTimeout(() => target.classList.remove('is-priority'), 420);
+        return true;
+      };
+      window.__prioritizeAseoSection = prioritizeAseoSection;
+
+      grid.before(wrap);
+      document.body.classList.add('aseo-sections-mode');
+      const hashTarget = (window.location.hash || '').replace('#', '');
+      if (hashTarget) {
+        const activeChip = chipsWrap ? chipsWrap.querySelector(`a[href*="#${hashTarget}"]`) : null;
+        requestAnimationFrame(() => {
+          prioritizeAseoSection(hashTarget, activeChip);
+          history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+        });
+      }
+    };
+
+    window.__buildAseoMobileSections = buildAseoMobileSections;
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', buildAseoMobileSections);
+    } else {
+      buildAseoMobileSections();
     }
   </script>
 
@@ -245,6 +631,10 @@
       {% set is_revita = 'revita' in producto_nombre or 'revitacolor' in producto_nombre %}
       {% set is_fab = 'fab' in producto_nombre and 'fabuloso' not in producto_nombre %}
       {% set is_3d = '3d' in producto_nombre %}
+      {% set is_axion = 'axion' in producto_nombre %}
+      {% set is_lozacrem = 'lozacrem' in producto_nombre %}
+      {% set is_limpido = 'limpido' in producto_nombre %}
+      {% set is_donalupe = 'dona lupe' in producto_nombre or 'doña lupe' in producto_nombre or 'donalupe' in producto_nombre %}
       {% if is_revita %}
         {% set producto_imagen = '/static/images/ariel-revita-thumb.jpg' %}
         {% set added_revita = true %}
@@ -254,12 +644,18 @@
       {% elif is_3d %}
         {% set producto_imagen = '/static/images/3d-thumb.jpg' %}
         {% set added_3d = true %}
+      {% elif is_axion %}
+        {% set producto_imagen = '/static/images/axion.jpg' %}
+      {% elif is_lozacrem %}
+        {% set producto_imagen = '/static/images/lozacrem.jpg' %}
+      {% elif is_donalupe %}
+        {% set producto_imagen = '/static/images/do%C3%B1alupe.png' %}
       {% elif is_ariel %}
         {% set producto_imagen = '/static/images/ariel-thumb.jpg' %}
       {% endif %}
       {% set producto_variantes = variants_by_product.get(item.producto_id, []) %}
       {% set is_quick = is_ariel or is_revita or is_fab or is_3d %}
-      <a class="tienda-card {% if is_quick %}focusable quick-view{% endif %}"
+      <a class="tienda-card {% if is_quick %}focusable quick-view{% endif %} {% if is_limpido %}is-limpido{% endif %}"
          href="/producto/{{ item.producto_id }}"
          data-producto="{{ item.producto }}"
          data-categoria="{{ item.categoria }}"
@@ -414,16 +810,18 @@
     }
   });
 
-  const grid = document.querySelector('.tienda-grid');
-  if (grid) {
-    const focusCards = Array.from(grid.querySelectorAll('.tienda-card.focusable'));
+  const attachFocusEffects = (container) => {
+    if (!container || container.dataset.focusBound === '1') return;
+    const focusCards = Array.from(container.querySelectorAll('.tienda-card.focusable'));
+    if (!focusCards.length) return;
+    container.dataset.focusBound = '1';
     const activate = (card) => {
-      grid.classList.add('dimmed');
+      container.classList.add('dimmed');
       focusCards.forEach((c) => c.classList.remove('active'));
       card.classList.add('active');
     };
     const clear = () => {
-      grid.classList.remove('dimmed');
+      container.classList.remove('dimmed');
       focusCards.forEach((c) => c.classList.remove('active'));
     };
     focusCards.forEach((card) => {
@@ -435,9 +833,13 @@
       card.addEventListener('focusout', clear);
     });
     document.addEventListener('click', (e) => {
-      if (!grid.contains(e.target)) clear();
+      if (!container.contains(e.target)) clear();
     });
-  }
+  };
+
+  if (window.__buildAseoMobileSections) window.__buildAseoMobileSections();
+  attachFocusEffects(document.querySelector('.tienda-grid'));
+  document.querySelectorAll('.aseo-mobile-row').forEach((row) => attachFocusEffects(row));
 
   const quickModal = document.getElementById('quickModal');
   const quickSheet = quickModal ? quickModal.querySelector('.quick-sheet') : null;
@@ -533,6 +935,51 @@
     { id: '225g', label: '225 g', match: '225g', img: '/static/images/fab.jpg', x: 60, y: 58, w: 14, hit: '6px', hitArea: '8px', scale: 1.7, scaleMobile: 2.2 },
     { id: '100g', label: '100 g', match: '100g', img: '/static/images/fab.jpg', x: 66, y: 70, w: 16, hit: '6px', hitArea: '8px', scale: 1.9, scaleMobile: 2.4, lift: '-8px', liftMobile: '-10px' }
   ];
+  const axionHotspots = [
+    { id: 'axion-900', label: '900 g', match: '900', img: '/static/images/axion.jpg', x: 34, y: 12, w: 26, hit: '8px', hitArea: '10px', scale: 1.2, scaleMobile: 1.5, lift: '-8px', liftMobile: '-10px' },
+    { id: 'axion-450', label: '450 g', match: '450', img: '/static/images/axion.jpg', x: 30, y: 38, w: 24, hit: '8px', hitArea: '10px', scale: 1.35, scaleMobile: 1.7 },
+    { id: 'axion-200', label: '200 g', match: '200', img: '/static/images/axion.jpg', x: 28, y: 62, w: 22, hit: '8px', hitArea: '10px', scale: 1.45, scaleMobile: 1.85, lift: '-8px', liftMobile: '-10px' }
+  ];
+  const lozacremHotspots = [
+    { id: 'lozacrem-1500', label: '1.5 L', match: '1.5', img: '/static/images/lozacrem.jpg', x: 38, y: 10, w: 22, hit: '8px', hitArea: '10px', scale: 1.28, scaleMobile: 1.65, lift: '-10px', liftMobile: '-12px' },
+    { id: 'lozacrem-720', label: '720 ml', match: '720', img: '/static/images/lozacrem.jpg', x: 37, y: 39, w: 20, hit: '8px', hitArea: '10px', scale: 1.42, scaleMobile: 1.82 },
+    { id: 'lozacrem-250', label: '250 g', match: '250', img: '/static/images/lozacrem.jpg', x: 36, y: 65, w: 18, hit: '8px', hitArea: '10px', scale: 1.5, scaleMobile: 1.95, lift: '-8px', liftMobile: '-10px' }
+  ];
+  const donaLupeHotspots = [
+    { id: 'donalupe-900', label: '900 g', match: '900', img: '/static/images/do%C3%B1alupe.png', x: 30, y: 20, w: 34, hit: '8px', hitArea: '10px', scale: 1.5, scaleMobile: 1.95, lift: '-12px', liftMobile: '-14px' }
+  ];
+  const limpidoHotspots = [
+    { id: 'limpido-1000', label: '1 L', match: '1l', img: '/static/images/limpido.png', x: 28, y: 14, w: 36, hit: '8px', hitArea: '10px', scale: 1.4, scaleMobile: 1.85, lift: '-10px', liftMobile: '-12px' },
+    { id: 'limpido-500', label: '500 ml', match: '500', img: '/static/images/limpidopeq.png', x: 34, y: 48, w: 30, hit: '8px', hitArea: '10px', scale: 1.55, scaleMobile: 2.0 }
+  ];
+  const ak1Hotspots = [
+    { id: 'ak1polvo-900', label: '900 g', match: '900', img: '/static/images/ak1polvo.jpg', x: 26, y: 16, w: 38, hit: '8px', hitArea: '10px', scale: 1.45, scaleMobile: 1.9, lift: '-10px', liftMobile: '-12px' }
+  ];
+  const jabonLiquidoHotspots = [
+    { id: 'losa-crem-liq-900', label: '900 ml', match: '900', img: '/static/images/losa-crem.jpg', x: 26, y: 16, w: 38, hit: '8px', hitArea: '10px', scale: 1.45, scaleMobile: 1.9, lift: '-10px', liftMobile: '-12px' }
+  ];
+  const threeDLiquidoHotspots = [
+    { id: '3d-liquido-900', label: '900 ml', match: '900', img: '/static/images/3d-liquido.jpg', x: 26, y: 16, w: 38, hit: '8px', hitArea: '10px', scale: 1.45, scaleMobile: 1.9, lift: '-10px', liftMobile: '-12px' }
+  ];
+  const ak1LiquidoHotspots = [
+    { id: 'ak1-liquido-900', label: '900 ml', match: '900', img: '/static/images/ak1.jpg', x: 26, y: 16, w: 38, hit: '8px', hitArea: '10px', scale: 1.45, scaleMobile: 1.9, lift: '-10px', liftMobile: '-12px' }
+  ];
+  const suavitelTarroHotspots = [
+    { id: 'suavitel-tarro-frasco', label: 'Tarro 1 L', match: 'frasco', img: '/static/images/suavitel-tarro.png', x: 16, y: 16, w: 36, hit: '12px', hitArea: '14px', scale: 1.65, scaleMobile: 2.2, lift: '-12px', liftMobile: '-14px' },
+    { id: 'suavitel-tarro-rosas', label: 'Bolsa Rosas', match: 'rosas', img: '/static/images/suavitel-tarro.png', x: 52, y: 30, w: 34, hit: '12px', hitArea: '14px', scale: 1.65, scaleMobile: 2.2, lift: '-12px', liftMobile: '-14px' }
+  ];
+  const suavitelSinTHotspots = [
+    { id: 'suavitel-sin-t-rosas', label: 'Rosas', match: 'rosas', img: '/static/images/suavitel-sin-t.png', x: 6, y: 14, w: 22, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' },
+    { id: 'suavitel-sin-t-lavanda', label: 'Lavanda', match: 'lavanda', img: '/static/images/suavitel-sin-t.png', x: 30, y: 14, w: 22, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' },
+    { id: 'suavitel-sin-t-primavera', label: 'Primavera', match: 'primavera', img: '/static/images/suavitel-sin-t.png', x: 54, y: 14, w: 22, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' },
+    { id: 'suavitel-sin-t-brisa', label: 'Brisa', match: 'brisa', img: '/static/images/suavitel-sin-t.png', x: 78, y: 14, w: 18, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' }
+  ];
+  const suavitelConTHotspots = [
+    { id: 'suavitel-con-t-rosas', label: 'Rosas', match: 'rosas', img: '/static/images/suavitel-con-t.png', x: 6, y: 14, w: 22, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' },
+    { id: 'suavitel-con-t-lavanda', label: 'Lavanda', match: 'lavanda', img: '/static/images/suavitel-con-t.png', x: 30, y: 14, w: 22, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' },
+    { id: 'suavitel-con-t-primavera', label: 'Primavera', match: 'primavera', img: '/static/images/suavitel-con-t.png', x: 54, y: 14, w: 22, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' },
+    { id: 'suavitel-con-t-brisa', label: 'Brisa', match: 'brisa', img: '/static/images/suavitel-con-t.png', x: 78, y: 14, w: 18, hit: '12px', hitArea: '14px', scale: 1.72, scaleMobile: 2.25, lift: '-12px', liftMobile: '-14px' }
+  ];
 
   const buildPriceTiers = (unit) => ([
     { min_cantidad: 1, precio: unit },
@@ -566,6 +1013,51 @@
       '450g': 6150,
       '225g': 2800,
       '100g': 1500
+    },
+    axion: {
+      'axion-900': 11200,
+      'axion-450': 6400,
+      'axion-200': 3600
+    },
+    lozacrem: {
+      'lozacrem-1500': 18200,
+      'lozacrem-720': 8200,
+      'lozacrem-250': 3150
+    },
+    donalupe: {
+      'donalupe-900': 9200
+    },
+    limpido: {
+      'limpido-1000': 9800,
+      'limpido-500': 5700
+    },
+    ak1polvo: {
+      'ak1polvo-900': 4200
+    },
+    'losa-crem-liq': {
+      'losa-crem-liq-900': 7600
+    },
+    '3d-liquido': {
+      '3d-liquido-900': 7500
+    },
+    'ak1-liquido': {
+      'ak1-liquido-900': 6900
+    },
+    'suavitel-tarro': {
+      'suavitel-tarro-frasco': 10900,
+      'suavitel-tarro-rosas': 8900
+    },
+    'suavitel-sin-t': {
+      'suavitel-sin-t-rosas': 8400,
+      'suavitel-sin-t-lavanda': 8400,
+      'suavitel-sin-t-primavera': 8400,
+      'suavitel-sin-t-brisa': 8400
+    },
+    'suavitel-con-t': {
+      'suavitel-con-t-rosas': 9200,
+      'suavitel-con-t-lavanda': 9200,
+      'suavitel-con-t-primavera': 9200,
+      'suavitel-con-t-brisa': 9200
     }
   };
   const quickConfigs = {
@@ -596,6 +1088,83 @@
       img: '/static/images/fab.jpg',
       hotspots: fabHotspots,
       priceMap: priceMaps.fab
+    },
+    axion: {
+      name: 'Axion Lavaloza',
+      brand: 'Axion',
+      img: '/static/images/axion.jpg',
+      hotspots: axionHotspots,
+      priceMap: priceMaps.axion
+    },
+    lozacrem: {
+      name: 'Lozacrem',
+      brand: 'Lozacrem',
+      img: '/static/images/lozacrem.jpg',
+      hotspots: lozacremHotspots,
+      priceMap: priceMaps.lozacrem
+    },
+    donalupe: {
+      name: 'Dona Lupe',
+      brand: 'Dona Lupe',
+      img: '/static/images/do%C3%B1alupe.png',
+      hotspots: donaLupeHotspots,
+      priceMap: priceMaps.donalupe
+    },
+    limpido: {
+      name: 'Limpido',
+      brand: 'Limpido',
+      img: '/static/images/limpido.png',
+      hotspots: limpidoHotspots,
+      priceMap: priceMaps.limpido
+    },
+    ak1polvo: {
+      name: 'AK1 Polvo',
+      brand: 'AK1',
+      img: '/static/images/ak1polvo.jpg',
+      hotspots: ak1Hotspots,
+      priceMap: priceMaps.ak1polvo
+    },
+    'losa-crem-liq': {
+      name: 'Losa-Crem Liquido',
+      brand: 'Losa-Crem',
+      img: '/static/images/losa-crem.jpg',
+      hotspots: jabonLiquidoHotspots,
+      priceMap: priceMaps['losa-crem-liq']
+    },
+    '3d-liquido': {
+      name: '3D Liquido',
+      brand: '3D',
+      img: '/static/images/3d-liquido.jpg',
+      hotspots: threeDLiquidoHotspots,
+      priceMap: priceMaps['3d-liquido']
+    },
+    'ak1-liquido': {
+      name: 'AK1 Liquido',
+      brand: 'AK1',
+      img: '/static/images/ak1.jpg',
+      hotspots: ak1LiquidoHotspots,
+      priceMap: priceMaps['ak1-liquido']
+    },
+    'suavitel-tarro': {
+      name: 'Suavitel Tarro',
+      brand: 'Suavitel',
+      img: '/static/images/suavitel-tarro.png',
+      hotspots: suavitelTarroHotspots,
+      priceMap: priceMaps['suavitel-tarro']
+    },
+    'suavitel-sin-t': {
+      name: 'Suavitel Repuesto',
+      brand: 'Suavitel',
+      img: '/static/images/suavitel-sin-t.png',
+      hotspots: suavitelSinTHotspots,
+      priceMap: priceMaps['suavitel-sin-t']
+    },
+    'suavitel-con-t': {
+      name: 'Suavitel Repuesto c/Tapa',
+      brand: 'Suavitel',
+      img: '/static/images/suavitel-con-t.png',
+      hotspots: suavitelConTHotspots,
+      priceMap: priceMaps['suavitel-con-t']
     }
   };
 
@@ -702,6 +1271,10 @@
         }, { passive: false });
         quickHotspots.appendChild(btn);
       });
+    }
+
+    if (currentQuick.hotspots.length === 1) {
+      selectHotspot(currentQuick.hotspots[0], variants);
     }
 
     document.body.classList.add('modal-open');
@@ -880,6 +1453,3 @@
 
 </body>
 </html>
-
-
-
