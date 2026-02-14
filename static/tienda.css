@@ -55,11 +55,6 @@
 .pagina-tienda.is-entering .tienda-chips{
     animation:none;
 }
-.pagina-tienda.cat-switch-soft .tienda-main,
-.pagina-tienda.cat-switch-soft .tienda-chips{
-    opacity:.92;
-    transform:translateY(1px);
-}
 @media (prefers-reduced-motion: reduce){
     .pagina-tienda .tienda-main,
     .pagina-tienda .tienda-chips{
@@ -626,6 +621,19 @@ body.modal-open .floating-arrows{
     font-weight:600;
     letter-spacing:.2px;
     color:#0f172a;
+}
+
+.pagina-tienda.vista-todos .tienda-card{
+    min-height:auto;
+}
+.pagina-tienda.vista-todos .tienda-img{
+    height:154px;
+}
+.pagina-tienda.vista-todos .tienda-img img{
+    max-height:148px;
+}
+.pagina-tienda.vista-todos .tienda-info{
+    display:none;
 }
 
 .tienda-paginacion{
@@ -1878,6 +1886,70 @@ body.dark .quick-total strong{
     }
     .floating-arrow-right{
         right:6px;
+    }
+}
+
+@media(max-width:650px){
+    .pagina-tienda .tienda-chips{
+        position:fixed;
+        right:8px;
+        bottom:84px;
+        width:auto;
+        margin:0;
+        z-index:1280;
+        pointer-events:auto;
+    }
+    .pagina-tienda .tienda-resumen{
+        display:none;
+    }
+    .pagina-tienda .chips-story{
+        width:86px;
+        max-height:74px;
+        overflow-y:hidden;
+        overflow-x:hidden;
+        display:flex;
+        flex-direction:column-reverse;
+        align-items:center;
+        gap:8px;
+        padding:4px;
+        border-radius:999px;
+        background:transparent;
+        border:none;
+        box-shadow:none;
+        transition:max-height .22s ease, background .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .pagina-tienda .chip-story{
+        min-width:0;
+        width:78px;
+    }
+    .pagina-tienda .chip-circle{
+        width:62px;
+        height:62px;
+    }
+    .pagina-tienda .chip-name{
+        font-size:7.7px;
+        padding:2px 6px;
+    }
+    .pagina-tienda.chips-open .chips-story{
+        max-height:68vh;
+        overflow-y:auto;
+        scrollbar-width:none;
+        background:rgba(10,31,65,.45);
+        border:1px solid rgba(255,255,255,.35);
+        box-shadow:0 12px 28px rgba(0,0,0,.25);
+        backdrop-filter:blur(6px);
+        -webkit-backdrop-filter:blur(6px);
+        border-radius:20px;
+        padding:8px 4px 10px;
+    }
+    .pagina-tienda.chips-open .chips-story::-webkit-scrollbar{
+        display:none;
+    }
+    .pagina-tienda.vista-todos .tienda-main{
+        padding-right:96px;
+    }
+    .pagina-tienda.vista-todos .tienda-grid{
+        padding-right:4px;
     }
 }
 

@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
-<body class="pagina-tienda">
+<body class="pagina-tienda{% if not cat %} vista-todos{% endif %}">
 {% set header_labels = {
   'aseo': 'Aseo',
   'drogueria': 'Drogueria',
@@ -323,10 +323,7 @@
           }
           e.preventDefault();
           navLocked = true;
-          document.body.classList.add('cat-switch-soft');
-          setTimeout(() => {
-            window.location.assign(href);
-          }, 55);
+          window.location.assign(href);
         });
       });
     };
@@ -863,6 +860,71 @@
     }
   });
 
+  const injectAllProductsInCatalog = () => {
+    const activeCat = (chipsWrap?.dataset.activeCat || '').trim().toLowerCase();
+    if (activeCat) return;
+    const grid = document.querySelector('.tienda-grid');
+    if (!grid) return;
+    const existingNames = new Set(
+      Array.from(grid.querySelectorAll('.tienda-card')).map((card) => (card.dataset.producto || '').toLowerCase().trim())
+    );
+    const extras = [
+      { nombre: 'Axion', imagen: '/static/images/axion.jpg', quickType: 'axion', variantes: [{ presentacion_id: 'axion-900', contenido: '900 g' }] },
+      { nombre: 'Lozacrem', imagen: '/static/images/lozacrem.jpg', quickType: 'lozacrem', variantes: [{ presentacion_id: 'lozacrem-720', contenido: '720 ml' }] },
+      { nombre: 'Dona Lupe', imagen: '/static/images/do%C3%B1alupe.png', quickType: 'donalupe', variantes: [{ presentacion_id: 'donalupe-900', contenido: '900 g' }] },
+      { nombre: 'Supremo Barra', imagen: '/static/images/supremo-ba.png', quickType: 'supremo-barra', variantes: [{ presentacion_id: 'supremo-barra-500', contenido: '500 g' }] },
+      { nombre: 'Losa-Crem Liquido', imagen: '/static/images/losa-crem.jpg', quickType: 'losa-crem-liq', variantes: [{ presentacion_id: 'losa-crem-liq-900', contenido: '900 ml' }] },
+      { nombre: '3D Liquido', imagen: '/static/images/3d-liquido.jpg', quickType: '3d-liquido', variantes: [{ presentacion_id: '3d-liquido-900', contenido: '900 ml' }] },
+      { nombre: 'AK1 Liquido', imagen: '/static/images/ak1.jpg', quickType: 'ak1-liquido', variantes: [{ presentacion_id: 'ak1-liquido-900', contenido: '900 ml' }] },
+      { nombre: 'Suavitel Tarro', imagen: '/static/images/suavitel-tarro.png', quickType: 'suavitel-tarro', variantes: [{ presentacion_id: 'suavitel-tarro-frasco', contenido: 'Frasco 1 L' }] },
+      { nombre: 'Suavitel Repuesto', imagen: '/static/images/suavitel-sin-t.png', quickType: 'suavitel-sin-t', variantes: [{ presentacion_id: 'suavitel-sin-t-rosas', contenido: 'Rosas 900 ml' }] },
+      { nombre: 'Suavitel Repuesto c/Tapa', imagen: '/static/images/suavitel-con-t.png', quickType: 'suavitel-con-t', variantes: [{ presentacion_id: 'suavitel-con-t-rosas', contenido: 'Rosas 900 ml' }] },
+      { nombre: 'Limpido 1 L', imagen: '/static/images/limpido.png', quickType: 'limpido', variantes: [{ presentacion_id: 'limpido-1000', contenido: '1 L' }] },
+      { nombre: 'Limpido 500 ml', imagen: '/static/images/limpidopeq.png', quickType: 'limpido', variantes: [{ presentacion_id: 'limpido-500', contenido: '500 ml' }] },
+      { nombre: 'Barrigón', imagen: '/static/images/barrigon.jpg', quickType: 'barrigon', variantes: [{ presentacion_id: 'barrigon-300', contenido: '300 g' }] },
+      { nombre: 'Jabón Coco', imagen: '/static/images/coco.jpg', quickType: 'coco', variantes: [{ presentacion_id: 'coco-300', contenido: '300 g' }] },
+      { nombre: 'Jabón Vela Rosa', imagen: '/static/images/vel-rosa.jpg', quickType: 'vel-rosa', variantes: [{ presentacion_id: 'vel-rosa-300', contenido: '300 g' }] }
+    ];
+    extras.forEach((item) => {
+      const keyName = item.nombre.toLowerCase().trim();
+      if (existingNames.has(keyName)) return;
+      const card = document.createElement('a');
+      card.className = 'tienda-card focusable quick-view';
+      card.href = '#';
+      card.dataset.quickType = item.quickType;
+      card.dataset.producto = item.nombre;
+      card.dataset.categoria = 'Catalogo';
+      card.dataset.variantes = JSON.stringify(item.variantes || []);
+      card.innerHTML = `
+        <div class="tienda-img">
+          <img src="${item.imagen}" alt="${item.nombre}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+        </div>
+        <div class="tienda-info"><h3>${item.nombre}</h3></div>
+      `;
+      grid.appendChild(card);
+      existingNames.add(keyName);
+    });
+  };
+
+  const setupMobileCategoryRail = () => {
+    if (!chipsWrap) return;
+    if (!window.matchMedia('(max-width: 650px)').matches) return;
+    const chipsContainer = document.querySelector('.tienda-chips');
+    const homeChip = chipsWrap.querySelector('.chip-home');
+    if (!chipsContainer || !homeChip) return;
+    if (document.body.classList.contains('vista-todos')) {
+      homeChip.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.classList.toggle('chips-open');
+      });
+      document.addEventListener('click', (e) => {
+        if (!chipsContainer.contains(e.target) && !e.target.closest('.tienda-search-mobile')) {
+          document.body.classList.remove('chips-open');
+        }
+      });
+    }
+  };
+
   const attachFocusEffects = (container) => {
     if (!container || container.dataset.focusBound === '1') return;
     const focusCards = Array.from(container.querySelectorAll('.tienda-card.focusable'));
@@ -890,6 +952,8 @@
     });
   };
 
+  injectAllProductsInCatalog();
+  setupMobileCategoryRail();
   if (window.__buildAseoMobileSections) window.__buildAseoMobileSections();
   attachFocusEffects(document.querySelector('.tienda-grid'));
   document.querySelectorAll('.aseo-mobile-row').forEach((row) => attachFocusEffects(row));
