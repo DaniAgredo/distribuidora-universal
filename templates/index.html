@@ -65,23 +65,26 @@
         
 
             <!-- BOTON CATEGORIAS -->
-    <div class="buscador-categorias">
+    <form class="buscador-categorias" action="/tienda" method="get">
             <div class="dropdown">
-                <button class="btn-categorias">&#9776;</button>
+                <button class="btn-categorias" type="button" aria-label="Categorías">&#9776;</button>
 
-                <div class="dropdown-contenido">
-                    <a href="/drogueria">&#128138; Droguería</a>
-                    <a href="/aseo">&#129529; Aseo</a>
-                    <a href="/ferreteria">&#128295; Ferretería</a>
-                    <a href="/papeleria">&#128213; Papelería</a>
-                    <a href="/jabones">&#129530; Varios</a>
+                                <div class="dropdown-contenido">
+                    <a href="/tienda">&#128722; Todas las categor&iacute;as</a>
+                    <a href="/tienda?cat=aseo">&#129529; Aseo</a>
+                    <a href="/tienda?cat=drogueria">&#128138; Droguer&iacute;a</a>
+                    <a href="/tienda?cat=cuidado-personal">&#128105;&#8205;&#9877;&#65039; Cuidado personal</a>
+                    <a href="/tienda?cat=ferreteria">&#128295; Ferreter&iacute;a</a>
+                    <a href="/tienda?cat=comestibles">&#127828; Comestibles</a>
+                    <a href="/tienda?cat=varios">&#127922; Varios</a>
                 </div>
             </div>
 
              <!-- BUSCADOR -->
-        <input class="buscador" type="text" placeholder="Buscar productos...">
+        <input class="buscador" type="text" name="q" placeholder="Buscar productos..." autocomplete="off">
+        <button class="btn-buscar" type="submit" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
            <!-- FRANJA METODOS DE PAGO -->
-     </div>
+     </form>
     </div>
     
     <div class="mapa">
