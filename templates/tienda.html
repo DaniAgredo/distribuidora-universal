@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260325">
+<link rel="stylesheet" href="/static/tienda.css?v=20260326">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -95,7 +95,7 @@
         <span class="chip-circle">
           <img src="/static/images/estante.jfif" alt="Todos" loading="lazy">
         </span>
-        <span class="chip-name">Categorias</span>
+        <span class="chip-name">Todo</span>
       </a>
       {% if categorias %}
         {% set existing = categorias|map(attribute='slug')|list %}
@@ -986,7 +986,7 @@
       chipsWrap.style.setProperty('width', small ? '74px' : '78px', 'important');
       chipsWrap.style.setProperty('max-width', small ? '74px' : '78px', 'important');
       chipsWrap.style.setProperty('min-width', small ? '74px' : '78px', 'important');
-      chipsWrap.style.setProperty('max-height', openState ? '62svh' : (small ? '78px' : '82px'), 'important');
+      chipsWrap.style.setProperty('max-height', openState ? '74svh' : (small ? '78px' : '82px'), 'important');
       chipsWrap.style.setProperty('overflow-y', openState ? 'auto' : 'hidden', 'important');
       chipsWrap.style.setProperty('overflow-x', 'hidden', 'important');
       chipsWrap.style.setProperty('scrollbar-width', 'none', 'important');
@@ -1013,6 +1013,13 @@
     };
     const toggleFromInteraction = (e) => {
       if (!mq.matches) return;
+      const activeCat = (chipsWrap.dataset.activeCat || '').trim().toLowerCase();
+      if (activeCat) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.assign('/tienda');
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       toggle();
@@ -1084,6 +1091,7 @@
     if (!container || container.dataset.focusBound === '1') return;
     const focusCards = Array.from(container.querySelectorAll('.tienda-card.focusable'));
     if (!focusCards.length) return;
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
     container.dataset.focusBound = '1';
     const activate = (card) => {
       container.classList.add('dimmed');
@@ -1097,8 +1105,10 @@
     focusCards.forEach((card) => {
       card.addEventListener('mouseenter', () => activate(card));
       card.addEventListener('mouseleave', clear);
-      card.addEventListener('touchstart', () => activate(card), { passive: true });
-      card.addEventListener('touchend', () => setTimeout(clear, 700), { passive: true });
+      if (!isTouch) {
+        card.addEventListener('touchstart', () => activate(card), { passive: true });
+        card.addEventListener('touchend', () => setTimeout(clear, 700), { passive: true });
+      }
       card.addEventListener('focusin', () => activate(card));
       card.addEventListener('focusout', clear);
     });
@@ -1633,12 +1643,17 @@
   };
 
   document.querySelectorAll('.tienda-card.quick-view').forEach((card) => {
+    const IS_COARSE = window.matchMedia('(pointer: coarse)').matches;
     const TAP_MOVE_TOLERANCE = 3;
     const TAP_SCROLL_TOLERANCE = 2;
     const TAP_MAX_DURATION = 220;
     let touchMeta = null;
     card.addEventListener('click', (e) => {
       const openedByTouchAt = Number(card.dataset.touchOpenAt || 0);
+      if (IS_COARSE && (!openedByTouchAt || (Date.now() - openedByTouchAt) >= 700)) {
+        e.preventDefault();
+        return;
+      }
       if (openedByTouchAt && (Date.now() - openedByTouchAt) < 700) {
         e.preventDefault();
         return;

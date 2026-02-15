@@ -2722,7 +2722,7 @@ body.dark .carrito-link{
         text-transform:none !important;
     }
     html body.pagina-tienda.chips-open .tienda-chips > .chips-story{
-        max-height:62svh !important;
+        max-height:74svh !important;
         overflow-y:auto !important;
         overflow-x:hidden !important;
         background:rgba(10,31,65,.45) !important;
