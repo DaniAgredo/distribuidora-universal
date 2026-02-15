@@ -2650,7 +2650,7 @@ body.dark .carrito-link{
 /* Final lock: categorias flotantes como barra de busqueda en movil */
 @media (max-width: 650px){
     html body.pagina-tienda .tienda-main{
-        padding-bottom:112px !important;
+        padding-bottom:78px !important;
     }
     html body.pagina-tienda .tienda-chips{
         position:fixed !important;
