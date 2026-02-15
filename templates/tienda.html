@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260233">
+<link rel="stylesheet" href="/static/tienda.css?v=20260236">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 body.pagina-tienda .todo-float{ display:none; }
@@ -23,30 +23,39 @@ body.pagina-tienda .todo-float{ display:none; }
   body.pagina-tienda.chips-open .tienda-chips{
     display:none !important;
   }
-  body.pagina-tienda .chips-story,
-  body.pagina-tienda.chips-open .chips-story{
-    width:74px !important;
-    max-height:74px !important;
+  body.pagina-tienda.mobile-cats-open .tienda-chips{
+    display:block !important;
+    position:fixed !important;
+    right:84px !important;
+    bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+    width:min(78vw, 320px) !important;
+    margin:0 !important;
+    z-index:19999 !important;
+    pointer-events:auto !important;
+  }
+  body.pagina-tienda.mobile-cats-open .chips-story{
+    width:100% !important;
+    max-height:none !important;
     overflow-y:hidden !important;
-    overflow-x:hidden !important;
+    overflow-x:auto !important;
     display:flex !important;
-    flex-direction:column !important;
-    align-items:center !important;
-    gap:8px !important;
-    padding:4px 0 !important;
-    background:transparent !important;
-    border:none !important;
-    box-shadow:none !important;
-    border-radius:0 !important;
+    flex-direction:row !important;
+    align-items:flex-start !important;
+    gap:10px !important;
+    padding:6px !important;
+    background:rgba(255,255,255,.88) !important;
+    border:1px solid rgba(198,217,255,.95) !important;
+    box-shadow:0 12px 24px rgba(16,59,124,.22) !important;
+    border-radius:16px !important;
     scrollbar-width:none !important;
   }
-  body.pagina-tienda .chips-story .chip-story{
+  body.pagina-tienda.mobile-cats-open .chips-story::-webkit-scrollbar{
     display:none !important;
-    width:70px !important;
-    min-width:70px !important;
   }
-  body.pagina-tienda .chips-story .chip-story:first-child{
+  body.pagina-tienda.mobile-cats-open .chips-story .chip-story{
     display:flex !important;
+    width:72px !important;
+    min-width:72px !important;
   }
   body.pagina-tienda .chip-circle{
     width:56px !important;
@@ -1047,81 +1056,75 @@ body.pagina-tienda .todo-float{ display:none; }
     if (!chipsWrap) return;
     const chipsContainer = document.querySelector('.tienda-chips');
     if (!chipsContainer) return;
-    if (chipsContainer.dataset.railBound === '1') return;
-    chipsContainer.dataset.railBound = '1';
+    chipsContainer.style.cssText = '';
+    chipsWrap.style.cssText = '';
+    chipsWrap.querySelectorAll('.chip-story').forEach((chip) => {
+      chip.style.display = '';
+      chip.style.width = '';
+      chip.style.minWidth = '';
+    });
+    document.body.classList.remove('force-floating-chips');
+    document.body.classList.remove('chips-open');
+  };
 
-    const mobileRailMQ = window.matchMedia('(max-width: 650px)');
-    const setImp = (el, prop, value) => el.style.setProperty(prop, value, 'important');
+  const setupTodoCategoriesPanel = () => {
+    const mq = window.matchMedia('(max-width: 650px)');
+    const todoFloat = document.querySelector('.todo-float');
+    const chipsContainer = document.querySelector('.tienda-chips');
+    if (!todoFloat || !chipsContainer) return;
 
-    const applyFloatingLayout = () => {
-      if (!mobileRailMQ.matches) {
-        chipsContainer.style.cssText = '';
-        chipsWrap.style.cssText = '';
-        chipsWrap.querySelectorAll('.chip-story').forEach((chip) => {
-          chip.style.display = '';
-          chip.style.width = '';
-          chip.style.minWidth = '';
-        });
-        return;
-      }
-
-      setImp(chipsContainer, 'position', 'fixed');
-      setImp(chipsContainer, 'right', '6px');
-      setImp(chipsContainer, 'left', 'auto');
-      setImp(chipsContainer, 'top', 'auto');
-      setImp(chipsContainer, 'bottom', 'calc(env(safe-area-inset-bottom, 0px) + 64px)');
-      setImp(chipsContainer, 'width', '74px');
-      setImp(chipsContainer, 'margin', '0');
-      setImp(chipsContainer, 'z-index', '15000');
-      setImp(chipsContainer, 'opacity', '1');
-      setImp(chipsContainer, 'visibility', 'visible');
-      setImp(chipsContainer, 'pointer-events', 'auto');
-      setImp(chipsContainer, 'transform', 'none');
-      setImp(chipsContainer, 'transition', 'none');
-
-      setImp(chipsWrap, 'width', '74px');
-      setImp(chipsWrap, 'max-height', '74px');
-      setImp(chipsWrap, 'overflow-y', 'hidden');
-      setImp(chipsWrap, 'overflow-x', 'hidden');
-      setImp(chipsWrap, 'display', 'flex');
-      setImp(chipsWrap, 'flex-direction', 'column');
-      setImp(chipsWrap, 'align-items', 'center');
-      setImp(chipsWrap, 'gap', '8px');
-      setImp(chipsWrap, 'padding', '4px 0');
-      setImp(chipsWrap, 'background', 'transparent');
-      setImp(chipsWrap, 'border', 'none');
-      setImp(chipsWrap, 'box-shadow', 'none');
-      setImp(chipsWrap, 'border-radius', '0');
-      setImp(chipsWrap, 'scroll-behavior', 'auto');
-
-      const chips = chipsWrap.querySelectorAll('.chip-story');
-      chips.forEach((chip, idx) => {
-        setImp(chip, 'display', idx === 0 ? 'flex' : 'none');
-        setImp(chip, 'width', '70px');
-        setImp(chip, 'min-width', '70px');
-      });
+    let hideTimer = null;
+    const clearHideTimer = () => {
+      if (!hideTimer) return;
+      clearTimeout(hideTimer);
+      hideTimer = null;
+    };
+    const closePanel = () => {
+      clearHideTimer();
+      document.body.classList.remove('mobile-cats-open');
+    };
+    const scheduleHide = (delay = 900) => {
+      clearHideTimer();
+      hideTimer = setTimeout(() => {
+        document.body.classList.remove('mobile-cats-open');
+      }, delay);
+    };
+    const togglePanel = (e) => {
+      if (!mq.matches) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const willOpen = !document.body.classList.contains('mobile-cats-open');
+      document.body.classList.toggle('mobile-cats-open');
+      if (willOpen) scheduleHide(1800);
     };
 
-    const syncRail = () => {
-      if (mobileRailMQ.matches) {
-        document.body.classList.add('force-floating-chips');
-        document.body.classList.remove('search-open');
-        document.body.classList.remove('chips-open');
-        applyFloatingLayout();
-        return;
-      }
-      document.body.classList.remove('force-floating-chips');
-      document.body.classList.remove('chips-open');
-      applyFloatingLayout();
-    };
+    todoFloat.addEventListener('click', togglePanel);
+    todoFloat.addEventListener('mouseenter', clearHideTimer);
+    todoFloat.addEventListener('mouseleave', () => scheduleHide(500));
+    todoFloat.addEventListener('touchstart', clearHideTimer, { passive: true });
+    todoFloat.addEventListener('touchend', () => scheduleHide(1200), { passive: true });
 
-    syncRail();
-    window.addEventListener('pageshow', syncRail);
-    window.addEventListener('load', syncRail);
-    mobileRailMQ.addEventListener('change', syncRail);
+    chipsContainer.addEventListener('click', (e) => {
+      const chip = e.target.closest('.chip-story');
+      if (chip) closePanel();
+    });
+    chipsContainer.addEventListener('mouseenter', clearHideTimer);
+    chipsContainer.addEventListener('mouseleave', () => scheduleHide(500));
+    chipsContainer.addEventListener('touchstart', clearHideTimer, { passive: true });
+    chipsContainer.addEventListener('touchend', () => scheduleHide(1200), { passive: true });
 
-    window.addEventListener('scroll', applyFloatingLayout, { passive: true });
-    window.addEventListener('resize', applyFloatingLayout);
+    document.addEventListener('click', (e) => {
+      if (!mq.matches) return;
+      if (!chipsContainer.contains(e.target) && !todoFloat.contains(e.target)) closePanel();
+    });
+    document.addEventListener('touchstart', (e) => {
+      if (!mq.matches) return;
+      if (!chipsContainer.contains(e.target) && !todoFloat.contains(e.target)) closePanel();
+    }, { passive: true });
+
+    window.addEventListener('load', closePanel);
+    window.addEventListener('pageshow', closePanel);
+    mq.addEventListener('change', closePanel);
   };
 
   const pinTodoFloat = () => {
@@ -1257,6 +1260,7 @@ body.pagina-tienda .todo-float{ display:none; }
   injectAllProductsInCatalog();
   setupMobileCategoryRail();
   pinTodoFloat();
+  setupTodoCategoriesPanel();
   document.body.classList.remove('mobile-ui-hidden');
   if (window.__buildAseoMobileSections) window.__buildAseoMobileSections();
   attachFocusEffects(document.querySelector('.tienda-grid'));
