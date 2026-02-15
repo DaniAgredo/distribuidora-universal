@@ -2324,11 +2324,11 @@ body.dark .carrito-link{
 @media (max-width: 650px){
     .pagina-tienda .tienda-chips{
         position:fixed !important;
-        left:auto !important;
+        left:10px !important;
         right:10px !important;
         top:auto !important;
         bottom:calc(var(--mobile-fixed-bottom) + 56px) !important;
-        width:74px !important;
+        width:auto !important;
         margin:0 !important;
         z-index:4200 !important;
         pointer-events:auto !important;
@@ -2344,7 +2344,9 @@ body.dark .carrito-link{
         -webkit-transform:translateZ(0) !important;
         contain:layout paint style !important;
         overflow:visible !important;
-        display:block !important;
+        display:flex !important;
+        justify-content:flex-end !important;
+        align-items:flex-end !important;
         visibility:visible !important;
     }
     .pagina-tienda .tienda-main{
@@ -2447,11 +2449,11 @@ body.dark .carrito-link{
 
 @media (max-width: 430px){
     .pagina-tienda .tienda-chips{
-        left:auto !important;
-        right:8px !important;
+        left:10px !important;
+        right:10px !important;
         top:auto !important;
         bottom:calc(var(--mobile-fixed-bottom) + 54px) !important;
-        width:72px !important;
+        width:auto !important;
     }
     .pagina-tienda .tienda-main{
         padding-bottom:10px !important;
