@@ -494,8 +494,8 @@ body.modal-open .floating-arrows{
     gap:14px;
 }
 .tienda-card{
-    background:#f8fbff;
-    border:1px solid #dbe7ff;
+    background:#f1f6ff;
+    border:1px solid rgba(13,132,252,.12);
     border-radius:10px;
     overflow:hidden;
     text-decoration:none;
@@ -562,7 +562,7 @@ body.modal-open .floating-arrows{
     z-index:2;
 }
 .tienda-img{
-    background:#ffffff;
+    background:#f6f9ff;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -1766,42 +1766,60 @@ body.dark .quick-total strong{
     }
     .tienda-search-mobile{
         display:flex;
-        width:auto;
+        align-items:center;
+        justify-content:flex-end;
+        width:42px;
+        min-width:42px;
+        height:42px;
         position:fixed;
         z-index:1200;
-        left:10px;
-        right:10px;
-        bottom:12px;
+        left:auto;
+        right:8px;
+        bottom:-30px;
         margin:0;
-        padding:8px;
-        background:rgba(255,255,255,.92);
-        border:1px solid #c6d9ff;
-        border-radius:14px;
-        box-shadow:0 12px 26px rgba(16,59,124,.18);
+        padding:0;
+        background:transparent;
+        border:none;
+        border-radius:999px;
+        box-shadow:none;
+        overflow:hidden;
         max-width:none;
+        transition:width .24s ease,left .24s ease,right .24s ease,bottom .24s ease,box-shadow .24s ease;
     }
     .tienda-search-mobile .tienda-btn{
         display:none;
     }
     .tienda-search-mobile .tienda-input{
-        width:100%;
+        width:0;
         min-width:0;
         height:34px;
-        padding:7px 92px 7px 10px;
+        padding:0;
         font-size:12px;
+        border:none;
+        opacity:0;
+        pointer-events:none;
+        transition:width .22s ease,opacity .18s ease,padding .22s ease;
     }
     .tienda-camera{
         width:28px;
         height:28px;
         right:6px;
+        opacity:0;
+        pointer-events:none;
     }
     .tienda-camera i{
         font-size:12px;
     }
     .tienda-lupa{
-        width:24px;
-        height:24px;
-        right:60px;
+        position:static;
+        width:34px;
+        height:34px;
+        right:auto;
+        top:auto;
+        transform:none;
+        border-radius:50%;
+        background:rgba(13,132,252,.2);
+        border:1px solid rgba(13,132,252,.34);
     }
     .tienda-lupa i{
         font-size:12px;
@@ -1810,13 +1828,59 @@ body.dark .quick-total strong{
         width:24px;
         height:24px;
         right:38px;
+        opacity:0;
+        pointer-events:none;
+    }
+    body.search-open .tienda-search-mobile,
+    .tienda-search-mobile:focus-within{
+        left:auto;
+        right:8px;
+        width:min(70vw, 270px);
+        min-width:0;
+        height:auto;
+        padding:0;
+        background:transparent;
+        border:none;
+        box-shadow:none;
+        overflow:visible;
+    }
+    body.search-open .tienda-search-mobile .tienda-input,
+    .tienda-search-mobile:focus-within .tienda-input{
+        width:100%;
+        opacity:1;
+        pointer-events:auto;
+        padding:7px 92px 7px 10px;
+        border:none;
+        border-radius:10px;
+        background:transparent;
+        box-shadow:none;
+    }
+    body.search-open .tienda-search-mobile .tienda-lupa,
+    .tienda-search-mobile:focus-within .tienda-lupa{
+        position:absolute;
+        right:60px;
+        top:50%;
+        transform:translateY(-50%);
+        width:24px;
+        height:24px;
+        border:none;
+        border-radius:50%;
+        background:transparent;
+    }
+    body.search-open .tienda-search-mobile .tienda-clear,
+    body.search-open .tienda-search-mobile .tienda-camera,
+    .tienda-search-mobile:focus-within .tienda-clear,
+    .tienda-search-mobile:focus-within .tienda-camera{
+        opacity:1;
+        pointer-events:auto;
     }
     .tienda-main{
-        padding-bottom:96px;
+        padding-bottom:0 !important;
     }
     body.dark .tienda-search-mobile{
-        background:rgba(15,27,51,.92);
-        border-color:#1e2a40;
+        background:transparent;
+        border:none;
+        box-shadow:none;
     }
 }
 
@@ -1853,10 +1917,17 @@ body.dark .quick-total strong{
         font-size:11px;
     }
     .tienda-search-mobile{
-        padding:7px;
+        padding:0;
+        right:6px;
+        bottom:-34px;
+    }
+    body.search-open .tienda-search-mobile,
+    .tienda-search-mobile:focus-within{
+        right:6px;
+        width:min(68vw, 250px);
     }
     .tienda-main{
-        padding-bottom:20px;
+        padding-bottom:0 !important;
     }
     .tienda-acciones .carrito-link{
         width:auto;
@@ -1891,36 +1962,42 @@ body.dark .quick-total strong{
 
 @media(max-width:650px){
     .pagina-tienda .tienda-chips{
-        position:fixed;
-        right:8px;
-        bottom:84px;
-        width:auto;
+        position:fixed !important;
+        right:0 !important;
+        bottom:-18px !important;
+        top:auto !important;
+        left:auto !important;
+        transform:none !important;
+        width:78px;
         margin:0;
-        z-index:1280;
+        z-index:1100;
         pointer-events:auto;
     }
     .pagina-tienda .tienda-resumen{
         display:none;
     }
     .pagina-tienda .chips-story{
-        width:86px;
-        max-height:74px;
+        width:78px;
+        max-height:78px;
         overflow-y:hidden;
         overflow-x:hidden;
         display:flex;
         flex-direction:column-reverse;
         align-items:center;
         gap:8px;
-        padding:4px;
+        padding:2px 0;
         border-radius:999px;
         background:transparent;
         border:none;
         box-shadow:none;
+        scroll-snap-type:y mandatory;
         transition:max-height .22s ease, background .22s ease, border-color .22s ease, box-shadow .22s ease;
+        filter:drop-shadow(0 8px 18px rgba(0,0,0,.24));
     }
     .pagina-tienda .chip-story{
-        min-width:0;
+        min-width:78px;
         width:78px;
+        scroll-snap-align:end;
     }
     .pagina-tienda .chip-circle{
         width:62px;
@@ -1931,25 +2008,364 @@ body.dark .quick-total strong{
         padding:2px 6px;
     }
     .pagina-tienda.chips-open .chips-story{
-        max-height:68vh;
-        overflow-y:auto;
+        max-height:96px;
+        width:100%;
+        overflow-x:auto;
+        overflow-y:hidden;
         scrollbar-width:none;
-        background:rgba(10,31,65,.45);
-        border:1px solid rgba(255,255,255,.35);
-        box-shadow:0 12px 28px rgba(0,0,0,.25);
-        backdrop-filter:blur(6px);
-        -webkit-backdrop-filter:blur(6px);
-        border-radius:20px;
-        padding:8px 4px 10px;
+        background:transparent;
+        border:none;
+        box-shadow:none;
+        backdrop-filter:blur(3px);
+        -webkit-backdrop-filter:blur(3px);
+        border-radius:999px;
+        padding:8px 8px 10px;
+        gap:10px;
+        flex-direction:row;
+        align-items:flex-start;
+    }
+    .pagina-tienda.chips-open .tienda-chips{
+        right:6px !important;
+        bottom:6px !important;
+        width:min(94vw, 360px);
+    }
+    .pagina-tienda.chips-open .chip-story{
+        min-width:70px;
+        width:auto;
+        scroll-snap-align:start;
     }
     .pagina-tienda.chips-open .chips-story::-webkit-scrollbar{
         display:none;
     }
-    .pagina-tienda.vista-todos .tienda-main{
-        padding-right:96px;
+}
+
+@media(max-width:430px){
+    .pagina-tienda .tienda-chips{
+        right:0 !important;
+        bottom:-44px !important;
     }
+    .pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:18px !important;
+        width:calc(100vw - 8px);
+    }
+}
+
+@media(max-width:430px) and (max-height:650px){
+    .pagina-tienda .tienda-chips{
+        right:0 !important;
+        bottom:-48px !important;
+    }
+    .pagina-tienda.chips-open .tienda-chips{
+        bottom:14px !important;
+    }
+    .pagina-tienda.chips-open .chips-story{
+        max-height:92px;
+    }
+}
+
+/* Tablet: ocultar buscador flotante para evitar choque con header */
+@media(min-width:651px) and (max-width:1024px){
+    .tienda-search-mobile{
+        display:none !important;
+    }
+    body.search-open .tienda-search-mobile,
+    .tienda-search-mobile:focus-within{
+        display:none !important;
+    }
+}
+
+/* Movil: rail de categorias flotante vertical abajo-derecha */
+@media(max-width:650px){
+    .pagina-tienda .tienda-search-mobile{
+        display:flex !important;
+        position:fixed !important;
+        right:6px !important;
+        bottom:6px !important;
+        left:auto !important;
+        top:auto !important;
+        z-index:1200 !important;
+        width:min(94vw, 392px) !important;
+        min-width:min(94vw, 392px) !important;
+        height:auto !important;
+        margin:0 !important;
+        padding:2px 4px !important;
+        background:rgba(255,255,255,.94) !important;
+        border:1px solid #c6d9ff !important;
+        border-radius:14px !important;
+        box-shadow:0 10px 22px rgba(16,59,124,.18) !important;
+        overflow:visible !important;
+    }
+    .pagina-tienda .tienda-search-mobile .tienda-lupa{
+        position:absolute !important;
+        right:60px !important;
+        top:50% !important;
+        transform:translateY(-50%) !important;
+        width:24px !important;
+        height:24px !important;
+        border:none !important;
+        border-radius:50% !important;
+        background:transparent !important;
+    }
+    .pagina-tienda .tienda-search-mobile .tienda-lupa i{
+        font-size:12px !important;
+    }
+    .pagina-tienda .tienda-search-mobile .tienda-input{
+        width:100% !important;
+        opacity:1 !important;
+        pointer-events:auto !important;
+        padding:7px 92px 7px 42px !important;
+        border:1px solid #c6d9ff !important;
+        border-radius:10px !important;
+        background:#f8fbff !important;
+    }
+    .pagina-tienda .tienda-search-mobile .tienda-camera,
+    .pagina-tienda .tienda-search-mobile .tienda-clear{
+        opacity:1 !important;
+        pointer-events:auto !important;
+    }
+    .pagina-tienda .tienda-search-mobile .tienda-camera{
+        left:6px !important;
+        right:auto !important;
+    }
+    .pagina-tienda .tienda-search-mobile{
+        transition:opacity .28s ease, transform .28s ease !important;
+    }
+    body.mobile-ui-hidden .pagina-tienda .tienda-search-mobile{
+        opacity:0 !important;
+        transform:translateY(18px) !important;
+        pointer-events:none !important;
+    }
+    .pagina-tienda .tienda-chips,
+    .pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        bottom:68px !important;
+        top:auto !important;
+        left:auto !important;
+        width:78px !important;
+        margin:0 !important;
+        padding:0 !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        overflow:visible !important;
+        z-index:1260 !important;
+        pointer-events:auto !important;
+        transform:none !important;
+        transition:none !important;
+    }
+    .pagina-tienda .chips-story{
+        width:78px !important;
+        max-height:78px !important;
+        overflow-y:hidden !important;
+        overflow-x:hidden !important;
+        display:flex !important;
+        flex-direction:column-reverse !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:2px 0 !important;
+        border-radius:999px !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        filter:none !important;
+        pointer-events:auto !important;
+        scroll-snap-type:y mandatory !important;
+        transition:max-height .22s ease, box-shadow .22s ease, background .22s ease !important;
+    }
+    .pagina-tienda .chip-story,
+    .pagina-tienda.chips-open .chip-story{
+        min-width:78px !important;
+        width:78px !important;
+        pointer-events:auto !important;
+        scroll-snap-align:end !important;
+    }
+    .pagina-tienda .chip-circle{
+        width:62px !important;
+        height:62px !important;
+        background:rgba(13,132,252,.2) !important;
+        border:1px solid rgba(13,132,252,.34) !important;
+        box-shadow:0 6px 14px rgba(16,59,124,.16) !important;
+    }
+    .pagina-tienda .chip-name{
+        font-size:7.7px !important;
+        padding:2px 6px !important;
+    }
+    .pagina-tienda.chips-open .chips-story{
+        max-height:calc(100vh - 120px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        padding:6px 0 10px !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:999px !important;
+        filter:none !important;
+    }
+    .pagina-tienda.chips-open .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+    .pagina-tienda .tienda-main{
+        padding-bottom:0 !important;
+        margin-bottom:0 !important;
+    }
+    .pagina-tienda .tienda-grid{
+        margin-bottom:0 !important;
+        padding-bottom:0 !important;
+    }
+    .pagina-tienda .aseo-mobile-sections{
+        margin-bottom:0 !important;
+        padding-bottom:0 !important;
+    }
+    .pagina-tienda .tienda-main > :last-child{
+        margin-bottom:0 !important;
+        padding-bottom:0 !important;
+    }
+}
+
+@media(max-width:430px){
+    .pagina-tienda .tienda-search-mobile{
+        right:4px !important;
+        bottom:4px !important;
+    }
+    .pagina-tienda .tienda-chips,
+    .pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:66px !important;
+    }
+}
+
+@media(max-width:430px) and (max-height:650px){
+    .pagina-tienda .tienda-search-mobile{
+        right:4px !important;
+        bottom:2px !important;
+    }
+    .pagina-tienda .tienda-chips,
+    .pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:64px !important;
+    }
+    .pagina-tienda.chips-open .chips-story{
+        max-height:calc(100vh - 104px) !important;
+    }
+}
+
+/* Ajuste final movil: Catalogo en modo galeria + chips junto al buscador */
+@media(max-width:650px){
     .pagina-tienda.vista-todos .tienda-grid{
-        padding-right:4px;
+        display:grid !important;
+        grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+        gap:10px !important;
+        overflow:visible !important;
+        padding:2px 0 6px !important;
+        scroll-snap-type:none !important;
+    }
+    .pagina-tienda.vista-todos .tienda-grid .tienda-card{
+        flex:none !important;
+        min-height:auto !important;
+        background:#eef4ff !important;
+        border:none !important;
+        border-radius:12px !important;
+        box-shadow:0 6px 14px rgba(16,59,124,.1) !important;
+        content-visibility:visible !important;
+        contain-intrinsic-size:auto !important;
+    }
+    .pagina-tienda.vista-todos .tienda-grid .tienda-img{
+        height:136px !important;
+        border-radius:12px !important;
+        border:none !important;
+        background:#f3f7ff !important;
+        padding:4px !important;
+    }
+    .pagina-tienda.vista-todos .tienda-grid .tienda-img img{
+        width:100% !important;
+        height:100% !important;
+        max-height:none !important;
+        object-fit:contain !important;
+    }
+    .pagina-tienda.vista-todos .tienda-grid .tienda-info{
+        display:none !important;
+    }
+    .pagina-tienda .tienda-chips,
+    .pagina-tienda.chips-open .tienda-chips{
+        bottom:54px !important;
+        position:fixed !important;
+        transform:none !important;
+        transition:none !important;
+        animation:none !important;
+        opacity:1 !important;
+        pointer-events:auto !important;
+    }
+    body.mobile-ui-hidden .pagina-tienda .tienda-chips{
+        opacity:1 !important;
+        transform:none !important;
+        pointer-events:auto !important;
+    }
+    .pagina-tienda.chips-open .chips-story{
+        max-height:clamp(170px, 34vh, 240px) !important;
+    }
+}
+
+@media(max-width:430px){
+    .pagina-tienda .tienda-chips,
+    .pagina-tienda.chips-open .tienda-chips{
+        bottom:52px !important;
+    }
+}
+
+@media(max-width:430px) and (max-height:650px){
+    .pagina-tienda.vista-todos .tienda-grid{
+        gap:8px !important;
+    }
+    .pagina-tienda.vista-todos .tienda-grid .tienda-img{
+        height:126px !important;
+    }
+    .pagina-tienda .tienda-chips,
+    .pagina-tienda.chips-open .tienda-chips{
+        bottom:50px !important;
+    }
+    .pagina-tienda.chips-open .chips-story{
+        max-height:clamp(160px, 32vh, 210px) !important;
+    }
+}
+
+body.dark .pagina-tienda.vista-todos .tienda-grid .tienda-img{
+    background:#10203a !important;
+    border:none !important;
+}
+body.dark .pagina-tienda.vista-todos .tienda-grid .tienda-card{
+    background:#0f1b33 !important;
+    border:none !important;
+    box-shadow:0 10px 20px rgba(0,0,0,.3) !important;
+}
+
+/* Forzar chips flotantes en movil/tablet */
+@media(max-width:1024px){
+    .pagina-tienda .tienda-chips,
+    .pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        top:auto !important;
+        left:auto !important;
+        right:8px !important;
+        bottom:54px !important;
+        z-index:1260 !important;
+        transform:none !important;
+    }
+}
+
+@media(max-width:430px){
+    .pagina-tienda .tienda-chips,
+    .pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:52px !important;
+    }
+}
+
+@media(max-width:430px) and (max-height:650px){
+    .pagina-tienda .tienda-chips,
+    .pagina-tienda.chips-open .tienda-chips{
+        bottom:50px !important;
     }
 }
 
@@ -2226,5 +2642,1088 @@ body.dark .carrito-link{
 }
 .chips-story.subcats-only .chip-volver .chip-circle{
     animation:chipPulse 2.4s ease-in-out infinite;
+}
+
+/* Bloque final: chips de categorias siempre flotantes sobre productos */
+@media (max-width: 1200px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        inset:auto 6px calc(env(safe-area-inset-bottom, 0px) + 54px) auto !important;
+        left:auto !important;
+        top:auto !important;
+        right:6px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 54px) !important;
+        z-index:2140 !important;
+        display:block !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        transform:none !important;
+        transition:none !important;
+        pointer-events:auto !important;
+    }
+    body.pagina-tienda.mobile-ui-hidden .tienda-chips{
+        opacity:1 !important;
+        visibility:visible !important;
+        transform:none !important;
+        pointer-events:auto !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 52px) !important;
+    }
+}
+
+@media (max-width: 430px) and (max-height: 650px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 50px) !important;
+    }
+}
+
+/* Override final: buscador fijo y categorias flotando justo encima (derecha) */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        z-index:2200 !important;
+    }
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 66px) !important;
+        z-index:2230 !important;
+        pointer-events:auto !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-search-mobile{
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+    }
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 62px) !important;
+    }
+}
+
+/* Bloque final fijo: categorias inmoviles como la barra de busqueda */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        top:auto !important;
+        transform:none !important;
+    }
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 66px) !important;
+        transform:none !important;
+        transition:none !important;
+        animation:none !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        z-index:2300 !important;
+    }
+    body.pagina-tienda.mobile-ui-hidden .tienda-chips,
+    body.pagina-tienda.mobile-ui-hidden .tienda-search-mobile{
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+    }
+}
+
+/* Override definitivo 400x650: categorias fijas, visibles y fuera de contenedor */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:4px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 66px) !important;
+        width:82px !important;
+        margin:0 !important;
+        z-index:2400 !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:82px !important;
+        max-height:calc(100vh - 146px) !important;
+        overflow-y:auto !important;
+        overflow-x:visible !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 8px !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+    }
+    body.pagina-tienda .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+    body.pagina-tienda .chip-story,
+    body.pagina-tienda.chips-open .chip-story{
+        min-width:78px !important;
+        width:78px !important;
+        scroll-snap-align:start !important;
+    }
+    body.pagina-tienda .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+    body.pagina-tienda .chip-name{
+        display:none !important;
+    }
+}
+
+/* Unificar estilo de tarjetas en "Todo" con el look de Aseo */
+.pagina-tienda.vista-todos .tienda-grid .tienda-card{
+    background:#f8fbff !important;
+    border:1px solid #dbe7ff !important;
+    border-radius:14px !important;
+    box-shadow:0 8px 16px rgba(16,59,124,.1) !important;
+}
+.pagina-tienda.vista-todos .tienda-grid .tienda-img{
+    background:#ffffff !important;
+    border:none !important;
+    border-bottom:1px solid #dbe7ff !important;
+    border-radius:14px 14px 0 0 !important;
+    padding:0 !important;
+}
+body.dark .pagina-tienda.vista-todos .tienda-grid .tienda-card{
+    background:#0f1b33 !important;
+    border:1px solid #1d2d47 !important;
+    box-shadow:0 10px 20px rgba(0,0,0,.3) !important;
+}
+body.dark .pagina-tienda.vista-todos .tienda-grid .tienda-img{
+    background:#122039 !important;
+    border-bottom:1px solid #1d2d47 !important;
+}
+
+/* Override final movil: categorias siempre fijas y visibles sobre el buscador */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:84px !important;
+        max-height:calc(100vh - 142px) !important;
+        margin:0 !important;
+        z-index:2450 !important;
+        overflow:visible !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:84px !important;
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 8px !important;
+        background:transparent !important;
+        border:none !important;
+        border-radius:0 !important;
+        box-shadow:none !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+    }
+    body.pagina-tienda .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+    body.pagina-tienda .chip-story,
+    body.pagina-tienda.chips-open .chip-story{
+        width:78px !important;
+        min-width:78px !important;
+    }
+    body.pagina-tienda .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+    body.pagina-tienda .chip-name{
+        display:none !important;
+    }
+    body.pagina-tienda.mobile-ui-hidden .tienda-chips{
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:80px !important;
+    }
+}
+
+/* FINAL ABSOLUTO: circulos siempre visibles y flotantes sobre productos */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        z-index:2400 !important;
+    }
+
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips,
+    body.pagina-tienda.force-floating-chips .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:86px !important;
+        margin:0 !important;
+        z-index:9999 !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+        transition:none !important;
+    }
+
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story,
+    body.pagina-tienda.force-floating-chips .chips-story{
+        width:86px !important;
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 8px !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+    }
+
+    body.pagina-tienda .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+
+    body.pagina-tienda .chips-story .chip-story,
+    body.pagina-tienda.chips-open .chips-story .chip-story,
+    body.pagina-tienda:not(.chips-open) .chips-story .chip-story{
+        display:flex !important;
+        width:78px !important;
+        min-width:78px !important;
+        transform:none !important;
+    }
+
+    body.pagina-tienda .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+
+    body.pagina-tienda .chip-name{
+        display:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:80px !important;
+    }
+}
+
+/* FORCE: categorias siempre flotando sobre productos en movil */
+@media (max-width: 650px){
+    body.pagina-tienda.force-floating-chips .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        z-index:2400 !important;
+    }
+
+    body.pagina-tienda.force-floating-chips .tienda-chips,
+    body.pagina-tienda.force-floating-chips.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:86px !important;
+        margin:0 !important;
+        z-index:9000 !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+        transition:none !important;
+    }
+
+    body.pagina-tienda.force-floating-chips .chips-story,
+    body.pagina-tienda.force-floating-chips.chips-open .chips-story{
+        width:86px !important;
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 8px !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+    }
+
+    body.pagina-tienda.force-floating-chips .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+
+    body.pagina-tienda.force-floating-chips .chips-story .chip-story,
+    body.pagina-tienda.force-floating-chips.chips-open .chips-story .chip-story{
+        display:flex !important;
+        width:78px !important;
+        min-width:78px !important;
+        transform:none !important;
+    }
+
+    /* "Todo" queda fijo para volver rapido */
+    body.pagina-tienda.force-floating-chips .chips-story .chip-story:first-child{
+        position:sticky !important;
+        top:0 !important;
+        z-index:2 !important;
+        background:transparent !important;
+    }
+
+    body.pagina-tienda.force-floating-chips .chip-story:active{
+        transform:none !important;
+    }
+
+    body.pagina-tienda.force-floating-chips .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+
+    body.pagina-tienda.force-floating-chips .chip-name{
+        display:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda.force-floating-chips .tienda-chips,
+    body.pagina-tienda.force-floating-chips.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda.force-floating-chips .chips-story,
+    body.pagina-tienda.force-floating-chips.chips-open .chips-story{
+        width:80px !important;
+    }
+}
+
+/* Estado cerrado forzado en recarga: solo se ve "Todo" hasta tocar */
+@media (max-width: 650px){
+    html body.pagina-tienda:not(.chips-open) .chips-story .chip-story{
+        display:none !important;
+    }
+    html body.pagina-tienda:not(.chips-open) .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+    html body.pagina-tienda.chips-open .chips-story .chip-story{
+        display:flex !important;
+    }
+}
+
+/* TODO fijo: siempre flotando encima del buscador al hacer scroll */
+@media (max-width: 650px){
+    html body.pagina-tienda .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        z-index:2400 !important;
+    }
+
+    html body.pagina-tienda .tienda-chips,
+    html body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:86px !important;
+        margin:0 !important;
+        z-index:5200 !important;
+        transform:none !important;
+        transition:none !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+    }
+
+    html body.pagina-tienda .chips-story{
+        width:86px !important;
+        max-height:84px !important;
+        overflow:hidden !important;
+        display:flex !important;
+        flex-direction:column-reverse !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+    }
+
+    html body.pagina-tienda:not(.chips-open) .chips-story .chip-story{
+        display:none !important;
+    }
+    html body.pagina-tienda:not(.chips-open) .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+    html body.pagina-tienda.chips-open .chips-story{
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        background:rgba(8,21,44,.14) !important;
+        backdrop-filter:blur(2px) !important;
+        -webkit-backdrop-filter:blur(2px) !important;
+        border-radius:18px !important;
+    }
+    html body.pagina-tienda.chips-open .chips-story .chip-story{
+        display:flex !important;
+    }
+}
+
+/* ULTIMO OVERRIDE: fijo como buscador + Todo abajo + despliegue por click/touch */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        z-index:2400 !important;
+    }
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:86px !important;
+        margin:0 !important;
+        z-index:4000 !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+        transition:none !important;
+    }
+    body.pagina-tienda.mobile-ui-hidden .tienda-chips{
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+    }
+    body.pagina-tienda .chips-story{
+        width:86px !important;
+        max-height:84px !important;
+        overflow:hidden !important;
+        display:flex !important;
+        flex-direction:column-reverse !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+        scroll-behavior:auto !important;
+    }
+    body.pagina-tienda .chips-story .chip-story{
+        display:none !important;
+        width:78px !important;
+        min-width:78px !important;
+        transform:none !important;
+        transition:none !important;
+    }
+    body.pagina-tienda .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+    body.pagina-tienda.chips-open .chips-story{
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        background:rgba(8,21,44,.14) !important;
+        backdrop-filter:blur(2px) !important;
+        -webkit-backdrop-filter:blur(2px) !important;
+        border-radius:18px !important;
+    }
+    body.pagina-tienda.chips-open .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+    body.pagina-tienda.chips-open .chips-story .chip-story{
+        display:flex !important;
+    }
+    body.pagina-tienda .chip-story:active{
+        transform:none !important;
+    }
+    body.pagina-tienda .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+    body.pagina-tienda .chip-name{
+        display:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:80px !important;
+    }
+}
+
+/* MOVIL DEFINITIVO: "Todo" abajo fijo + categorias desplegables al tocar */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        z-index:2400 !important;
+    }
+
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:86px !important;
+        margin:0 !important;
+        z-index:3200 !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+        transition:none !important;
+    }
+
+    body.pagina-tienda.mobile-ui-hidden .tienda-chips{
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+    }
+
+    body.pagina-tienda .chips-story{
+        width:86px !important;
+        max-height:84px !important;
+        overflow:hidden !important;
+        display:flex !important;
+        flex-direction:column-reverse !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+        scroll-behavior:auto !important;
+    }
+
+    body.pagina-tienda .chips-story .chip-story{
+        display:none !important;
+        width:78px !important;
+        min-width:78px !important;
+        transform:none !important;
+    }
+
+    body.pagina-tienda .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+
+    body.pagina-tienda.chips-open .chips-story{
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        background:rgba(8,21,44,.14) !important;
+        backdrop-filter:blur(2px) !important;
+        -webkit-backdrop-filter:blur(2px) !important;
+        border-radius:18px !important;
+    }
+
+    body.pagina-tienda.chips-open .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+
+    body.pagina-tienda.chips-open .chips-story .chip-story{
+        display:flex !important;
+    }
+
+    body.pagina-tienda .chip-story:active{
+        transform:none !important;
+    }
+
+    body.pagina-tienda .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+
+    body.pagina-tienda .chip-name{
+        display:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:80px !important;
+    }
+}
+
+/* Override real final: categorias fijas SIEMPRE visibles sobre buscador (movil) */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        z-index:2400 !important;
+    }
+
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:84px !important;
+        margin:0 !important;
+        z-index:2600 !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+        transition:none !important;
+    }
+
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:84px !important;
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 8px !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+        scroll-behavior:auto !important;
+    }
+
+    body.pagina-tienda .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+
+    body.pagina-tienda .chips-story .chip-story,
+    body.pagina-tienda.chips-open .chips-story .chip-story{
+        display:flex !important;
+        width:78px !important;
+        min-width:78px !important;
+        transform:none !important;
+    }
+
+    body.pagina-tienda .chip-story:active{
+        transform:none !important;
+    }
+
+    body.pagina-tienda .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+
+    body.pagina-tienda .chip-name{
+        display:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:80px !important;
+    }
+}
+
+/* Fijo final: categorias estaticas sobre el buscador (movil) */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        z-index:2400 !important;
+    }
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:84px !important;
+        margin:0 !important;
+        z-index:2475 !important;
+        transform:none !important;
+        transition:none !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:84px !important;
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 8px !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+        transition:none !important;
+        scroll-behavior:auto !important;
+    }
+    body.pagina-tienda .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+    body.pagina-tienda .chip-story,
+    body.pagina-tienda.chips-open .chip-story{
+        display:flex !important;
+        width:78px !important;
+        min-width:78px !important;
+        transform:none !important;
+        transition:opacity .12s ease !important;
+    }
+    body.pagina-tienda .chip-story:active{
+        transform:none !important;
+    }
+    body.pagina-tienda .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+    body.pagina-tienda .chip-name{
+        display:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:80px !important;
+    }
+}
+
+/* Movil final: boton "Todo" fijo abajo y categorias al tocar/click */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:84px !important;
+        margin:0 !important;
+        z-index:2460 !important;
+        pointer-events:auto !important;
+    }
+    body.pagina-tienda .chips-story{
+        width:84px !important;
+        max-height:84px !important;
+        overflow:hidden !important;
+        display:flex !important;
+        flex-direction:column-reverse !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+    }
+    body.pagina-tienda .chips-story .chip-story{
+        display:none !important;
+        width:78px !important;
+        min-width:78px !important;
+    }
+    body.pagina-tienda .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+    body.pagina-tienda.chips-open .chips-story{
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        background:rgba(8,21,44,.16) !important;
+        backdrop-filter:blur(2px) !important;
+        -webkit-backdrop-filter:blur(2px) !important;
+        border-radius:20px !important;
+        scrollbar-width:none !important;
+    }
+    body.pagina-tienda.chips-open .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+    body.pagina-tienda.chips-open .chips-story .chip-story{
+        display:flex !important;
+    }
+    body.pagina-tienda .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+    body.pagina-tienda .chip-name{
+        display:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda .chips-story{
+        width:80px !important;
+    }
+}
+
+/* Ajuste final anti-brinco: abrir/cerrar categorias sin salto visual */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:84px !important;
+        margin:0 !important;
+        z-index:2470 !important;
+        transform:none !important;
+        transition:none !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:84px !important;
+        transition:none !important;
+        scroll-behavior:auto !important;
+    }
+    body.pagina-tienda .chip-story{
+        transform:none !important;
+        transition:opacity .12s ease !important;
+    }
+    body.pagina-tienda .chip-story:active{
+        transform:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:80px !important;
+    }
+}
+
+/* ULTIMO OVERRIDE REAL (final de archivo) */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-search-mobile{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        z-index:2400 !important;
+    }
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        position:fixed !important;
+        right:6px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
+        width:86px !important;
+        margin:0 !important;
+        z-index:5000 !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+        transition:none !important;
+    }
+    body.pagina-tienda.mobile-ui-hidden .tienda-chips{
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+    }
+    body.pagina-tienda .chips-story{
+        width:86px !important;
+        max-height:84px !important;
+        overflow:hidden !important;
+        display:flex !important;
+        flex-direction:column-reverse !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px 0 !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        scrollbar-width:none !important;
+        -ms-overflow-style:none !important;
+        scroll-behavior:auto !important;
+    }
+    body.pagina-tienda .chips-story .chip-story{
+        display:none !important;
+        width:78px !important;
+        min-width:78px !important;
+        transform:none !important;
+        transition:none !important;
+    }
+    body.pagina-tienda .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+    body.pagina-tienda.chips-open .chips-story{
+        max-height:calc(100vh - 142px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        background:rgba(8,21,44,.14) !important;
+        backdrop-filter:blur(2px) !important;
+        -webkit-backdrop-filter:blur(2px) !important;
+        border-radius:18px !important;
+    }
+    body.pagina-tienda.chips-open .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+    body.pagina-tienda.chips-open .chips-story .chip-story{
+        display:flex !important;
+    }
+    body.pagina-tienda .chip-story:active{
+        transform:none !important;
+    }
+    body.pagina-tienda .chip-circle{
+        width:60px !important;
+        height:60px !important;
+    }
+    body.pagina-tienda .chip-name{
+        display:none !important;
+    }
+}
+
+@media (max-width: 430px){
+    body.pagina-tienda .tienda-chips,
+    body.pagina-tienda.chips-open .tienda-chips{
+        right:4px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 60px) !important;
+    }
+    body.pagina-tienda .chips-story,
+    body.pagina-tienda.chips-open .chips-story{
+        width:80px !important;
+    }
 }
 
