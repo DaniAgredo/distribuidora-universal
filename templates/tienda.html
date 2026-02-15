@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260326">
+<link rel="stylesheet" href="/static/tienda.css?v=20260327">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -213,11 +213,10 @@
         { label: 'Lava loza', img: '/static/images/axion.jpg', anchor: 'sub-lava-lozas' },
         { label: 'Jabon liquido', img: '/static/images/losa-crem.jpg', anchor: 'sub-jabon-liquido' },
         { label: 'Suavizantes', img: '/static/images/suavitel-tarro.png', anchor: 'sub-suavizantes' },
-        { label: 'Desinfectantes', img: '/static/images/limpido.png', anchor: 'sub-otros' }
+        { label: 'Limpidos', img: '/static/images/limpido.png', anchor: 'sub-otros' },
+        { label: 'Jabon de barra', img: '/static/images/barrigon.jpg', anchor: 'sub-jabones-barra' }
       ],
-      'drogueria': [
-        { label: 'Jabones en barra', img: '/static/images/barrigon.jpg', anchor: 'sub-jabones-barra' }
-      ],
+      'drogueria': [],
       'cuidado-bebes': [
         { label: 'Panales', q: 'panal', img: '/static/images/banner11.jpg' },
         { label: 'Toallitas', q: 'toallitas', img: '/static/images/banner12.jpg' },
@@ -239,8 +238,8 @@
         chipsWrap.innerHTML = '';
         const volver = document.createElement('a');
         volver.className = 'chip-story chip-volver';
-        volver.href = currentQ ? `/tienda?q=${encodeURIComponent(currentQ)}` : '/tienda';
-        volver.innerHTML = '<span class="chip-circle"><img src="/static/images/estante.jfif" alt="Volver"></span><span class="chip-name">Secciones</span>';
+        volver.href = '/tienda';
+        volver.innerHTML = '<span class="chip-circle"><img src="/static/images/estante.jfif" alt="Todo"></span><span class="chip-name">Todo</span>';
         chipsWrap.appendChild(volver);
         list.forEach((item, idx) => {
           const img = item.img || subcatImages[idx % subcatImages.length];
@@ -281,7 +280,7 @@
       void target.offsetWidth;
       target.classList.add('is-jump');
       setTimeout(() => target.classList.remove('is-jump'), 420);
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target.scrollIntoView({ behavior: 'smooth', block: 'end' });
       return true;
     };
 
@@ -345,7 +344,7 @@
     const buildAseoMobileSections = () => {
       if (!chipsWrap) return;
       const activeCat = chipsWrap.dataset.activeCat || '';
-      if (!['aseo', 'drogueria'].includes(activeCat)) return;
+      if (activeCat !== 'aseo') return;
       const grid = document.querySelector('.tienda-grid');
       if (!grid || document.querySelector('.aseo-mobile-sections')) return;
       const cards = Array.from(grid.querySelectorAll('.tienda-card'));
@@ -400,15 +399,6 @@
               quickType: 'donalupe',
               variantes: [
                 { presentacion_id: 'donalupe-900', marca: 'Dona Lupe', presentacion: 'Dona Lupe', contenido: '900 g' }
-              ]
-            },
-            {
-              key: 'supremo-barra',
-              nombre: 'Supremo Barra',
-              imagen: '/static/images/supremo-ba.png',
-              quickType: 'supremo-barra',
-              variantes: [
-                { presentacion_id: 'supremo-barra-500', marca: 'Supremo', presentacion: 'Supremo Barra', contenido: '500 g' }
               ]
             }
           ]
@@ -489,39 +479,19 @@
           ]
         },
         {
-          key: 'otros',
-          title: 'Desinfectantes',
-          test: () => true,
+          key: 'jabones-barra',
+          title: 'Jabon de barra',
+          test: (name) => /(barrigon|barrig[oó]n|coco|rosa|vel-?rosa|supremo|jabon barra|jab[oó]n barra)/.test(name),
           fallback: [
             {
-              key: 'limpido-gde',
-              nombre: 'Limpido 1 L',
-              imagen: '/static/images/limpido.png',
-              quickType: 'limpido',
+              key: 'supremo-barra',
+              nombre: 'Supremo Barra',
+              imagen: '/static/images/supremo-ba.png',
+              quickType: 'supremo-barra',
               variantes: [
-                { presentacion_id: 'limpido-1000', marca: 'Limpido', presentacion: 'Limpido', contenido: '1 L' },
-                { presentacion_id: 'limpido-500', marca: 'Limpido', presentacion: 'Limpido', contenido: '500 ml' }
+                { presentacion_id: 'supremo-barra-500', marca: 'Supremo', presentacion: 'Supremo Barra', contenido: '500 g' }
               ]
             },
-            {
-              key: 'limpido-peq',
-              nombre: 'Limpido 500 ml',
-              imagen: '/static/images/limpidopeq.png',
-              quickType: 'limpido',
-              variantes: [
-                { presentacion_id: 'limpido-1000', marca: 'Limpido', presentacion: 'Limpido', contenido: '1 L' },
-                { presentacion_id: 'limpido-500', marca: 'Limpido', presentacion: 'Limpido', contenido: '500 ml' }
-              ]
-            }
-          ]
-        }
-      ];
-      const drogueriaDefs = [
-        {
-          key: 'jabones-barra',
-          title: 'Jabones en barra',
-          test: (name) => /(barrigon|barrig[oó]n|coco|rosa|vel-?rosa|jabon barra|jab[oó]n barra)/.test(name),
-          fallback: [
             {
               key: 'barrigon',
               nombre: 'Barrigón',
@@ -550,9 +520,36 @@
               ]
             }
           ]
+        },
+        {
+          key: 'otros',
+          title: 'Desinfectantes',
+          test: () => true,
+          fallback: [
+            {
+              key: 'limpido-gde',
+              nombre: 'Limpido 1 L',
+              imagen: '/static/images/limpido.png',
+              quickType: 'limpido',
+              variantes: [
+                { presentacion_id: 'limpido-1000', marca: 'Limpido', presentacion: 'Limpido', contenido: '1 L' },
+                { presentacion_id: 'limpido-500', marca: 'Limpido', presentacion: 'Limpido', contenido: '500 ml' }
+              ]
+            },
+            {
+              key: 'limpido-peq',
+              nombre: 'Limpido 500 ml',
+              imagen: '/static/images/limpidopeq.png',
+              quickType: 'limpido',
+              variantes: [
+                { presentacion_id: 'limpido-1000', marca: 'Limpido', presentacion: 'Limpido', contenido: '1 L' },
+                { presentacion_id: 'limpido-500', marca: 'Limpido', presentacion: 'Limpido', contenido: '500 ml' }
+              ]
+            }
+          ]
         }
       ];
-      const defs = activeCat === 'aseo' ? aseoDefs : drogueriaDefs;
+      const defs = aseoDefs;
       if (!cards.length && !defs.some((d) => d.fallback && d.fallback.length)) return;
 
       const buckets = {};
@@ -587,7 +584,7 @@
         card.className = `tienda-card focusable quick-view lava-preview-card lava-${type}`;
         card.dataset.quickType = item.quickType || type;
         card.dataset.producto = cleanName;
-        card.dataset.categoria = activeCat === 'aseo' ? 'Aseo' : 'Drogueria';
+        card.dataset.categoria = 'Aseo';
         card.dataset.variantes = JSON.stringify(item.variantes || []);
         card.tabIndex = 0;
         card.innerHTML = `
@@ -641,14 +638,11 @@
         const target = document.getElementById(anchorId);
         if (!target || !wrap.contains(target)) return false;
         if (chip) promoteSubcatChip(chip);
-        const first = wrap.querySelector('.aseo-mobile-section');
-        if (first && first !== target) {
-          target.classList.remove('is-priority');
-          wrap.insertBefore(target, first);
-        }
+        target.classList.remove('is-priority');
         void target.offsetWidth;
         target.classList.add('is-priority');
         setTimeout(() => target.classList.remove('is-priority'), 420);
+        target.scrollIntoView({ behavior: 'smooth', block: 'end' });
         return true;
       };
       window.__prioritizeAseoSection = prioritizeAseoSection;
