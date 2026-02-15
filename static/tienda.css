@@ -2659,11 +2659,17 @@ body.dark .carrito-link{
         top:auto !important;
         bottom:calc(var(--mobile-fixed-bottom, 4px) + 64px) !important;
         width:78px !important;
+        max-width:78px !important;
+        min-width:78px !important;
         margin:0 !important;
         z-index:10050 !important;
-        pointer-events:auto !important;
+        pointer-events:none !important;
         display:block !important;
         overflow:visible !important;
+        padding:0 !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
         transform:translateZ(0) !important;
         -webkit-transform:translateZ(0) !important;
         backface-visibility:hidden !important;
@@ -2672,6 +2678,8 @@ body.dark .carrito-link{
     html body.pagina-tienda .tienda-chips > .chips-story{
         position:relative !important;
         width:78px !important;
+        max-width:78px !important;
+        min-width:78px !important;
         max-height:82px !important;
         overflow:hidden !important;
         display:flex !important;
