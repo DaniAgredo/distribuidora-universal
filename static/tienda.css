@@ -2667,7 +2667,7 @@ body.dark .carrito-link{
         left:10px !important;
         right:10px !important;
         top:auto !important;
-        bottom:calc(var(--mobile-fixed-bottom, 4px) + 64px) !important;
+        bottom:calc(var(--mobile-fixed-bottom, 4px) + 56px) !important;
         width:auto !important;
         max-width:none !important;
         min-width:0 !important;
@@ -2753,7 +2753,7 @@ body.dark .carrito-link{
         left:8px !important;
         right:8px !important;
         width:auto !important;
-        bottom:calc(var(--mobile-fixed-bottom, 4px) + 62px) !important;
+        bottom:calc(var(--mobile-fixed-bottom, 4px) + 54px) !important;
     }
     html body.pagina-tienda .tienda-chips > .chips-story{
         width:74px !important;
