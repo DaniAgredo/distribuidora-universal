@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260255">
+<link rel="stylesheet" href="/static/tienda.css?v=20260260">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -586,7 +586,7 @@
         card.tabIndex = 0;
         card.innerHTML = `
           <div class="tienda-img">
-            <img src="${item.imagen}" alt="${cleanName}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+            <img src="${item.imagen}" alt="${cleanName}" loading="lazy" decoding="async" onerror="if(document.body.classList.contains('vista-todos')){const card=this.closest('.tienda-card'); if(card) card.remove();} else {this.onerror=null; this.src='/static/images/placeholder.svg';}">
           </div>
           <div class="tienda-info">
             <h3>${cleanName}</h3>
@@ -719,7 +719,7 @@
          {% if is_quick %}data-quick-type="{% if is_revita %}revita{% elif is_fab %}fab{% elif is_3d %}3d{% elif is_ariel %}ariel{% endif %}"{% endif %}
          {% if is_quick %}data-variantes='{{ producto_variantes|tojson }}'{% endif %}>
         <div class="tienda-img">
-          <img src="{{ producto_imagen }}" alt="{{ item.producto }}" loading="lazy" decoding="async" fetchpriority="low" width="640" height="420" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+          <img src="{{ producto_imagen }}" alt="{{ item.producto }}" loading="lazy" decoding="async" fetchpriority="low" width="640" height="420" onerror="if(document.body.classList.contains('vista-todos')){const card=this.closest('.tienda-card'); if(card) card.remove();} else {this.onerror=null; this.src='/static/images/placeholder.svg';}">
         </div>
       <div class="tienda-info">
           <h3>
@@ -904,7 +904,7 @@
       card.dataset.variantes = JSON.stringify(item.variantes || []);
       card.innerHTML = `
         <div class="tienda-img">
-          <img src="${item.imagen}" alt="${item.nombre}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+          <img src="${item.imagen}" alt="${item.nombre}" loading="lazy" decoding="async" onerror="if(document.body.classList.contains('vista-todos')){const card=this.closest('.tienda-card'); if(card) card.remove();} else {this.onerror=null; this.src='/static/images/placeholder.svg';}">
         </div>
         <div class="tienda-info"><h3>${item.nombre}</h3></div>
       `;
@@ -994,6 +994,17 @@
     mq.addEventListener('change', close);
   };
 
+  const removeCardsWithoutImageInAll = () => {
+    if (!document.body.classList.contains('vista-todos')) return;
+    document.querySelectorAll('.tienda-grid .tienda-card img').forEach((img) => {
+      const src = (img.getAttribute('src') || '').trim().toLowerCase();
+      if (!src || src.includes('placeholder.svg')) {
+        const card = img.closest('.tienda-card');
+        if (card) card.remove();
+      }
+    });
+  };
+
   const attachFocusEffects = (container) => {
     if (!container || container.dataset.focusBound === '1') return;
     const focusCards = Array.from(container.querySelectorAll('.tienda-card.focusable'));
@@ -1023,6 +1034,7 @@
 
   injectAllProductsInCatalog();
   setupMobileCategoryRail();
+  removeCardsWithoutImageInAll();
   if (window.__buildAseoMobileSections) window.__buildAseoMobileSections();
   attachFocusEffects(document.querySelector('.tienda-grid'));
   document.querySelectorAll('.aseo-mobile-row').forEach((row) => attachFocusEffects(row));

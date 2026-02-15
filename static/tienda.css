@@ -1633,6 +1633,26 @@ body.dark .quick-total strong{
     .pagina-tienda:not(.aseo-sections-mode) .tienda-grid .tienda-img img{
         max-height:116px;
     }
+    .pagina-tienda.vista-todos .tienda-grid{
+        display:grid !important;
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+        gap:8px;
+        overflow:visible;
+        padding:2px 0 10px;
+        scroll-snap-type:none;
+    }
+    .pagina-tienda.vista-todos .tienda-grid .tienda-card{
+        flex:unset;
+        min-height:0;
+        width:100%;
+        max-width:none;
+    }
+    .pagina-tienda.vista-todos .tienda-grid .tienda-img{
+        height:148px;
+    }
+    .pagina-tienda.vista-todos .tienda-grid .tienda-img img{
+        max-height:none;
+    }
     .pagina-tienda.aseo-sections-mode .aseo-mobile-sections{
         gap:14px;
         margin:2px 0 8px;
@@ -1786,7 +1806,7 @@ body.dark .quick-total strong{
         z-index:1200;
         left:10px;
         right:10px;
-        bottom:12px;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 4px);
         margin:0;
         padding:8px;
         background:rgba(255,255,255,.92);
@@ -2250,12 +2270,14 @@ body.dark .carrito-link{
         right:6px !important;
         left:auto !important;
         top:auto !important;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 42px) !important;
         width:74px !important;
         margin:0 !important;
         z-index:2400 !important;
         pointer-events:auto !important;
         transform:none !important;
+        transition:none !important;
+        will-change:auto !important;
     }
     .pagina-tienda .tienda-resumen{
         display:none !important;
@@ -2314,12 +2336,21 @@ body.dark .carrito-link{
         padding:2px 5px !important;
         text-transform:none !important;
     }
+    .pagina-tienda.vista-todos .tienda-main{
+        padding-right:0 !important;
+    }
+    .pagina-tienda.vista-todos .tienda-grid{
+        padding-right:0 !important;
+    }
 }
 
 @media (max-width: 430px){
     .pagina-tienda .tienda-chips{
         right:4px !important;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 0px) !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 38px) !important;
+    }
+    .pagina-tienda.vista-todos .tienda-grid .tienda-img{
+        height:136px;
     }
 }
 
