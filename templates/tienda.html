@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260236">
+<link rel="stylesheet" href="/static/tienda.css?v=20260237">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 body.pagina-tienda .todo-float{ display:none; }
@@ -26,27 +26,27 @@ body.pagina-tienda .todo-float{ display:none; }
   body.pagina-tienda.mobile-cats-open .tienda-chips{
     display:block !important;
     position:fixed !important;
-    right:84px !important;
-    bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
-    width:min(78vw, 320px) !important;
+    right:6px !important;
+    bottom:calc(env(safe-area-inset-bottom, 0px) + 138px) !important;
+    width:74px !important;
     margin:0 !important;
     z-index:19999 !important;
     pointer-events:auto !important;
   }
   body.pagina-tienda.mobile-cats-open .chips-story{
-    width:100% !important;
-    max-height:none !important;
-    overflow-y:hidden !important;
-    overflow-x:auto !important;
+    width:74px !important;
+    max-height:calc(100vh - 216px) !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
     display:flex !important;
-    flex-direction:row !important;
-    align-items:flex-start !important;
-    gap:10px !important;
-    padding:6px !important;
-    background:rgba(255,255,255,.88) !important;
-    border:1px solid rgba(198,217,255,.95) !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    gap:8px !important;
+    padding:4px 0 !important;
+    background:rgba(255,255,255,.92) !important;
+    border:1px solid rgba(198,217,255,.9) !important;
     box-shadow:0 12px 24px rgba(16,59,124,.22) !important;
-    border-radius:16px !important;
+    border-radius:14px !important;
     scrollbar-width:none !important;
   }
   body.pagina-tienda.mobile-cats-open .chips-story::-webkit-scrollbar{
@@ -54,8 +54,8 @@ body.pagina-tienda .todo-float{ display:none; }
   }
   body.pagina-tienda.mobile-cats-open .chips-story .chip-story{
     display:flex !important;
-    width:72px !important;
-    min-width:72px !important;
+    width:70px !important;
+    min-width:70px !important;
   }
   body.pagina-tienda .chip-circle{
     width:56px !important;
@@ -1079,6 +1079,11 @@ body.pagina-tienda .todo-float{ display:none; }
       clearTimeout(hideTimer);
       hideTimer = null;
     };
+    const openPanel = () => {
+      if (!mq.matches) return;
+      clearHideTimer();
+      document.body.classList.add('mobile-cats-open');
+    };
     const closePanel = () => {
       clearHideTimer();
       document.body.classList.remove('mobile-cats-open');
@@ -1093,15 +1098,18 @@ body.pagina-tienda .todo-float{ display:none; }
       if (!mq.matches) return;
       e.preventDefault();
       e.stopPropagation();
-      const willOpen = !document.body.classList.contains('mobile-cats-open');
-      document.body.classList.toggle('mobile-cats-open');
-      if (willOpen) scheduleHide(1800);
+      if (document.body.classList.contains('mobile-cats-open')) {
+        closePanel();
+        return;
+      }
+      openPanel();
+      scheduleHide(1800);
     };
 
     todoFloat.addEventListener('click', togglePanel);
-    todoFloat.addEventListener('mouseenter', clearHideTimer);
+    todoFloat.addEventListener('mouseenter', openPanel);
     todoFloat.addEventListener('mouseleave', () => scheduleHide(500));
-    todoFloat.addEventListener('touchstart', clearHideTimer, { passive: true });
+    todoFloat.addEventListener('touchstart', openPanel, { passive: true });
     todoFloat.addEventListener('touchend', () => scheduleHide(1200), { passive: true });
 
     chipsContainer.addEventListener('click', (e) => {
