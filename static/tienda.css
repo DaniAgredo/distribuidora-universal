@@ -2650,7 +2650,11 @@ body.dark .carrito-link{
 /* Final lock: categorias flotantes como barra de busqueda en movil */
 @media (max-width: 650px){
     html body.pagina-tienda .tienda-main{
-        padding-bottom:78px !important;
+        padding-bottom:0 !important;
+    }
+    html body.pagina-tienda .tienda-grid,
+    html body.pagina-tienda .aseo-mobile-sections{
+        padding-bottom:94px !important;
     }
     html body.pagina-tienda .tienda-chips{
         position:fixed !important;
@@ -2733,6 +2737,10 @@ body.dark .carrito-link{
 }
 
 @media (max-width: 430px){
+    html body.pagina-tienda .tienda-grid,
+    html body.pagina-tienda .aseo-mobile-sections{
+        padding-bottom:90px !important;
+    }
     html body.pagina-tienda .tienda-chips{
         right:8px !important;
         width:74px !important;
