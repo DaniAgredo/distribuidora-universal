@@ -2756,6 +2756,29 @@ body.dark .carrito-link{
     }
 }
 
+/* Respaldo: fija el boton principal de categorias (selector del inspector) */
+@media (max-width: 650px){
+    html body.pagina-tienda .chips-story > a.chip-story.chip-home{
+        position:fixed !important;
+        right:10px !important;
+        left:auto !important;
+        top:auto !important;
+        bottom:calc(var(--mobile-fixed-bottom, 4px) + 64px) !important;
+        width:74px !important;
+        min-width:74px !important;
+        z-index:10110 !important;
+        pointer-events:auto !important;
+    }
+}
+@media (max-width: 430px){
+    html body.pagina-tienda .chips-story > a.chip-story.chip-home{
+        right:8px !important;
+        bottom:calc(var(--mobile-fixed-bottom, 4px) + 62px) !important;
+        width:72px !important;
+        min-width:72px !important;
+    }
+}
+
 /* Limpia contenedor del buscador movil (solo queda la barra/input) */
 @media (max-width: 650px){
     html body.pagina-tienda .tienda-search.tienda-search-mobile{
