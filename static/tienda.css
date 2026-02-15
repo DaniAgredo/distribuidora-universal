@@ -1356,6 +1356,49 @@ body.dark .quick-total strong{
     }
 }
 
+/* Tablet horizontal: mismo comportamiento del buscador que en movil */
+@media (min-width:651px) and (max-width:900px){
+    .pagina-tienda{
+        --mobile-fixed-bottom: calc(env(safe-area-inset-bottom, 0px) + 4px);
+    }
+    .tienda-search-inline{
+        display:none !important;
+    }
+    .tienda-search-mobile{
+        display:flex !important;
+        width:auto !important;
+        max-width:none !important;
+        position:fixed !important;
+        z-index:1200 !important;
+        left:12px !important;
+        right:12px !important;
+        bottom:var(--mobile-fixed-bottom) !important;
+        margin:0 !important;
+        padding:8px !important;
+        background:rgba(255,255,255,.92) !important;
+        border:1px solid #c6d9ff !important;
+        border-radius:14px !important;
+        box-shadow:0 12px 26px rgba(16,59,124,.18) !important;
+    }
+    .tienda-search-mobile .tienda-btn{
+        display:none !important;
+    }
+    .tienda-search-mobile .tienda-input{
+        width:100% !important;
+        min-width:0 !important;
+        height:36px !important;
+        padding:8px 92px 8px 12px !important;
+        font-size:13px !important;
+    }
+    .tienda-main{
+        padding-bottom:106px !important;
+    }
+    body.dark .tienda-search-mobile{
+        background:rgba(15,27,51,.92) !important;
+        border-color:#1e2a40 !important;
+    }
+}
+
 @media(max-width:600px){
     .pagina-tienda{
         padding-top:150px;
@@ -2266,6 +2309,16 @@ body.dark .carrito-link{
 .chips-story.subcats-only .chip-volver .chip-circle{
     animation:chipPulse 2.4s ease-in-out infinite;
 }
+@keyframes chipBreath{
+    0%,100%{
+        box-shadow:0 0 0 0 rgba(13,132,252,.28), 0 8px 16px rgba(16,59,124,.18);
+        border-color:rgba(13,132,252,.55);
+    }
+    50%{
+        box-shadow:0 0 0 8px rgba(13,132,252,.12), 0 10px 18px rgba(16,59,124,.22);
+        border-color:rgba(13,132,252,.95);
+    }
+}
 
 /* Mobile: Todo flotante + categorias verticales hacia arriba */
 @media (max-width: 650px){
@@ -2328,12 +2381,22 @@ body.dark .carrito-link{
         pointer-events:auto !important;
         position:static !important;
     }
+    .pagina-tienda .chips-story .chip-story:first-child .chip-circle{
+        animation:chipBreath 2s ease-in-out infinite !important;
+    }
     .pagina-tienda .chip-circle{
         width:56px !important;
         height:56px !important;
     }
     .pagina-tienda .chip-name{
         display:none !important;
+    }
+    .pagina-tienda .chips-story .chip-story:first-child .chip-name{
+        display:block !important;
+        font-size:8px !important;
+        line-height:1.05 !important;
+        padding:2px 5px !important;
+        text-transform:none !important;
     }
 
     .pagina-tienda.chips-open .chips-story{
@@ -2362,6 +2425,9 @@ body.dark .carrito-link{
     }
     .pagina-tienda.chips-open .chips-story .chip-story:first-child{
         display:flex !important;
+    }
+    .pagina-tienda.chips-open .chips-story .chip-story:first-child .chip-circle{
+        animation:none !important;
     }
     .pagina-tienda.chips-open .chip-name{
         display:block !important;
