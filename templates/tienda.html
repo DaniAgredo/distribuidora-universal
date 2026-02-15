@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260261">
+<link rel="stylesheet" href="/static/tienda.css?v=20260269">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -1571,7 +1571,24 @@
     card.addEventListener('touchstart', (e) => {
       const touch = e.changedTouches && e.changedTouches[0];
       if (!touch) return;
-      touchMeta = { x: touch.clientX, y: touch.clientY, t: Date.now() };
+      touchMeta = {
+        x: touch.clientX,
+        y: touch.clientY,
+        t: Date.now(),
+        sy: window.scrollY || window.pageYOffset || 0,
+        moved: false
+      };
+    }, { passive: true });
+    card.addEventListener('touchmove', (e) => {
+      if (!touchMeta) return;
+      const touch = e.changedTouches && e.changedTouches[0];
+      if (!touch) return;
+      const dx = Math.abs(touch.clientX - touchMeta.x);
+      const dy = Math.abs(touch.clientY - touchMeta.y);
+      const sy = window.scrollY || window.pageYOffset || 0;
+      if (dx > 6 || dy > 6 || Math.abs(sy - touchMeta.sy) > 6) {
+        touchMeta.moved = true;
+      }
     }, { passive: true });
     card.addEventListener('touchend', (e) => {
       if (!touchMeta) return;
@@ -1580,13 +1597,16 @@
       const dx = Math.abs(touch.clientX - touchMeta.x);
       const dy = Math.abs(touch.clientY - touchMeta.y);
       const dt = Date.now() - touchMeta.t;
+      const sy = window.scrollY || window.pageYOffset || 0;
+      const moved = touchMeta.moved || Math.abs(sy - touchMeta.sy) > 6;
       touchMeta = null;
       // Prevent accidental open while vertical scrolling.
-      if (dx > 10 || dy > 10 || dt > 550) return;
+      if (moved || dx > 6 || dy > 6 || dt > 320) return;
       e.preventDefault();
       card.dataset.touchOpenAt = String(Date.now());
       openQuick(card);
     }, { passive: false });
+    card.addEventListener('touchcancel', () => { touchMeta = null; }, { passive: true });
   });
 
   if (quickModal) {
