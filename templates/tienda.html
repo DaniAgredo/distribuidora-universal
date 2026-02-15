@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260214">
+<link rel="stylesheet" href="/static/tienda.css?v=20260245">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -91,7 +91,7 @@
   } %}
   <section class="tienda-chips" aria-label="Categorias">
     <div class="chips-story" data-active-cat="{{ cat }}" data-current-q="{{ q }}">
-      <a class="chip-story chip-home {% if not cat %}active{% endif %}" data-cat="" href="/tienda{% if q %}?q={{ q|urlencode }}{% endif %}">
+      <a class="chip-story chip-home {% if not cat %}active{% endif %}" data-cat="" href="/tienda">
         <span class="chip-circle">
           <img src="/static/images/estante.jfif" alt="Todos" loading="lazy">
         </span>
@@ -305,6 +305,13 @@
           link.addEventListener('touchstart', () => prefetchDoc(href), { passive: true });
         }
         link.addEventListener('click', (e) => {
+          if (window.matchMedia('(max-width: 650px)').matches) {
+            const trigger = chipsWrap ? chipsWrap.querySelector('.chip-story') : null;
+            if (trigger && link === trigger && !document.body.classList.contains('chips-open')) {
+              e.preventDefault();
+              return;
+            }
+          }
           if (navLocked) return;
           if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
           const href = link.getAttribute('href');
@@ -908,21 +915,83 @@
 
   const setupMobileCategoryRail = () => {
     if (!chipsWrap) return;
-    if (!window.matchMedia('(max-width: 650px)').matches) return;
     const chipsContainer = document.querySelector('.tienda-chips');
-    const homeChip = chipsWrap.querySelector('.chip-home');
-    if (!chipsContainer || !homeChip) return;
-    if (document.body.classList.contains('vista-todos')) {
-      homeChip.addEventListener('click', (e) => {
+    if (!chipsContainer) return;
+    const mq = window.matchMedia('(max-width: 650px)');
+    const trigger = chipsWrap.querySelector('.chip-story');
+    if (!trigger) return;
+    const isTodoTrigger = document.body.classList.contains('vista-todos') && trigger.classList.contains('chip-home');
+
+    let justOpenedByTouch = false;
+    const close = () => document.body.classList.remove('chips-open');
+    const open = () => document.body.classList.add('chips-open');
+    const toggle = () => document.body.classList.toggle('chips-open');
+    const openFromInteraction = (e) => {
+      if (!mq.matches) return;
+      e.preventDefault();
+      e.stopPropagation();
+      open();
+    };
+
+    trigger.addEventListener('touchstart', (e) => {
+      if (!mq.matches) return;
+      if (isTodoTrigger) {
+        justOpenedByTouch = true;
         e.preventDefault();
-        document.body.classList.toggle('chips-open');
-      });
-      document.addEventListener('click', (e) => {
-        if (!chipsContainer.contains(e.target) && !e.target.closest('.tienda-search-mobile')) {
-          document.body.classList.remove('chips-open');
+        e.stopPropagation();
+        toggle();
+        setTimeout(() => { justOpenedByTouch = false; }, 420);
+        return;
+      }
+      if (document.body.classList.contains('chips-open')) return;
+      justOpenedByTouch = true;
+      openFromInteraction(e);
+      setTimeout(() => { justOpenedByTouch = false; }, 420);
+    }, { passive: false });
+
+    trigger.addEventListener('click', (e) => {
+      if (!mq.matches) return;
+      if (isTodoTrigger) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (justOpenedByTouch) {
+          justOpenedByTouch = false;
+          return;
         }
-      });
-    }
+        toggle();
+        return;
+      }
+      if (justOpenedByTouch) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (!document.body.classList.contains('chips-open')) {
+        openFromInteraction(e);
+      }
+      // Si ya esta abierto, dejamos que el enlace haga su navegacion normal.
+    });
+
+    chipsContainer.addEventListener('click', (e) => {
+      if (!mq.matches) return;
+      const chip = e.target.closest('.chip-story');
+      if (!chip || chip === trigger) return;
+      close();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mq.matches) return;
+      if (!chipsContainer.contains(e.target) && !e.target.closest('.tienda-search-mobile')) close();
+    });
+
+    document.addEventListener('touchstart', (e) => {
+      if (!mq.matches) return;
+      if (!chipsContainer.contains(e.target) && !e.target.closest('.tienda-search-mobile')) close();
+    }, { passive: true });
+
+    window.addEventListener('pageshow', close);
+    window.addEventListener('load', close);
+    mq.addEventListener('change', close);
   };
 
   const attachFocusEffects = (container) => {
