@@ -1009,6 +1009,12 @@
       if (!mq.matches) return;
       const activeCat = (chipsWrap.dataset.activeCat || '').trim().toLowerCase();
       if (activeCat) {
+        if (!document.body.classList.contains('chips-open')) {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(true);
+          return;
+        }
         e.preventDefault();
         e.stopPropagation();
         window.location.assign('/tienda');
