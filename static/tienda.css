@@ -2319,19 +2319,14 @@ body.dark .carrito-link{
         transition:max-height .24s ease, background-color .24s ease, box-shadow .24s ease, border-color .24s ease !important;
     }
     .pagina-tienda .chips-story .chip-story{
-        display:flex !important;
+        display:none !important;
         width:70px !important;
         min-width:70px !important;
-        opacity:0 !important;
-        transform:translateY(6px) scale(.98) !important;
-        pointer-events:none !important;
-        transition:opacity .2s ease, transform .2s ease !important;
     }
     .pagina-tienda .chips-story .chip-story:first-child{
         display:flex !important;
-        opacity:1 !important;
-        transform:none !important;
         pointer-events:auto !important;
+        position:static !important;
     }
     .pagina-tienda .chip-circle{
         width:56px !important;
@@ -2360,9 +2355,13 @@ body.dark .carrito-link{
         display:none !important;
     }
     .pagina-tienda.chips-open .chips-story .chip-story{
+        display:flex !important;
         opacity:1 !important;
         transform:none !important;
         pointer-events:auto !important;
+    }
+    .pagina-tienda.chips-open .chips-story .chip-story:first-child{
+        display:flex !important;
     }
     .pagina-tienda.chips-open .chip-name{
         display:block !important;
