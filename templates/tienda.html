@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260299">
+<link rel="stylesheet" href="/static/tienda.css?v=20260307">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -940,21 +940,19 @@
       if (!mq.matches) return;
       const small = window.matchMedia('(max-width: 430px)').matches;
       chipsContainer.style.setProperty('position', 'fixed', 'important');
-      chipsContainer.style.setProperty('left', '10px', 'important');
-      chipsContainer.style.setProperty('right', '10px', 'important');
+      chipsContainer.style.setProperty('left', 'auto', 'important');
+      chipsContainer.style.setProperty('right', small ? '8px' : '10px', 'important');
       chipsContainer.style.setProperty('top', 'auto', 'important');
       chipsContainer.style.setProperty('bottom', small ? 'calc(var(--mobile-fixed-bottom) + 54px)' : 'calc(var(--mobile-fixed-bottom) + 56px)', 'important');
-      chipsContainer.style.setProperty('width', 'auto', 'important');
+      chipsContainer.style.setProperty('width', small ? '72px' : '74px', 'important');
       chipsContainer.style.setProperty('z-index', '4200', 'important');
-      chipsContainer.style.setProperty('display', 'flex', 'important');
-      chipsContainer.style.setProperty('justify-content', 'flex-end', 'important');
-      chipsContainer.style.setProperty('align-items', 'flex-end', 'important');
+      chipsContainer.style.setProperty('display', 'block', 'important');
       chipsContainer.style.setProperty('pointer-events', 'auto', 'important');
       chipsContainer.style.setProperty('transform', 'translate3d(0,0,0)', 'important');
       chipsContainer.style.setProperty('-webkit-transform', 'translate3d(0,0,0)', 'important');
     };
     const clearPinnedStyles = () => {
-      ['position', 'left', 'right', 'top', 'bottom', 'width', 'z-index', 'display', 'justify-content', 'align-items', 'pointer-events', 'transform', '-webkit-transform']
+      ['position', 'left', 'right', 'top', 'bottom', 'width', 'z-index', 'display', 'pointer-events', 'transform', '-webkit-transform']
         .forEach((prop) => chipsContainer.style.removeProperty(prop));
     };
     const syncByViewport = () => {
@@ -1017,7 +1015,6 @@
       syncByViewport();
       setTimeout(applyPinnedStyles, 120);
     }, { passive: true });
-    window.addEventListener('scroll', applyPinnedStyles, { passive: true });
     mq.addEventListener('change', () => {
       syncByViewport();
       applyPinnedStyles();
