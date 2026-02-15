@@ -2369,7 +2369,7 @@ body.dark .carrito-link{
         border:none !important;
         box-shadow:none !important;
         border-radius:0 !important;
-        transition:max-height .24s ease, background-color .24s ease, box-shadow .24s ease, border-color .24s ease !important;
+        transition:none !important;
     }
     .pagina-tienda .chips-story .chip-story{
         display:none !important;
@@ -2408,10 +2408,11 @@ body.dark .carrito-link{
         max-height:60svh !important;
         overflow-y:auto !important;
         overflow-x:hidden !important;
-        background:rgba(255,255,255,.92) !important;
-        border:1px solid rgba(198,217,255,.9) !important;
-        box-shadow:0 12px 24px rgba(16,59,124,.22) !important;
-        border-radius:14px !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        padding:4px 0 !important;
         scrollbar-width:none !important;
     }
     .pagina-tienda.chips-open .chips-story::-webkit-scrollbar{
