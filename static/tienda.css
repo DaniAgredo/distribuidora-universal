@@ -624,13 +624,28 @@ body.modal-open .floating-arrows{
 }
 
 .pagina-tienda.vista-todos .tienda-card{
+    background:transparent;
+    border:none;
+    box-shadow:none;
+    border-radius:12px;
     min-height:auto;
 }
+.pagina-tienda.vista-todos .tienda-grid{
+    grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+    gap:10px;
+}
 .pagina-tienda.vista-todos .tienda-img{
-    height:154px;
+    height:172px;
+    background:transparent;
+    border-radius:12px;
+    padding:0;
 }
 .pagina-tienda.vista-todos .tienda-img img{
-    max-height:148px;
+    width:100%;
+    height:100%;
+    max-height:none;
+    object-fit:cover;
+    border-radius:12px;
 }
 .pagina-tienda.vista-todos .tienda-info{
     display:none;
@@ -2235,7 +2250,7 @@ body.dark .carrito-link{
         right:6px !important;
         left:auto !important;
         top:auto !important;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 46px) !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
         width:74px !important;
         margin:0 !important;
         z-index:2400 !important;
@@ -2303,7 +2318,7 @@ body.dark .carrito-link{
 @media (max-width: 430px){
     .pagina-tienda .tienda-chips{
         right:4px !important;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 40px) !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 6px) !important;
     }
 }
 
