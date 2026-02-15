@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260324">
+<link rel="stylesheet" href="/static/tienda.css?v=20260325">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -923,6 +923,9 @@
     if (!chipsWrap) return;
     const chipsContainer = document.querySelector('.tienda-chips');
     if (!chipsContainer) return;
+    const originalParent = chipsContainer.parentElement;
+    const originalNext = chipsContainer.nextElementSibling;
+    let movedToBody = false;
     const mq = window.matchMedia('(max-width: 650px)');
     const trigger = chipsWrap.querySelector('.chip-story');
     if (!trigger) return;
@@ -938,6 +941,20 @@
     };
     const close = () => setOpen(false);
     const toggle = () => setOpen(!document.body.classList.contains('chips-open'));
+    const moveToBody = () => {
+      if (movedToBody || !originalParent) return;
+      document.body.appendChild(chipsContainer);
+      movedToBody = true;
+    };
+    const restoreToOriginalParent = () => {
+      if (!movedToBody || !originalParent) return;
+      if (originalNext && originalNext.parentNode === originalParent) {
+        originalParent.insertBefore(chipsContainer, originalNext);
+      } else {
+        originalParent.appendChild(chipsContainer);
+      }
+      movedToBody = false;
+    };
     applyPinnedStyles = () => {
       if (!mq.matches) return;
       const small = window.matchMedia('(max-width: 430px)').matches;
@@ -984,10 +1001,12 @@
     const syncByViewport = () => {
       clearPinnedStyles();
       if (mq.matches) {
+        moveToBody();
         setOpen(false);
         trigger.setAttribute('href', '#');
         applyPinnedStyles();
       } else {
+        restoreToOriginalParent();
         setOpen(true);
         trigger.setAttribute('href', originalHref);
       }
