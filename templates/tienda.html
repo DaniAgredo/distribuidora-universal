@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260272">
+<link rel="stylesheet" href="/static/tienda.css?v=20260274">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -923,9 +923,20 @@
     const isTodoTrigger = document.body.classList.contains('vista-todos') && trigger.classList.contains('chip-home');
 
     let justOpenedByTouch = false;
-    const close = () => document.body.classList.remove('chips-open');
+    const close = () => {
+      if (mq.matches) return;
+      document.body.classList.remove('chips-open');
+    };
     const open = () => document.body.classList.add('chips-open');
     const toggle = () => document.body.classList.toggle('chips-open');
+    const enforceFixedOpen = () => {
+      if (mq.matches) {
+        document.body.classList.add('chips-open');
+      } else {
+        document.body.classList.remove('chips-open');
+      }
+    };
+    enforceFixedOpen();
     const openFromInteraction = (e) => {
       if (!mq.matches) return;
       e.preventDefault();
@@ -939,7 +950,7 @@
         justOpenedByTouch = true;
         e.preventDefault();
         e.stopPropagation();
-        toggle();
+        open();
         setTimeout(() => { justOpenedByTouch = false; }, 420);
         return;
       }
@@ -958,7 +969,7 @@
           justOpenedByTouch = false;
           return;
         }
-        toggle();
+        open();
         return;
       }
       if (justOpenedByTouch) {
@@ -989,9 +1000,11 @@
       if (!chipsContainer.contains(e.target) && !e.target.closest('.tienda-search-mobile')) close();
     }, { passive: true });
 
-    window.addEventListener('pageshow', close);
-    window.addEventListener('load', close);
-    mq.addEventListener('change', close);
+    window.addEventListener('pageshow', enforceFixedOpen);
+    window.addEventListener('load', enforceFixedOpen);
+    window.addEventListener('resize', enforceFixedOpen, { passive: true });
+    window.addEventListener('orientationchange', enforceFixedOpen, { passive: true });
+    mq.addEventListener('change', enforceFixedOpen);
   };
 
   const removeCardsWithoutImageInAll = () => {
