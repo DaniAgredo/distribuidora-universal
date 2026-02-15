@@ -2756,3 +2756,26 @@ body.dark .carrito-link{
     }
 }
 
+/* Limpia contenedor del buscador movil (solo queda la barra/input) */
+@media (max-width: 650px){
+    html body.pagina-tienda .tienda-search.tienda-search-mobile{
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        padding:0 !important;
+        backdrop-filter:none !important;
+        -webkit-backdrop-filter:none !important;
+    }
+    html body.pagina-tienda .tienda-search.tienda-search-mobile .tienda-input{
+        background:rgba(255,255,255,.96) !important;
+        border:1px solid #c6d9ff !important;
+        box-shadow:0 8px 18px rgba(16,59,124,.18) !important;
+    }
+    body.dark .pagina-tienda .tienda-search.tienda-search-mobile .tienda-input{
+        background:rgba(15,27,51,.95) !important;
+        border-color:#1e2a40 !important;
+        color:#e6eefc !important;
+        box-shadow:0 8px 18px rgba(0,0,0,.32) !important;
+    }
+}
+
