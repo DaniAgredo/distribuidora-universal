@@ -2672,7 +2672,7 @@ body.dark .carrito-link{
         max-width:none !important;
         min-width:0 !important;
         margin:0 !important;
-        z-index:1205 !important;
+        z-index:1320 !important;
         pointer-events:none !important;
         display:flex !important;
         justify-content:flex-end !important;
@@ -2689,9 +2689,9 @@ body.dark .carrito-link{
     }
     html body.pagina-tienda .tienda-chips > .chips-story{
         position:relative !important;
-        width:78px !important;
-        max-width:78px !important;
-        min-width:78px !important;
+        width:84px !important;
+        max-width:84px !important;
+        min-width:84px !important;
         max-height:82px !important;
         overflow:hidden !important;
         display:flex !important;
@@ -2718,8 +2718,20 @@ body.dark .carrito-link{
         display:flex !important;
     }
     html body.pagina-tienda .tienda-chips > .chips-story .chip-circle{
-        width:62px !important;
-        height:62px !important;
+        width:66px !important;
+        height:66px !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-home .chip-circle{
+        border-color:#0d84fc !important;
+        box-shadow:0 10px 24px rgba(13,132,252,.45) !important;
+        background:linear-gradient(145deg,#eff6ff,#ffffff) !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-home .chip-name{
+        display:block !important;
+        background:rgba(13,132,252,.94) !important;
+        color:#ffffff !important;
+        border-color:rgba(255,255,255,.35) !important;
+        font-weight:700 !important;
     }
     html body.pagina-tienda .tienda-chips > .chips-story .chip-name{
         font-size:7.8px !important;
@@ -2756,12 +2768,12 @@ body.dark .carrito-link{
         bottom:calc(var(--mobile-fixed-bottom, 4px) + 54px) !important;
     }
     html body.pagina-tienda .tienda-chips > .chips-story{
-        width:74px !important;
+        width:80px !important;
         max-height:78px !important;
     }
     html body.pagina-tienda .tienda-chips > .chips-story .chip-circle{
-        width:58px !important;
-        height:58px !important;
+        width:62px !important;
+        height:62px !important;
     }
 }
 
