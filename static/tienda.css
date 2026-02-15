@@ -2270,21 +2270,24 @@ body.dark .carrito-link{
         right:6px !important;
         left:auto !important;
         top:auto !important;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 42px) !important;
-        width:74px !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 46px) !important;
+        width:80px !important;
         margin:0 !important;
         z-index:2400 !important;
         pointer-events:auto !important;
         transform:none !important;
         transition:none !important;
         will-change:auto !important;
+        contain:layout paint !important;
+        backface-visibility:hidden !important;
+        -webkit-backface-visibility:hidden !important;
     }
     .pagina-tienda .tienda-resumen{
         display:none !important;
     }
     .pagina-tienda .chips-story{
-        width:74px !important;
-        max-height:74px !important;
+        width:80px !important;
+        max-height:80px !important;
         overflow-y:hidden !important;
         overflow-x:hidden !important;
         display:flex !important;
@@ -2299,15 +2302,15 @@ body.dark .carrito-link{
     }
     .pagina-tienda .chips-story .chip-story{
         display:none !important;
-        width:70px !important;
-        min-width:70px !important;
+        width:76px !important;
+        min-width:76px !important;
     }
     .pagina-tienda .chips-story .chip-story:first-child{
         display:flex !important;
     }
     .pagina-tienda .chip-circle{
-        width:56px !important;
-        height:56px !important;
+        width:60px !important;
+        height:60px !important;
     }
     .pagina-tienda .chip-name{
         display:none !important;
@@ -2347,7 +2350,7 @@ body.dark .carrito-link{
 @media (max-width: 430px){
     .pagina-tienda .tienda-chips{
         right:4px !important;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 38px) !important;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 42px) !important;
     }
     .pagina-tienda.vista-todos .tienda-grid .tienda-img{
         height:136px;
