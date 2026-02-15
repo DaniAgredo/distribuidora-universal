@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260232">
+<link rel="stylesheet" href="/static/tienda.css?v=20260233">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 body.pagina-tienda .todo-float{ display:none; }
@@ -21,19 +21,7 @@ body.pagina-tienda .todo-float{ display:none; }
   }
   body.pagina-tienda .tienda-chips,
   body.pagina-tienda.chips-open .tienda-chips{
-    position:fixed !important;
-    right:6px !important;
-    left:auto !important;
-    top:auto !important;
-    bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
-    width:74px !important;
-    margin:0 !important;
-    z-index:12000 !important;
-    opacity:1 !important;
-    visibility:visible !important;
-    pointer-events:auto !important;
-    transform:none !important;
-    transition:none !important;
+    display:none !important;
   }
   body.pagina-tienda .chips-story,
   body.pagina-tienda.chips-open .chips-story{
@@ -84,6 +72,7 @@ body.pagina-tienda .todo-float{ display:none; }
     box-shadow:0 10px 20px rgba(16,59,124,.25) !important;
     overflow:hidden !important;
     text-decoration:none !important;
+    pointer-events:auto !important;
   }
 
   body.pagina-tienda .todo-float img{
@@ -1135,6 +1124,41 @@ body.pagina-tienda .todo-float{ display:none; }
     window.addEventListener('resize', applyFloatingLayout);
   };
 
+  const pinTodoFloat = () => {
+    const mq = window.matchMedia('(max-width: 650px)');
+    const todoFloat = document.querySelector('.todo-float');
+    if (!todoFloat) return;
+    const setImp = (prop, value) => todoFloat.style.setProperty(prop, value, 'important');
+
+    const apply = () => {
+      if (!mq.matches) {
+        todoFloat.style.cssText = '';
+        return;
+      }
+      setImp('display', 'flex');
+      setImp('position', 'fixed');
+      setImp('right', '6px');
+      setImp('left', 'auto');
+      setImp('top', 'auto');
+      setImp('bottom', 'calc(env(safe-area-inset-bottom, 0px) + 64px)');
+      setImp('width', '70px');
+      setImp('height', '70px');
+      setImp('border-radius', '50%');
+      setImp('z-index', '25000');
+      setImp('pointer-events', 'auto');
+      setImp('opacity', '1');
+      setImp('visibility', 'visible');
+      setImp('transform', 'none');
+    };
+
+    apply();
+    window.addEventListener('load', apply);
+    window.addEventListener('pageshow', apply);
+    window.addEventListener('scroll', apply, { passive: true });
+    window.addEventListener('resize', apply);
+    mq.addEventListener('change', apply);
+  };
+
   const setupMobileFloatingAutoHide = () => {
     const mobileUiMQ = window.matchMedia('(max-width: 650px)');
     const mobileSearch = document.querySelector('.tienda-search-mobile');
@@ -1232,6 +1256,7 @@ body.pagina-tienda .todo-float{ display:none; }
 
   injectAllProductsInCatalog();
   setupMobileCategoryRail();
+  pinTodoFloat();
   document.body.classList.remove('mobile-ui-hidden');
   if (window.__buildAseoMobileSections) window.__buildAseoMobileSections();
   attachFocusEffects(document.querySelector('.tienda-grid'));
