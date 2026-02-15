@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260307">
+<link rel="stylesheet" href="/static/tienda.css?v=20260318">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -930,39 +930,54 @@
     trigger.setAttribute('role', 'button');
     trigger.setAttribute('aria-expanded', 'false');
     trigger.style.touchAction = 'manipulation';
+    let applyPinnedStyles = () => {};
     const setOpen = (openState) => {
       document.body.classList.toggle('chips-open', !!openState);
       trigger.setAttribute('aria-expanded', openState ? 'true' : 'false');
+      if (mq.matches) applyPinnedStyles();
     };
     const close = () => setOpen(false);
     const toggle = () => setOpen(!document.body.classList.contains('chips-open'));
-    const applyPinnedStyles = () => {
+    applyPinnedStyles = () => {
       if (!mq.matches) return;
       const small = window.matchMedia('(max-width: 430px)').matches;
+      const openState = document.body.classList.contains('chips-open');
+
       chipsContainer.style.setProperty('position', 'fixed', 'important');
       chipsContainer.style.setProperty('left', 'auto', 'important');
       chipsContainer.style.setProperty('right', small ? '8px' : '10px', 'important');
       chipsContainer.style.setProperty('top', 'auto', 'important');
-      chipsContainer.style.setProperty('bottom', small ? 'calc(var(--mobile-fixed-bottom) + 54px)' : 'calc(var(--mobile-fixed-bottom) + 56px)', 'important');
-      chipsContainer.style.setProperty('width', small ? '72px' : '74px', 'important');
-      chipsContainer.style.setProperty('z-index', '4200', 'important');
+      chipsContainer.style.setProperty('bottom', small ? 'calc(var(--mobile-fixed-bottom, 4px) + 62px)' : 'calc(var(--mobile-fixed-bottom, 4px) + 64px)', 'important');
+      chipsContainer.style.setProperty('width', small ? '74px' : '78px', 'important');
+      chipsContainer.style.setProperty('z-index', '10050', 'important');
       chipsContainer.style.setProperty('display', 'block', 'important');
+      chipsContainer.style.setProperty('margin', '0', 'important');
+      chipsContainer.style.setProperty('overflow', 'visible', 'important');
       chipsContainer.style.setProperty('pointer-events', 'auto', 'important');
-      chipsContainer.style.setProperty('transform', 'translate3d(0,0,0)', 'important');
-      chipsContainer.style.setProperty('-webkit-transform', 'translate3d(0,0,0)', 'important');
+      chipsContainer.style.setProperty('transform', 'translateZ(0)', 'important');
+      chipsContainer.style.setProperty('-webkit-transform', 'translateZ(0)', 'important');
+
+      chipsWrap.style.setProperty('position', 'relative', 'important');
+      chipsWrap.style.setProperty('width', small ? '74px' : '78px', 'important');
+      chipsWrap.style.setProperty('max-height', openState ? '62svh' : (small ? '78px' : '82px'), 'important');
+      chipsWrap.style.setProperty('overflow-y', openState ? 'auto' : 'hidden', 'important');
+      chipsWrap.style.setProperty('overflow-x', 'hidden', 'important');
+      chipsWrap.style.setProperty('scrollbar-width', 'none', 'important');
     };
     const clearPinnedStyles = () => {
-      ['position', 'left', 'right', 'top', 'bottom', 'width', 'z-index', 'display', 'pointer-events', 'transform', '-webkit-transform']
+      ['position', 'left', 'right', 'top', 'bottom', 'width', 'z-index', 'display', 'justify-content', 'align-items', 'pointer-events', 'transform', '-webkit-transform', 'max-height', 'overflow-y', 'overflow-x', 'margin', 'overflow']
         .forEach((prop) => chipsContainer.style.removeProperty(prop));
+      ['position', 'left', 'right', 'top', 'bottom', 'width', 'z-index', 'max-height', 'overflow-y', 'overflow-x', 'pointer-events', 'transform', '-webkit-transform', 'scrollbar-width']
+        .forEach((prop) => chipsWrap.style.removeProperty(prop));
     };
     const syncByViewport = () => {
+      clearPinnedStyles();
       if (mq.matches) {
         setOpen(false);
-        applyPinnedStyles();
         trigger.setAttribute('href', '#');
+        applyPinnedStyles();
       } else {
         setOpen(true);
-        clearPinnedStyles();
         trigger.setAttribute('href', originalHref);
       }
     };
@@ -1001,23 +1016,25 @@
     syncByViewport();
     window.addEventListener('pageshow', () => {
       syncByViewport();
-      applyPinnedStyles();
     });
     window.addEventListener('load', () => {
       syncByViewport();
-      applyPinnedStyles();
     });
     window.addEventListener('resize', () => {
       syncByViewport();
-      applyPinnedStyles();
     }, { passive: true });
     window.addEventListener('orientationchange', () => {
       syncByViewport();
-      setTimeout(applyPinnedStyles, 120);
+      setTimeout(syncByViewport, 120);
+    }, { passive: true });
+    window.addEventListener('scroll', () => {
+      if (mq.matches) applyPinnedStyles();
+    }, { passive: true });
+    window.addEventListener('touchmove', () => {
+      if (mq.matches) applyPinnedStyles();
     }, { passive: true });
     mq.addEventListener('change', () => {
       syncByViewport();
-      applyPinnedStyles();
     });
   };
 
@@ -1586,6 +1603,9 @@
   };
 
   document.querySelectorAll('.tienda-card.quick-view').forEach((card) => {
+    const TAP_MOVE_TOLERANCE = 3;
+    const TAP_SCROLL_TOLERANCE = 2;
+    const TAP_MAX_DURATION = 220;
     let touchMeta = null;
     card.addEventListener('click', (e) => {
       const openedByTouchAt = Number(card.dataset.touchOpenAt || 0);
@@ -1614,7 +1634,7 @@
       const dx = Math.abs(touch.clientX - touchMeta.x);
       const dy = Math.abs(touch.clientY - touchMeta.y);
       const sy = window.scrollY || window.pageYOffset || 0;
-      if (dx > 6 || dy > 6 || Math.abs(sy - touchMeta.sy) > 6) {
+      if (dx > TAP_MOVE_TOLERANCE || dy > TAP_MOVE_TOLERANCE || Math.abs(sy - touchMeta.sy) > TAP_SCROLL_TOLERANCE) {
         touchMeta.moved = true;
       }
     }, { passive: true });
@@ -1626,10 +1646,10 @@
       const dy = Math.abs(touch.clientY - touchMeta.y);
       const dt = Date.now() - touchMeta.t;
       const sy = window.scrollY || window.pageYOffset || 0;
-      const moved = touchMeta.moved || Math.abs(sy - touchMeta.sy) > 6;
+      const moved = touchMeta.moved || Math.abs(sy - touchMeta.sy) > TAP_SCROLL_TOLERANCE;
       touchMeta = null;
       // Prevent accidental open while vertical scrolling.
-      if (moved || dx > 6 || dy > 6 || dt > 320) return;
+      if (moved || dx > TAP_MOVE_TOLERANCE || dy > TAP_MOVE_TOLERANCE || dt > TAP_MAX_DURATION) return;
       e.preventDefault();
       card.dataset.touchOpenAt = String(Date.now());
       openQuick(card);

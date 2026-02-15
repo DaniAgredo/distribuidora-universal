@@ -2508,3 +2508,235 @@ body.dark .carrito-link{
     }
 }
 
+/* Final mobile override: boton Categorias anclado igual que el buscador */
+@media (max-width: 650px){
+    .pagina-tienda .tienda-chips{
+        position:fixed !important;
+        left:10px !important;
+        right:10px !important;
+        top:auto !important;
+        bottom:calc(var(--mobile-fixed-bottom) + 8px) !important;
+        width:auto !important;
+        z-index:6200 !important;
+        display:flex !important;
+        justify-content:flex-end !important;
+        align-items:flex-end !important;
+        pointer-events:none !important;
+        margin:0 !important;
+    }
+    .pagina-tienda .chips-story{
+        position:static !important;
+        right:auto !important;
+        left:auto !important;
+        bottom:auto !important;
+        width:76px !important;
+        max-height:78px !important;
+        overflow:hidden !important;
+        pointer-events:auto !important;
+        z-index:6201 !important;
+    }
+    .pagina-tienda .chips-story .chip-story{
+        display:none !important;
+    }
+    .pagina-tienda .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+    .pagina-tienda.chips-open .chips-story{
+        max-height:58svh !important;
+        overflow-y:auto !important;
+    }
+    .pagina-tienda.chips-open .chips-story .chip-story{
+        display:flex !important;
+    }
+}
+@media (max-width: 430px){
+    .pagina-tienda .chips-story{
+        width:72px !important;
+        max-height:72px !important;
+    }
+}
+
+/* Lock: categorias flotando fijo como buscador en movil */
+@media (max-width: 650px){
+    body.pagina-tienda .tienda-chips{
+        position:fixed !important;
+        inset:auto 10px calc(var(--mobile-fixed-bottom, 4px) + 8px) 10px !important;
+        z-index:9000 !important;
+        display:flex !important;
+        justify-content:flex-end !important;
+        align-items:flex-end !important;
+        pointer-events:none !important;
+        transform:translateZ(0) !important;
+        -webkit-transform:translateZ(0) !important;
+    }
+    body.pagina-tienda .tienda-chips > .chips-story{
+        position:relative !important;
+        margin:0 !important;
+        width:74px !important;
+        max-height:74px !important;
+        overflow:hidden !important;
+        z-index:9001 !important;
+        pointer-events:auto !important;
+    }
+    body.pagina-tienda .tienda-chips > .chips-story .chip-story{
+        display:none !important;
+    }
+    body.pagina-tienda .tienda-chips > .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+    body.pagina-tienda.chips-open .tienda-chips > .chips-story{
+        max-height:58svh !important;
+        overflow-y:auto !important;
+    }
+    body.pagina-tienda.chips-open .tienda-chips > .chips-story .chip-story{
+        display:flex !important;
+    }
+}
+
+/* Ultimo override: anclar Categorias como buscador movil */
+@media (max-width: 650px){
+    html body.pagina-tienda .tienda-chips{
+        position:fixed !important;
+        left:auto !important;
+        right:10px !important;
+        top:auto !important;
+        bottom:calc(var(--mobile-fixed-bottom, 4px) + 8px) !important;
+        width:74px !important;
+        z-index:99999 !important;
+        margin:0 !important;
+        display:block !important;
+        pointer-events:auto !important;
+        transition:none !important;
+        animation:none !important;
+        transform:none !important;
+        will-change:auto !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story{
+        position:relative !important;
+        width:74px !important;
+        max-height:74px !important;
+        overflow:hidden !important;
+        pointer-events:auto !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-story{
+        display:none !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+    html body.pagina-tienda.chips-open .tienda-chips > .chips-story{
+        max-height:58svh !important;
+        overflow-y:auto !important;
+    }
+    html body.pagina-tienda.chips-open .tienda-chips > .chips-story .chip-story{
+        display:flex !important;
+    }
+}
+@media (max-width: 430px){
+    html body.pagina-tienda .tienda-chips{
+        right:8px !important;
+        bottom:calc(var(--mobile-fixed-bottom, 4px) + 8px) !important;
+        width:72px !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story{
+        width:72px !important;
+        max-height:72px !important;
+    }
+}
+
+/* Final lock: categorias flotantes como barra de busqueda en movil */
+@media (max-width: 650px){
+    html body.pagina-tienda .tienda-main{
+        padding-bottom:112px !important;
+    }
+    html body.pagina-tienda .tienda-chips{
+        position:fixed !important;
+        left:auto !important;
+        right:10px !important;
+        top:auto !important;
+        bottom:calc(var(--mobile-fixed-bottom, 4px) + 64px) !important;
+        width:78px !important;
+        margin:0 !important;
+        z-index:10050 !important;
+        pointer-events:auto !important;
+        display:block !important;
+        overflow:visible !important;
+        transform:translateZ(0) !important;
+        -webkit-transform:translateZ(0) !important;
+        backface-visibility:hidden !important;
+        -webkit-backface-visibility:hidden !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story{
+        position:relative !important;
+        width:78px !important;
+        max-height:82px !important;
+        overflow:hidden !important;
+        display:flex !important;
+        flex-direction:column-reverse !important;
+        align-items:center !important;
+        gap:8px !important;
+        padding:4px !important;
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+        border-radius:999px !important;
+        pointer-events:auto !important;
+        scrollbar-width:none !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story::-webkit-scrollbar{
+        display:none !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-story{
+        display:none !important;
+        width:74px !important;
+        min-width:0 !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-story:first-child{
+        display:flex !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-circle{
+        width:62px !important;
+        height:62px !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-name{
+        font-size:7.8px !important;
+        line-height:1.05 !important;
+        padding:2px 5px !important;
+        text-transform:none !important;
+    }
+    html body.pagina-tienda.chips-open .tienda-chips > .chips-story{
+        max-height:62svh !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        background:rgba(10,31,65,.45) !important;
+        border:1px solid rgba(255,255,255,.35) !important;
+        box-shadow:0 12px 28px rgba(0,0,0,.25) !important;
+        border-radius:20px !important;
+        backdrop-filter:blur(6px) !important;
+        -webkit-backdrop-filter:blur(6px) !important;
+        padding:8px 4px 10px !important;
+    }
+    html body.pagina-tienda.chips-open .tienda-chips > .chips-story .chip-story{
+        display:flex !important;
+    }
+}
+
+@media (max-width: 430px){
+    html body.pagina-tienda .tienda-chips{
+        right:8px !important;
+        width:74px !important;
+        bottom:calc(var(--mobile-fixed-bottom, 4px) + 62px) !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story{
+        width:74px !important;
+        max-height:78px !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-circle{
+        width:58px !important;
+        height:58px !important;
+    }
+}
+
