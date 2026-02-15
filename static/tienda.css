@@ -2658,17 +2658,19 @@ body.dark .carrito-link{
     }
     html body.pagina-tienda .tienda-chips{
         position:fixed !important;
-        left:auto !important;
+        left:10px !important;
         right:10px !important;
         top:auto !important;
         bottom:calc(var(--mobile-fixed-bottom, 4px) + 64px) !important;
-        width:78px !important;
-        max-width:78px !important;
-        min-width:78px !important;
+        width:auto !important;
+        max-width:none !important;
+        min-width:0 !important;
         margin:0 !important;
-        z-index:10050 !important;
+        z-index:1205 !important;
         pointer-events:none !important;
-        display:block !important;
+        display:flex !important;
+        justify-content:flex-end !important;
+        align-items:flex-end !important;
         overflow:visible !important;
         padding:0 !important;
         background:transparent !important;
@@ -2742,8 +2744,9 @@ body.dark .carrito-link{
         padding-bottom:90px !important;
     }
     html body.pagina-tienda .tienda-chips{
+        left:8px !important;
         right:8px !important;
-        width:74px !important;
+        width:auto !important;
         bottom:calc(var(--mobile-fixed-bottom, 4px) + 62px) !important;
     }
     html body.pagina-tienda .tienda-chips > .chips-story{
@@ -2753,29 +2756,6 @@ body.dark .carrito-link{
     html body.pagina-tienda .tienda-chips > .chips-story .chip-circle{
         width:58px !important;
         height:58px !important;
-    }
-}
-
-/* Respaldo: fija el boton principal de categorias (selector del inspector) */
-@media (max-width: 650px){
-    html body.pagina-tienda .chips-story > a.chip-story.chip-home{
-        position:fixed !important;
-        right:10px !important;
-        left:auto !important;
-        top:auto !important;
-        bottom:calc(var(--mobile-fixed-bottom, 4px) + 64px) !important;
-        width:74px !important;
-        min-width:74px !important;
-        z-index:10110 !important;
-        pointer-events:auto !important;
-    }
-}
-@media (max-width: 430px){
-    html body.pagina-tienda .chips-story > a.chip-story.chip-home{
-        right:8px !important;
-        bottom:calc(var(--mobile-fixed-bottom, 4px) + 62px) !important;
-        width:72px !important;
-        min-width:72px !important;
     }
 }
 

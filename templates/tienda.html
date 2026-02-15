@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260323">
+<link rel="stylesheet" href="/static/tienda.css?v=20260324">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -944,15 +944,17 @@
       const openState = document.body.classList.contains('chips-open');
 
       chipsContainer.style.setProperty('position', 'fixed', 'important');
-      chipsContainer.style.setProperty('left', 'auto', 'important');
+      chipsContainer.style.setProperty('left', small ? '8px' : '10px', 'important');
       chipsContainer.style.setProperty('right', small ? '8px' : '10px', 'important');
       chipsContainer.style.setProperty('top', 'auto', 'important');
       chipsContainer.style.setProperty('bottom', small ? 'calc(var(--mobile-fixed-bottom, 4px) + 62px)' : 'calc(var(--mobile-fixed-bottom, 4px) + 64px)', 'important');
-      chipsContainer.style.setProperty('width', small ? '74px' : '78px', 'important');
-      chipsContainer.style.setProperty('max-width', small ? '74px' : '78px', 'important');
-      chipsContainer.style.setProperty('min-width', small ? '74px' : '78px', 'important');
-      chipsContainer.style.setProperty('z-index', '10050', 'important');
-      chipsContainer.style.setProperty('display', 'block', 'important');
+      chipsContainer.style.setProperty('width', 'auto', 'important');
+      chipsContainer.style.setProperty('max-width', 'none', 'important');
+      chipsContainer.style.setProperty('min-width', '0', 'important');
+      chipsContainer.style.setProperty('z-index', '1205', 'important');
+      chipsContainer.style.setProperty('display', 'flex', 'important');
+      chipsContainer.style.setProperty('justify-content', 'flex-end', 'important');
+      chipsContainer.style.setProperty('align-items', 'flex-end', 'important');
       chipsContainer.style.setProperty('margin', '0', 'important');
       chipsContainer.style.setProperty('padding', '0', 'important');
       chipsContainer.style.setProperty('background', 'transparent', 'important');
@@ -960,9 +962,8 @@
       chipsContainer.style.setProperty('box-shadow', 'none', 'important');
       chipsContainer.style.setProperty('overflow', 'visible', 'important');
       chipsContainer.style.setProperty('pointer-events', 'none', 'important');
-      chipsContainer.style.setProperty('transform', 'translateZ(0)', 'important');
-      chipsContainer.style.setProperty('-webkit-transform', 'translateZ(0)', 'important');
-      chipsContainer.style.setProperty('contain', 'layout style paint', 'important');
+      chipsContainer.style.setProperty('transform', 'none', 'important');
+      chipsContainer.style.setProperty('-webkit-transform', 'none', 'important');
 
       chipsWrap.style.setProperty('position', 'relative', 'important');
       chipsWrap.style.setProperty('width', small ? '74px' : '78px', 'important');
@@ -973,24 +974,12 @@
       chipsWrap.style.setProperty('overflow-x', 'hidden', 'important');
       chipsWrap.style.setProperty('scrollbar-width', 'none', 'important');
       chipsWrap.style.setProperty('pointer-events', 'auto', 'important');
-
-      trigger.style.setProperty('position', 'fixed', 'important');
-      trigger.style.setProperty('right', small ? '8px' : '10px', 'important');
-      trigger.style.setProperty('bottom', small ? 'calc(var(--mobile-fixed-bottom, 4px) + 62px)' : 'calc(var(--mobile-fixed-bottom, 4px) + 64px)', 'important');
-      trigger.style.setProperty('top', 'auto', 'important');
-      trigger.style.setProperty('left', 'auto', 'important');
-      trigger.style.setProperty('z-index', '10110', 'important');
-      trigger.style.setProperty('width', small ? '72px' : '74px', 'important');
-      trigger.style.setProperty('min-width', small ? '72px' : '74px', 'important');
-      trigger.style.setProperty('pointer-events', 'auto', 'important');
     };
     const clearPinnedStyles = () => {
-      ['position', 'left', 'right', 'top', 'bottom', 'width', 'max-width', 'min-width', 'z-index', 'display', 'justify-content', 'align-items', 'pointer-events', 'transform', '-webkit-transform', 'max-height', 'overflow-y', 'overflow-x', 'margin', 'padding', 'overflow', 'background', 'border', 'box-shadow', 'contain']
+      ['position', 'left', 'right', 'top', 'bottom', 'width', 'max-width', 'min-width', 'z-index', 'display', 'justify-content', 'align-items', 'pointer-events', 'transform', '-webkit-transform', 'max-height', 'overflow-y', 'overflow-x', 'margin', 'padding', 'overflow', 'background', 'border', 'box-shadow']
         .forEach((prop) => chipsContainer.style.removeProperty(prop));
       ['position', 'left', 'right', 'top', 'bottom', 'width', 'max-width', 'min-width', 'z-index', 'max-height', 'overflow-y', 'overflow-x', 'pointer-events', 'transform', '-webkit-transform', 'scrollbar-width']
         .forEach((prop) => chipsWrap.style.removeProperty(prop));
-      ['position', 'left', 'right', 'top', 'bottom', 'width', 'min-width', 'z-index', 'pointer-events']
-        .forEach((prop) => trigger.style.removeProperty(prop));
     };
     const syncByViewport = () => {
       clearPinnedStyles();
