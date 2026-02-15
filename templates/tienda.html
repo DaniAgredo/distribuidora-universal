@@ -7,7 +7,7 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260291">
+<link rel="stylesheet" href="/static/tienda.css?v=20260297">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -307,9 +307,9 @@
         link.addEventListener('click', (e) => {
           if (window.matchMedia('(max-width: 650px)').matches) {
             const trigger = chipsWrap ? chipsWrap.querySelector('.chip-story') : null;
-            // En "Todos" no recargamos la misma pagina al tocar el boton Categorias:
-            // dejamos que el otro handler solo abra/cierre el panel.
-            if (trigger && link === trigger && document.body.classList.contains('vista-todos')) {
+            // En movil, el boton principal de categorias nunca navega:
+            // solo abre/cierra el panel desde setupMobileCategoryRail.
+            if (trigger && link === trigger) {
               e.preventDefault();
               return;
             }
@@ -926,64 +926,75 @@
     const mq = window.matchMedia('(max-width: 650px)');
     const trigger = chipsWrap.querySelector('.chip-story');
     if (!trigger) return;
-    const isTodoTrigger = document.body.classList.contains('vista-todos') && trigger.classList.contains('chip-home');
-
-    let justOpenedByTouch = false;
-    const close = () => document.body.classList.remove('chips-open');
-    const open = () => document.body.classList.add('chips-open');
-    const toggle = () => document.body.classList.toggle('chips-open');
+    trigger.setAttribute('role', 'button');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.style.touchAction = 'manipulation';
+    const setOpen = (openState) => {
+      document.body.classList.toggle('chips-open', !!openState);
+      trigger.setAttribute('aria-expanded', openState ? 'true' : 'false');
+    };
+    const close = () => setOpen(false);
+    const toggle = () => setOpen(!document.body.classList.contains('chips-open'));
+    const applyPinnedStyles = () => {
+      if (!mq.matches) return;
+      const small = window.matchMedia('(max-width: 430px)').matches;
+      chipsContainer.style.setProperty('position', 'fixed', 'important');
+      chipsContainer.style.setProperty('left', 'auto', 'important');
+      chipsContainer.style.setProperty('right', small ? '8px' : '10px', 'important');
+      chipsContainer.style.setProperty('top', 'auto', 'important');
+      chipsContainer.style.setProperty('bottom', small ? 'calc(var(--mobile-fixed-bottom) + 54px)' : 'calc(var(--mobile-fixed-bottom) + 56px)', 'important');
+      chipsContainer.style.setProperty('width', small ? '72px' : '74px', 'important');
+      chipsContainer.style.setProperty('z-index', '4200', 'important');
+      chipsContainer.style.setProperty('display', 'block', 'important');
+      chipsContainer.style.setProperty('pointer-events', 'auto', 'important');
+      chipsContainer.style.setProperty('transform', 'translate3d(0,0,0)', 'important');
+      chipsContainer.style.setProperty('-webkit-transform', 'translate3d(0,0,0)', 'important');
+    };
+    const clearPinnedStyles = () => {
+      ['position', 'left', 'right', 'top', 'bottom', 'width', 'z-index', 'display', 'pointer-events', 'transform', '-webkit-transform']
+        .forEach((prop) => chipsContainer.style.removeProperty(prop));
+    };
     const syncByViewport = () => {
       if (mq.matches) {
-        document.body.classList.remove('chips-open');
+        setOpen(false);
+        applyPinnedStyles();
       } else {
-        document.body.classList.add('chips-open');
+        setOpen(true);
+        clearPinnedStyles();
       }
     };
-    syncByViewport();
-    const openFromInteraction = (e) => {
+    const toggleFromInteraction = (e) => {
       if (!mq.matches) return;
       e.preventDefault();
       e.stopPropagation();
-      open();
+      toggle();
     };
+    let suppressNextClick = false;
 
-    trigger.addEventListener('touchstart', (e) => {
-      if (!mq.matches) return;
-      if (isTodoTrigger) {
-        justOpenedByTouch = true;
-        e.preventDefault();
-        e.stopPropagation();
-        toggle();
-        setTimeout(() => { justOpenedByTouch = false; }, 420);
-        return;
-      }
-      if (document.body.classList.contains('chips-open')) return;
-      justOpenedByTouch = true;
-      openFromInteraction(e);
-      setTimeout(() => { justOpenedByTouch = false; }, 420);
+    trigger.addEventListener('pointerdown', (e) => {
+      if (!mq.matches || e.pointerType !== 'touch') return;
+      suppressNextClick = true;
+      toggleFromInteraction(e);
+      setTimeout(() => { suppressNextClick = false; }, 420);
     }, { passive: false });
 
     trigger.addEventListener('click', (e) => {
       if (!mq.matches) return;
-      if (isTodoTrigger) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (justOpenedByTouch) {
-          justOpenedByTouch = false;
-          return;
-        }
-        toggle();
-        return;
-      }
-      if (justOpenedByTouch) {
+      if (suppressNextClick) {
         e.preventDefault();
         e.stopPropagation();
         return;
       }
-      if (!document.body.classList.contains('chips-open')) {
-        openFromInteraction(e);
-      }
-      // Si ya esta abierto, dejamos que el enlace haga su navegacion normal.
+      toggleFromInteraction(e);
+    });
+
+    trigger.addEventListener('touchstart', (e) => {
+      if (!mq.matches) return;
+      e.preventDefault();
+    }, { passive: false });
+
+    trigger.addEventListener('focus', () => {
+      if (mq.matches) trigger.blur();
     });
 
     chipsContainer.addEventListener('click', (e) => {
@@ -1003,11 +1014,28 @@
       if (!chipsContainer.contains(e.target) && !e.target.closest('.tienda-search-mobile')) close();
     }, { passive: true });
 
-    window.addEventListener('pageshow', syncByViewport);
-    window.addEventListener('load', syncByViewport);
-    window.addEventListener('resize', syncByViewport, { passive: true });
-    window.addEventListener('orientationchange', syncByViewport, { passive: true });
-    mq.addEventListener('change', syncByViewport);
+    syncByViewport();
+    window.addEventListener('pageshow', () => {
+      syncByViewport();
+      applyPinnedStyles();
+    });
+    window.addEventListener('load', () => {
+      syncByViewport();
+      applyPinnedStyles();
+    });
+    window.addEventListener('resize', () => {
+      syncByViewport();
+      applyPinnedStyles();
+    }, { passive: true });
+    window.addEventListener('orientationchange', () => {
+      syncByViewport();
+      setTimeout(applyPinnedStyles, 120);
+    }, { passive: true });
+    window.addEventListener('scroll', applyPinnedStyles, { passive: true });
+    mq.addEventListener('change', () => {
+      syncByViewport();
+      applyPinnedStyles();
+    });
   };
 
   const removeCardsWithoutImageInAll = () => {
