@@ -7,91 +7,8 @@
 <title>Tienda - Distribuidora Universal</title>
 
 <link rel="stylesheet" href="/static/style.css?v=20260214">
-<link rel="stylesheet" href="/static/tienda.css?v=20260237">
+<link rel="stylesheet" href="/static/tienda.css?v=20260214">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-body.pagina-tienda .todo-float{ display:none; }
-@media (max-width: 650px){
-  body.pagina-tienda .tienda-search-mobile{
-    position:fixed !important;
-    left:10px !important;
-    right:10px !important;
-    bottom:calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
-    z-index:2400 !important;
-  }
-  body.pagina-tienda .tienda-chips,
-  body.pagina-tienda.chips-open .tienda-chips{
-    display:none !important;
-  }
-  body.pagina-tienda.mobile-cats-open .tienda-chips{
-    display:block !important;
-    position:fixed !important;
-    right:6px !important;
-    bottom:calc(env(safe-area-inset-bottom, 0px) + 138px) !important;
-    width:74px !important;
-    margin:0 !important;
-    z-index:19999 !important;
-    pointer-events:auto !important;
-  }
-  body.pagina-tienda.mobile-cats-open .chips-story{
-    width:74px !important;
-    max-height:calc(100vh - 216px) !important;
-    overflow-y:auto !important;
-    overflow-x:hidden !important;
-    display:flex !important;
-    flex-direction:column !important;
-    align-items:center !important;
-    gap:8px !important;
-    padding:4px 0 !important;
-    background:rgba(255,255,255,.92) !important;
-    border:1px solid rgba(198,217,255,.9) !important;
-    box-shadow:0 12px 24px rgba(16,59,124,.22) !important;
-    border-radius:14px !important;
-    scrollbar-width:none !important;
-  }
-  body.pagina-tienda.mobile-cats-open .chips-story::-webkit-scrollbar{
-    display:none !important;
-  }
-  body.pagina-tienda.mobile-cats-open .chips-story .chip-story{
-    display:flex !important;
-    width:70px !important;
-    min-width:70px !important;
-  }
-  body.pagina-tienda .chip-circle{
-    width:56px !important;
-    height:56px !important;
-  }
-  body.pagina-tienda .chip-name{
-    display:none !important;
-  }
-
-  body.pagina-tienda .todo-float{
-    position:fixed !important;
-    right:6px !important;
-    bottom:calc(env(safe-area-inset-bottom, 0px) + 64px) !important;
-    width:70px !important;
-    height:70px !important;
-    border-radius:50% !important;
-    z-index:20000 !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    background:rgba(255,255,255,.92) !important;
-    border:2px solid #c6d9ff !important;
-    box-shadow:0 10px 20px rgba(16,59,124,.25) !important;
-    overflow:hidden !important;
-    text-decoration:none !important;
-    pointer-events:auto !important;
-  }
-
-  body.pagina-tienda .todo-float img{
-    width:100% !important;
-    height:100% !important;
-    object-fit:cover !important;
-    display:block !important;
-  }
-}
-</style>
 </head>
 
 <body class="pagina-tienda{% if not cat %} vista-todos{% endif %}">
@@ -154,10 +71,6 @@ body.pagina-tienda .todo-float{ display:none; }
   <a href="/" class="floating-arrow floating-arrow-left" aria-label="Volver al inicio">&#10094;</a>
   <a href="/carrito" class="floating-arrow floating-arrow-right" aria-label="Ir al carrito">&#10095;</a>
 </nav>
-
-<a class="todo-float" href="/tienda{% if q %}?q={{ q|urlencode }}{% endif %}" aria-label="Volver a Todo">
-  <img src="/static/images/estante.jfif" alt="Todo" loading="lazy">
-</a>
 
 <main class="tienda-main">
   {% set cat_images = [
@@ -830,7 +743,6 @@ body.pagina-tienda .todo-float{ display:none; }
     {% endif %}
   </section>
 
-  {% if pages > 1 %}
   <div class="tienda-paginacion">
     {% if page > 1 %}
       <a href="/tienda?page={{ page - 1 }}{% if cat %}&cat={{ cat }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">Anterior</a>
@@ -840,7 +752,6 @@ body.pagina-tienda .todo-float{ display:none; }
       <a href="/tienda?page={{ page + 1 }}{% if cat %}&cat={{ cat }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">Siguiente</a>
     {% endif %}
   </div>
-  {% endif %}
   {% endif %}
 </main>
 
@@ -918,37 +829,18 @@ body.pagina-tienda .todo-float{ display:none; }
   updateCartCount();
   window.addEventListener('storage', updateCartCount);
 
-  const mobileSearchMQ = window.matchMedia('(max-width: 650px)');
   document.querySelectorAll('.tienda-search').forEach((form) => {
     const cameraBtn = form.querySelector('.tienda-camera');
     const cameraInput = form.querySelector('.tienda-camera-input');
     const clearBtn = form.querySelector('.tienda-clear');
     const input = form.querySelector('.tienda-input');
-    const lupaBtn = form.querySelector('.tienda-lupa');
-    const isMobileSearchForm = form.classList.contains('tienda-search-mobile');
     if (!cameraBtn || !cameraInput) return;
     const toggleClear = () => {
       if (!input) return;
       form.classList.toggle('has-text', input.value.trim().length > 0);
     };
-    const openMobileSearch = () => {
-      if (!isMobileSearchForm || !mobileSearchMQ.matches) return;
-      document.body.classList.add('search-open');
-      if (input) {
-        requestAnimationFrame(() => {
-          try { input.focus({ preventScroll: true }); }
-          catch (_) { input.focus(); }
-        });
-      }
-    };
-    const closeMobileSearch = (force = false) => {
-      if (!isMobileSearchForm || !mobileSearchMQ.matches) return;
-      if (!force && input && input.value.trim()) return;
-      document.body.classList.remove('search-open');
-    };
     cameraBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      openMobileSearch();
       cameraInput.click();
     });
     cameraInput.addEventListener('change', () => {
@@ -963,45 +855,7 @@ body.pagina-tienda .todo-float{ display:none; }
       clearBtn.addEventListener('click', () => {
         input.value = '';
         toggleClear();
-        openMobileSearch();
-      });
-    }
-    if (isMobileSearchForm) {
-      form.addEventListener('submit', (e) => {
-        if (!mobileSearchMQ.matches) return;
-        if (!document.body.classList.contains('search-open')) {
-          e.preventDefault();
-          openMobileSearch();
-          return;
-        }
-        if (input && !input.value.trim()) {
-          e.preventDefault();
-          input.focus();
-        }
-      });
-      if (lupaBtn) {
-        lupaBtn.addEventListener('click', (e) => {
-          if (!mobileSearchMQ.matches) return;
-          if (!document.body.classList.contains('search-open')) {
-            e.preventDefault();
-            openMobileSearch();
-          }
-        });
-      }
-      if (input) {
-        input.addEventListener('focus', openMobileSearch);
-      }
-      document.addEventListener('click', (e) => {
-        if (!mobileSearchMQ.matches) return;
-        if (!form.contains(e.target) && !e.target.closest('.tienda-chips')) {
-          closeMobileSearch();
-        }
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeMobileSearch(true);
-      });
-      mobileSearchMQ.addEventListener('change', (evt) => {
-        if (!evt.matches) document.body.classList.remove('search-open');
+        input.focus();
       });
     }
   });
@@ -1054,188 +908,21 @@ body.pagina-tienda .todo-float{ display:none; }
 
   const setupMobileCategoryRail = () => {
     if (!chipsWrap) return;
+    if (!window.matchMedia('(max-width: 650px)').matches) return;
     const chipsContainer = document.querySelector('.tienda-chips');
-    if (!chipsContainer) return;
-    chipsContainer.style.cssText = '';
-    chipsWrap.style.cssText = '';
-    chipsWrap.querySelectorAll('.chip-story').forEach((chip) => {
-      chip.style.display = '';
-      chip.style.width = '';
-      chip.style.minWidth = '';
-    });
-    document.body.classList.remove('force-floating-chips');
-    document.body.classList.remove('chips-open');
-  };
-
-  const setupTodoCategoriesPanel = () => {
-    const mq = window.matchMedia('(max-width: 650px)');
-    const todoFloat = document.querySelector('.todo-float');
-    const chipsContainer = document.querySelector('.tienda-chips');
-    if (!todoFloat || !chipsContainer) return;
-
-    let hideTimer = null;
-    const clearHideTimer = () => {
-      if (!hideTimer) return;
-      clearTimeout(hideTimer);
-      hideTimer = null;
-    };
-    const openPanel = () => {
-      if (!mq.matches) return;
-      clearHideTimer();
-      document.body.classList.add('mobile-cats-open');
-    };
-    const closePanel = () => {
-      clearHideTimer();
-      document.body.classList.remove('mobile-cats-open');
-    };
-    const scheduleHide = (delay = 900) => {
-      clearHideTimer();
-      hideTimer = setTimeout(() => {
-        document.body.classList.remove('mobile-cats-open');
-      }, delay);
-    };
-    const togglePanel = (e) => {
-      if (!mq.matches) return;
-      e.preventDefault();
-      e.stopPropagation();
-      if (document.body.classList.contains('mobile-cats-open')) {
-        closePanel();
-        return;
-      }
-      openPanel();
-      scheduleHide(1800);
-    };
-
-    todoFloat.addEventListener('click', togglePanel);
-    todoFloat.addEventListener('mouseenter', openPanel);
-    todoFloat.addEventListener('mouseleave', () => scheduleHide(500));
-    todoFloat.addEventListener('touchstart', openPanel, { passive: true });
-    todoFloat.addEventListener('touchend', () => scheduleHide(1200), { passive: true });
-
-    chipsContainer.addEventListener('click', (e) => {
-      const chip = e.target.closest('.chip-story');
-      if (chip) closePanel();
-    });
-    chipsContainer.addEventListener('mouseenter', clearHideTimer);
-    chipsContainer.addEventListener('mouseleave', () => scheduleHide(500));
-    chipsContainer.addEventListener('touchstart', clearHideTimer, { passive: true });
-    chipsContainer.addEventListener('touchend', () => scheduleHide(1200), { passive: true });
-
-    document.addEventListener('click', (e) => {
-      if (!mq.matches) return;
-      if (!chipsContainer.contains(e.target) && !todoFloat.contains(e.target)) closePanel();
-    });
-    document.addEventListener('touchstart', (e) => {
-      if (!mq.matches) return;
-      if (!chipsContainer.contains(e.target) && !todoFloat.contains(e.target)) closePanel();
-    }, { passive: true });
-
-    window.addEventListener('load', closePanel);
-    window.addEventListener('pageshow', closePanel);
-    mq.addEventListener('change', closePanel);
-  };
-
-  const pinTodoFloat = () => {
-    const mq = window.matchMedia('(max-width: 650px)');
-    const todoFloat = document.querySelector('.todo-float');
-    if (!todoFloat) return;
-    const setImp = (prop, value) => todoFloat.style.setProperty(prop, value, 'important');
-
-    const apply = () => {
-      if (!mq.matches) {
-        todoFloat.style.cssText = '';
-        return;
-      }
-      setImp('display', 'flex');
-      setImp('position', 'fixed');
-      setImp('right', '6px');
-      setImp('left', 'auto');
-      setImp('top', 'auto');
-      setImp('bottom', 'calc(env(safe-area-inset-bottom, 0px) + 64px)');
-      setImp('width', '70px');
-      setImp('height', '70px');
-      setImp('border-radius', '50%');
-      setImp('z-index', '25000');
-      setImp('pointer-events', 'auto');
-      setImp('opacity', '1');
-      setImp('visibility', 'visible');
-      setImp('transform', 'none');
-    };
-
-    apply();
-    window.addEventListener('load', apply);
-    window.addEventListener('pageshow', apply);
-    window.addEventListener('scroll', apply, { passive: true });
-    window.addEventListener('resize', apply);
-    mq.addEventListener('change', apply);
-  };
-
-  const setupMobileFloatingAutoHide = () => {
-    const mobileUiMQ = window.matchMedia('(max-width: 650px)');
-    const mobileSearch = document.querySelector('.tienda-search-mobile');
-    const chipsContainer = document.querySelector('.tienda-chips');
-    if (!mobileSearch || !chipsContainer) return;
-
-    let hideTimer = null;
-    const HIDE_DELAY_MS = 2300;
-
-    const clearHideTimer = () => {
-      if (!hideTimer) return;
-      clearTimeout(hideTimer);
-      hideTimer = null;
-    };
-
-    const shouldStayVisible = () => {
-      if (!mobileUiMQ.matches) return true;
-      return mobileSearch.contains(document.activeElement);
-    };
-
-    const showFloatingUi = () => {
-      if (!mobileUiMQ.matches) return;
-      clearHideTimer();
-      document.body.classList.remove('mobile-ui-hidden');
-    };
-
-    const scheduleHide = () => {
-      if (!mobileUiMQ.matches) {
-        clearHideTimer();
-        document.body.classList.remove('mobile-ui-hidden');
-        return;
-      }
-      clearHideTimer();
-      hideTimer = setTimeout(() => {
-        if (shouldStayVisible()) {
-          scheduleHide();
-          return;
+    const homeChip = chipsWrap.querySelector('.chip-home');
+    if (!chipsContainer || !homeChip) return;
+    if (document.body.classList.contains('vista-todos')) {
+      homeChip.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.classList.toggle('chips-open');
+      });
+      document.addEventListener('click', (e) => {
+        if (!chipsContainer.contains(e.target) && !e.target.closest('.tienda-search-mobile')) {
+          document.body.classList.remove('chips-open');
         }
-        document.body.classList.add('mobile-ui-hidden');
-      }, HIDE_DELAY_MS);
-    };
-
-    const wakeAndSchedule = () => {
-      showFloatingUi();
-      scheduleHide();
-    };
-
-    window.addEventListener('scroll', wakeAndSchedule, { passive: true });
-    window.addEventListener('touchstart', wakeAndSchedule, { passive: true });
-    window.addEventListener('touchmove', wakeAndSchedule, { passive: true });
-    document.addEventListener('click', wakeAndSchedule);
-    document.addEventListener('keydown', wakeAndSchedule);
-    mobileSearch.addEventListener('focusin', wakeAndSchedule);
-    mobileSearch.addEventListener('focusout', () => setTimeout(scheduleHide, 80));
-    chipsContainer.addEventListener('click', wakeAndSchedule);
-    chipsContainer.addEventListener('touchstart', wakeAndSchedule, { passive: true });
-    mobileUiMQ.addEventListener('change', (evt) => {
-      if (!evt.matches) {
-        clearHideTimer();
-        document.body.classList.remove('mobile-ui-hidden');
-        return;
-      }
-      wakeAndSchedule();
-    });
-
-    wakeAndSchedule();
+      });
+    }
   };
 
   const attachFocusEffects = (container) => {
@@ -1267,9 +954,6 @@ body.pagina-tienda .todo-float{ display:none; }
 
   injectAllProductsInCatalog();
   setupMobileCategoryRail();
-  pinTodoFloat();
-  setupTodoCategoriesPanel();
-  document.body.classList.remove('mobile-ui-hidden');
   if (window.__buildAseoMobileSections) window.__buildAseoMobileSections();
   attachFocusEffects(document.querySelector('.tienda-grid'));
   document.querySelectorAll('.aseo-mobile-row').forEach((row) => attachFocusEffects(row));
@@ -1795,7 +1479,6 @@ body.pagina-tienda .todo-float{ display:none; }
   document.querySelectorAll('.tienda-card.quick-view').forEach((card) => {
     let touchMeta = null;
     card.addEventListener('click', (e) => {
-      if (!quickModal) return;
       const openedByTouchAt = Number(card.dataset.touchOpenAt || 0);
       if (openedByTouchAt && (Date.now() - openedByTouchAt) < 700) {
         e.preventDefault();
@@ -1810,7 +1493,6 @@ body.pagina-tienda .todo-float{ display:none; }
       touchMeta = { x: touch.clientX, y: touch.clientY, t: Date.now() };
     }, { passive: true });
     card.addEventListener('touchend', (e) => {
-      if (!quickModal) return;
       if (!touchMeta) return;
       const touch = e.changedTouches && e.changedTouches[0];
       if (!touch) return;
