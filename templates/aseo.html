@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aseo - Distribuidora Universal</title>
-<link rel="stylesheet" href="/static/style.css">
-<link rel="stylesheet" href="/static/aseo.css">
+<link rel="stylesheet" href="/static/style.css?v=20260214">
+<link rel="stylesheet" href="/static/aseo.css?v=20260214">
 </head>
 <body class="pagina-aseo">
 
@@ -89,24 +89,30 @@
     {% if section['items'] %}
     <div class="aseo-row">
       {% for item in section['items'] %}
+      {% set item_nombre = (item.producto or '')|lower %}
+      {% if 'revita' in item_nombre or 'revitacolor' in item_nombre %}
+        {% set item_titulo = 'Ariel Revita Color' %}
+        {% set item_img = '/static/images/ariel-revita.jpg?v=20260330' %}
+      {% elif 'ariel' in item_nombre %}
+        {% set item_titulo = 'Ariel Triple Poder' %}
+        {% set item_img = item.imagen %}
+      {% elif 'fab' in item_nombre and 'fabuloso' not in item_nombre %}
+        {% set item_titulo = 'Fab Lavado Perfecto' %}
+        {% set item_img = item.imagen %}
+      {% elif '3d' in item_nombre %}
+        {% set item_titulo = '3D Multiusos' %}
+        {% set item_img = '/static/images/3d.jpg?v=20260330' %}
+      {% else %}
+        {% set item_titulo = item.producto %}
+        {% set item_img = item.imagen %}
+      {% endif %}
       <article class="aseo-card quick-card"
-               data-item='{{ {"id": item.presentacion_id or ("aseo-" ~ item.producto_id), "producto": item.producto, "marca": item.marca, "presentacion": item.presentacion, "contenido": item.contenido, "imagen": item.imagen, "unit": item.precio_unit, "producto_id": item.producto_id, "subcat": section["title"]}|tojson|safe }}'>
+               data-item='{{ {"id": item.presentacion_id or ("aseo-" ~ item.producto_id), "producto": item_titulo, "marca": item.marca, "presentacion": item.presentacion, "contenido": item.contenido, "imagen": item_img, "unit": item.precio_unit, "producto_id": item.producto_id, "subcat": section["title"], "variantes": item.variantes}|tojson|safe }}'>
         <div class="aseo-card-img">
-          <img src="{{ item.imagen }}" alt="{{ item.producto }}" loading="lazy" decoding="async" fetchpriority="low" width="320" height="210" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
+          <img src="{{ item_img }}" alt="{{ item_titulo }}" loading="lazy" decoding="async" fetchpriority="low" width="320" height="210" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
         </div>
         <div class="aseo-card-info">
-          <h3>{{ item.producto }}</h3>
-          <p>{{ section['title'] }}</p>
-          {% if item.precio_desde %}
-          <span>Desde {{ item.precio_desde|cop }}</span>
-          {% else %}
-          <span>Precio por confirmar</span>
-          {% endif %}
-        </div>
-        <div class="aseo-card-actions">
-          <button type="button" class="aseo-mini-btn js-open">Detalle</button>
-          <button type="button" class="aseo-mini-btn js-add">Carrito</button>
-          <a href="/producto/{{ item.producto_id }}" class="aseo-mini-link">Ver</a>
+          <h3>{{ item_titulo }}</h3>
         </div>
       </article>
       {% endfor %}
@@ -128,13 +134,22 @@
         <img id="aseoQuickImg" src="/static/images/placeholder.svg" alt="Producto" onerror="this.onerror=null; this.src='/static/images/placeholder.svg';">
       </div>
       <div class="aseo-quick-info">
+        <span class="aseo-quick-tag" id="aseoQuickTag"></span>
         <h3 id="aseoQuickName"></h3>
         <p id="aseoQuickSub"></p>
-        <strong id="aseoQuickPrice">$0</strong>
+        <div class="aseo-quick-variants" id="aseoQuickVariants"></div>
+        <div class="aseo-quick-prices">
+          <h4>Precio unitario</h4>
+          <div class="aseo-price-grid" id="aseoQuickPriceList"></div>
+        </div>
         <div class="aseo-quick-qty">
           <button type="button" data-qty="-">-</button>
           <input type="number" id="aseoQuickQty" min="1" value="1">
           <button type="button" data-qty="+">+</button>
+        </div>
+        <div class="aseo-quick-total">
+          <span>Total</span>
+          <strong id="aseoQuickTotal">$0</strong>
         </div>
         <div class="aseo-quick-actions">
           <button type="button" id="aseoQuickAdd">Agregar al carrito</button>
@@ -187,17 +202,79 @@
   const CART_KEY = "du_cart";
   const quickModal = document.getElementById("aseoQuickModal");
   const quickImg = document.getElementById("aseoQuickImg");
+  const quickTag = document.getElementById("aseoQuickTag");
   const quickName = document.getElementById("aseoQuickName");
   const quickSub = document.getElementById("aseoQuickSub");
-  const quickPrice = document.getElementById("aseoQuickPrice");
+  const quickVariants = document.getElementById("aseoQuickVariants");
+  const quickPriceList = document.getElementById("aseoQuickPriceList");
   const quickQty = document.getElementById("aseoQuickQty");
+  const quickTotal = document.getElementById("aseoQuickTotal");
   const quickAdd = document.getElementById("aseoQuickAdd");
   const quickView = document.getElementById("aseoQuickView");
   let activeItem = null;
+  let activeVariant = null;
+  let activePriceTiers = [];
 
   const formatCOP = (value) => {
     const num = Number(value) || 0;
     return `$${num.toLocaleString("es-CO")}`.replace(/,/g, ".");
+  };
+  const sortTiers = (tiers) => [...(tiers || [])].sort((a, b) => (a.min_cantidad || 0) - (b.min_cantidad || 0));
+  const getUnitPrice = (tiers, qty) => {
+    const ordered = sortTiers(tiers);
+    if (!ordered.length) return 0;
+    let chosen = ordered[0];
+    ordered.forEach((tier) => {
+      if (qty >= (Number(tier.min_cantidad) || 1)) chosen = tier;
+    });
+    return Number(chosen.precio) || 0;
+  };
+  const buildFallbackTiers = (unit) => {
+    const base = Number(unit) || 0;
+    if (!base) return [];
+    return [
+      { min_cantidad: 1, precio: base },
+      { min_cantidad: 6, precio: Math.max(1, Math.round(base * 0.96)) },
+      { min_cantidad: 12, precio: Math.max(1, Math.round(base * 0.92)) }
+    ];
+  };
+  const renderPrices = (tiers, qty = 1) => {
+    if (!quickPriceList) return;
+    quickPriceList.innerHTML = "";
+    const ordered = sortTiers(tiers);
+    if (!ordered.length) {
+      const empty = document.createElement("div");
+      empty.className = "aseo-price-empty";
+      empty.textContent = "Precio disponible pronto";
+      quickPriceList.appendChild(empty);
+      return;
+    }
+    const chosen = ordered.reduce((acc, tier) => (qty >= (tier.min_cantidad || 1) ? tier : acc), ordered[0]);
+    const main = document.createElement("div");
+    main.className = "aseo-price-main";
+    main.innerHTML = `<span>Valor unidad</span><strong>${formatCOP(chosen.precio)}</strong>`;
+    quickPriceList.appendChild(main);
+    const other = ordered.filter((tier) => tier.min_cantidad !== chosen.min_cantidad);
+    if (other.length) {
+      const options = document.createElement("div");
+      options.className = "aseo-price-options";
+      other.forEach((tier) => {
+        const chip = document.createElement("span");
+        chip.className = "aseo-price-chip";
+        const label = Number(tier.min_cantidad) >= 12 ? "12+" : "6+";
+        chip.innerHTML = `<span>${label}</span><strong>${formatCOP(tier.precio)}</strong>`;
+        options.appendChild(chip);
+      });
+      quickPriceList.appendChild(options);
+    }
+  };
+  const updateTotal = () => {
+    if (!quickQty || !quickTotal) return;
+    const qty = Math.max(1, parseInt(quickQty.value || "1", 10) || 1);
+    quickQty.value = qty;
+    const unit = getUnitPrice(activePriceTiers, qty);
+    renderPrices(activePriceTiers, qty);
+    quickTotal.textContent = unit ? formatCOP(unit * qty) : "$0";
   };
 
   const addToCart = (item, qty) => {
@@ -232,18 +309,69 @@
     quickModal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("modal-open");
     activeItem = null;
+    activeVariant = null;
+    activePriceTiers = [];
+    if (quickImg) quickImg.classList.remove("is-pop");
+    if (quickTag) quickTag.textContent = "";
+    if (quickSub) quickSub.textContent = "";
+    if (quickVariants) quickVariants.innerHTML = "";
+    if (quickPriceList) quickPriceList.innerHTML = "";
+    if (quickTotal) quickTotal.textContent = "$0";
     if (quickQty) quickQty.value = 1;
+  };
+
+  const selectVariant = (variant, item) => {
+    if (!variant || !item) return;
+    activeVariant = variant;
+    if (quickTag) quickTag.textContent = variant.marca || item.marca || "";
+    if (quickName) quickName.textContent = item.producto || "Producto";
+    const detalle = `${variant.presentacion || ""} ${variant.contenido || ""}`.trim();
+    if (quickSub) quickSub.textContent = detalle || (item.subcat || "Aseo");
+    if (quickImg) {
+      quickImg.src = variant.imagen || item.imagen || "/static/images/placeholder.svg";
+      quickImg.classList.add("is-pop");
+      setTimeout(() => quickImg && quickImg.classList.remove("is-pop"), 220);
+    }
+    activePriceTiers = (variant.precios && variant.precios.length) ? variant.precios : buildFallbackTiers(item.unit || 0);
+    if (quickQty) quickQty.value = 1;
+    if (quickAdd) {
+      quickAdd.disabled = false;
+      quickAdd.textContent = "Agregar al carrito";
+    }
+    updateTotal();
+    if (quickVariants) {
+      quickVariants.querySelectorAll(".aseo-variant").forEach((chip) => {
+        chip.classList.toggle("active", chip.dataset.vid === String(variant.presentacion_id));
+      });
+    }
   };
 
   const openQuick = (item) => {
     if (!quickModal || !item) return;
     activeItem = item;
-    if (quickImg) quickImg.src = item.imagen || "/static/images/placeholder.svg";
-    if (quickName) quickName.textContent = item.producto || "Producto";
-    if (quickSub) quickSub.textContent = `${item.subcat || "Aseo"} - ${item.presentacion || ""} ${item.contenido || ""}`.trim();
-    if (quickPrice) quickPrice.textContent = formatCOP(item.unit || 0);
     if (quickView) quickView.href = `/producto/${item.producto_id || ""}`;
-    if (quickQty) quickQty.value = 1;
+    const variants = Array.isArray(item.variantes) ? item.variantes : [];
+    if (quickVariants) {
+      quickVariants.innerHTML = "";
+      variants.forEach((v) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "aseo-variant";
+        chip.dataset.vid = String(v.presentacion_id || "");
+        chip.innerHTML = `<span>${(v.presentacion || "").trim()}</span><strong>${(v.contenido || "").trim()}</strong>`;
+        chip.addEventListener("click", () => selectVariant(v, item));
+        quickVariants.appendChild(chip);
+      });
+    }
+    const fallbackVariant = {
+      presentacion_id: item.id || `aseo-${item.producto_id}`,
+      presentacion: item.presentacion || "Presentacion",
+      contenido: item.contenido || "",
+      imagen: item.imagen || "/static/images/placeholder.svg",
+      marca: item.marca || "",
+      precios: buildFallbackTiers(item.unit || 0)
+    };
+    selectVariant(variants[0] || fallbackVariant, item);
     quickModal.classList.add("open");
     quickModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
@@ -339,6 +467,7 @@
     quickQty.addEventListener("input", () => {
       const n = Math.max(1, parseInt(quickQty.value || "1", 10) || 1);
       quickQty.value = n;
+      updateTotal();
     });
   }
   document.querySelectorAll(".aseo-quick-qty button").forEach((btn) => {
@@ -347,18 +476,40 @@
       const d = btn.dataset.qty === "+" ? 1 : -1;
       const n = Math.max(1, parseInt(quickQty.value || "1", 10) + d);
       quickQty.value = n;
+      updateTotal();
     });
   });
   if (quickAdd) {
     quickAdd.addEventListener("click", () => {
-      if (!activeItem) return;
+      if (!activeItem || !activeVariant) return;
       const qty = quickQty ? Math.max(1, parseInt(quickQty.value || "1", 10) || 1) : 1;
-      addToCart(activeItem, qty);
+      const unit = getUnitPrice(activePriceTiers, qty);
+      addToCart(
+        {
+          id: activeVariant.presentacion_id || activeItem.id,
+          producto: activeItem.producto || "Producto",
+          marca: activeVariant.marca || activeItem.marca || "",
+          presentacion: activeVariant.presentacion || activeItem.presentacion || "Presentacion",
+          contenido: activeVariant.contenido || activeItem.contenido || "",
+          imagen: activeVariant.imagen || activeItem.imagen || "/static/images/placeholder.svg",
+          unit: unit || activeItem.unit || 0,
+          producto_id: activeItem.producto_id || ""
+        },
+        qty
+      );
       quickAdd.textContent = "Agregado";
       setTimeout(() => { quickAdd.textContent = "Agregar al carrito"; }, 900);
+    });
+  }
+
+  if (quickImg) {
+    quickImg.addEventListener("click", () => {
+      quickImg.classList.add("is-pop");
+      setTimeout(() => quickImg && quickImg.classList.remove("is-pop"), 220);
     });
   }
 </script>
 
 </body>
 </html>
+
