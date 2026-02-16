@@ -83,7 +83,7 @@
 .floating-arrow{
     position:fixed;
     top:50%;
-    transform:translateY(-50%);
+    transform:translateY(-50%) scale(.9);
     width:34px;
     height:34px;
     border-radius:50%;
@@ -97,15 +97,19 @@
     backdrop-filter:blur(5px);
     -webkit-backdrop-filter:blur(5px);
     box-shadow:0 8px 20px rgba(0,0,0,.2);
-    opacity:.55;
+    opacity:.08;
     pointer-events:auto;
-    transition:opacity .2s ease, transform .2s ease, background .2s ease;
+    transition:opacity .2s ease, transform .2s ease, background .2s ease, box-shadow .2s ease;
 }
 .floating-arrow-left{
     left:10px;
 }
 .floating-arrow-right{
     right:10px;
+}
+body.show-edge-arrows .floating-arrow{
+    opacity:.78;
+    transform:translateY(-50%) scale(1);
 }
 .floating-arrow:hover{
     opacity:.95;
@@ -486,6 +490,20 @@ body.modal-open .floating-arrows{
     0%{ box-shadow:0 0 0 0 rgba(13,132,252,.35); }
     70%{ box-shadow:0 0 0 12px rgba(13,132,252,0); }
     100%{ box-shadow:0 0 0 0 rgba(13,132,252,0); }
+}
+@keyframes todoPulseStrong{
+    0%{
+        transform:scale(1);
+        box-shadow:0 0 0 0 rgba(13,132,252,.75), 0 10px 24px rgba(13,132,252,.45);
+    }
+    55%{
+        transform:scale(1.08);
+        box-shadow:0 0 0 16px rgba(13,132,252,0), 0 14px 28px rgba(13,132,252,.55);
+    }
+    100%{
+        transform:scale(1);
+        box-shadow:0 0 0 0 rgba(13,132,252,0), 0 10px 24px rgba(13,132,252,.45);
+    }
 }
 
 .tienda-grid{
@@ -2725,6 +2743,13 @@ body.dark .carrito-link{
         border-color:#0d84fc !important;
         box-shadow:0 10px 24px rgba(13,132,252,.45) !important;
         background:linear-gradient(145deg,#eff6ff,#ffffff) !important;
+        animation:todoPulseStrong 1.15s ease-out infinite !important;
+    }
+    html body.pagina-tienda .tienda-chips > .chips-story .chip-volver .chip-circle{
+        border-color:#0d84fc !important;
+        box-shadow:0 10px 24px rgba(13,132,252,.45) !important;
+        background:linear-gradient(145deg,#eff6ff,#ffffff) !important;
+        animation:todoPulseStrong 1.15s ease-out infinite !important;
     }
     html body.pagina-tienda .tienda-chips > .chips-story .chip-home .chip-name{
         display:block !important;
