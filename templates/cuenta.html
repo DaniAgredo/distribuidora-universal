@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mi cuenta</title>
 
-<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="/static/style.css?v=20260329">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -49,6 +49,11 @@
   </div>
 </header>
 
+<nav class="page-float-nav" aria-label="Navegacion rapida">
+  <a href="/" class="page-float-arrow left" aria-label="Ir al inicio">&#10094;</a>
+  <a href="/tienda" class="page-float-arrow right" aria-label="Ir al catalogo">&#10095;</a>
+</nav>
+
 <main class="contenido-pagina cuenta-main">
   <section class="cuenta-hero">
     <div class="cuenta-identidad">
@@ -58,7 +63,7 @@
       <div class="cuenta-status" id="cuentaStatus">Cuenta en revisi&#243;n</div>
     </div>
     <div class="cuenta-tienda">
-      <a href="javascript:void(0)" class="tienda cuenta-tienda-btn" aria-disabled="true"><i class="fa-solid fa-cart-shopping tienda-icon"></i> Tienda Virtual</a>
+      <a href="/tienda" class="tienda cuenta-tienda-btn"><i class="fa-solid fa-cart-shopping tienda-icon"></i> Tienda Virtual</a>
       <div class="buscador-categorias">
         <div class="dropdown">
           <button class="btn-categorias" aria-expanded="false">&#9776;</button>
@@ -75,7 +80,7 @@
     </div>
   </section>
 
-  <section class="cuenta-resumen">
+  <section class="cuenta-resumen" data-cuenta-private hidden>
     <div class="cuenta-kpi">
       <span>Pedidos totales</span>
       <strong id="kpiPedidos">0</strong>
@@ -94,7 +99,7 @@
     </div>
   </section>
 
-  <section class="cuenta-grid">
+  <section class="cuenta-grid" data-cuenta-private hidden>
     <article class="cuenta-card">
       <h2>Datos del cliente</h2>
       <dl class="cuenta-datos">
@@ -133,7 +138,7 @@
     </article>
   </section>
 
-  <section class="cuenta-card cuenta-historial">
+  <section class="cuenta-card cuenta-historial" data-cuenta-private hidden>
     <div class="cuenta-card-head">
       <h2>Historial de pedidos</h2>
       <span class="cuenta-total" id="historialTotal">Total: $0</span>
@@ -157,7 +162,7 @@
     </div>
   </section>
 
-  <section class="cuenta-card cuenta-facturas">
+  <section class="cuenta-card cuenta-facturas" data-cuenta-private hidden>
     <h2>Facturas virtuales</h2>
     <ul class="facturas-list" id="facturasList">
       <li class="facturas-empty">A&#250;n no hay facturas disponibles.</li>
@@ -598,6 +603,9 @@
       try { user = JSON.parse(userRaw); } catch (e) { user = null; }
     }
     const isLogged = !!(user && user.loggedIn);
+    document.querySelectorAll("[data-cuenta-private]").forEach((section) => {
+      section.hidden = !isLogged;
+    });
 
     const fields = {
       nombre: "nombre",
@@ -707,6 +715,8 @@
 
   renderCuenta();
 </script>
+<script src="/static/floating-arrows.js?v=20260329" defer></script>
 
 </body>
 </html>
+

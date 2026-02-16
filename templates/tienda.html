@@ -68,7 +68,7 @@
 </header>
 
 <nav class="floating-arrows" aria-label="Navegacion">
-  <a href="/" class="floating-arrow floating-arrow-left" aria-label="Volver al inicio">&#10094;</a>
+  <a href="/" class="floating-arrow floating-arrow-left" data-smart-back="tienda" aria-label="Volver al inicio">&#10094;</a>
   <a href="/carrito" class="floating-arrow floating-arrow-right" aria-label="Ir al carrito">&#10095;</a>
 </nav>
 
@@ -693,13 +693,13 @@
       {% set is_limpido = 'limpido' in producto_nombre %}
       {% set is_donalupe = 'dona lupe' in producto_nombre or 'doÃ±a lupe' in producto_nombre or 'donalupe' in producto_nombre %}
       {% if is_revita %}
-        {% set producto_imagen = '/static/images/ariel-revita-thumb.jpg' %}
+        {% set producto_imagen = '/static/images/ariel-revita.jpg?v=20260330' %}
         {% set added_revita = true %}
       {% elif is_fab %}
         {% set producto_imagen = '/static/images/fab-thumb.jpg' %}
         {% set added_fab = true %}
       {% elif is_3d %}
-        {% set producto_imagen = '/static/images/3d-thumb.jpg' %}
+        {% set producto_imagen = '/static/images/3d.jpg?v=20260330' %}
         {% set added_3d = true %}
       {% elif is_axion %}
         {% set producto_imagen = '/static/images/axion.jpg' %}
@@ -1199,16 +1199,16 @@
     { id: '100g', label: '100 g', match: '100g', img: '/static/images/ariel100.jpg', x: 42, y: 56, w: 18, hit: '6px', hitArea: '8px', scale: 1.9, scaleMobile: 2.2, lift: '-8px', liftMobile: '-10px' }
   ];
   const revitaHotspots = [
-    { id: '2kg', label: '2 kg', match: '2kg', img: '/static/images/ariel-revita.jpg', x: 8, y: 26, w: 28, hit: '6px', hitArea: '8px', scale: 1.35, scaleMobile: 1.7, lift: '-10px', liftMobile: '-12px' },
-    { id: '800g', label: '800 g', match: '800g', img: '/static/images/ariel-revita.jpg', x: 40, y: 32, w: 22, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.1 },
-    { id: '450g', label: '450 g', match: '450g', img: '/static/images/ariel-revita.jpg', x: 66, y: 36, w: 20, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.1 }
+    { id: '2kg', label: '2 kg', match: '2kg', img: '/static/images/ariel-revita.jpg?v=20260330', x: 8, y: 26, w: 28, hit: '6px', hitArea: '8px', scale: 1.35, scaleMobile: 1.7, lift: '-10px', liftMobile: '-12px' },
+    { id: '800g', label: '800 g', match: '800g', img: '/static/images/ariel-revita.jpg?v=20260330', x: 40, y: 32, w: 22, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.1 },
+    { id: '450g', label: '450 g', match: '450g', img: '/static/images/ariel-revita.jpg?v=20260330', x: 66, y: 36, w: 20, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.1 }
   ];
   const threeDHotspots = [
-    { id: '2kg', label: '2 kg', match: '2kg', img: '/static/images/3d.jpg', x: 2, y: 14, w: 36, hit: '6px', hitArea: '8px', scale: 1.4, scaleMobile: 1.8, lift: '-10px', liftMobile: '-12px' },
-    { id: '1kg', label: '1 kg', match: '1kg', img: '/static/images/3d.jpg', x: 40, y: 18, w: 28, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.0 },
-    { id: '500g', label: '500 g', match: '500g', img: '/static/images/3d.jpg', x: 70, y: 18, w: 24, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.0 },
-    { id: '250g', label: '250 g', match: '250g', img: '/static/images/3d.jpg', x: 44, y: 62, w: 22, hit: '6px', hitArea: '8px', scale: 1.8, scaleMobile: 2.3 },
-    { id: '125g', label: '125 g', match: '125g', img: '/static/images/3d.jpg', x: 72, y: 66, w: 16, hit: '6px', hitArea: '8px', scale: 1.9, scaleMobile: 2.4, lift: '-8px', liftMobile: '-10px' }
+    { id: '2kg', label: '2 kg', match: '2kg', img: '/static/images/3d.jpg?v=20260330', x: 2, y: 14, w: 36, hit: '6px', hitArea: '8px', scale: 1.4, scaleMobile: 1.8, lift: '-10px', liftMobile: '-12px' },
+    { id: '1kg', label: '1 kg', match: '1kg', img: '/static/images/3d.jpg?v=20260330', x: 40, y: 18, w: 28, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.0 },
+    { id: '500g', label: '500 g', match: '500g', img: '/static/images/3d.jpg?v=20260330', x: 70, y: 18, w: 24, hit: '6px', hitArea: '8px', scale: 1.6, scaleMobile: 2.0 },
+    { id: '250g', label: '250 g', match: '250g', img: '/static/images/3d.jpg?v=20260330', x: 44, y: 62, w: 22, hit: '6px', hitArea: '8px', scale: 1.8, scaleMobile: 2.3 },
+    { id: '125g', label: '125 g', match: '125g', img: '/static/images/3d.jpg?v=20260330', x: 72, y: 66, w: 16, hit: '6px', hitArea: '8px', scale: 1.9, scaleMobile: 2.4, lift: '-8px', liftMobile: '-10px' }
   ];
   const fabHotspots = [
     { id: '3_5kg', label: '3.5 kg', match: '3.5', img: '/static/images/fab.jpg', x: 3, y: 18, w: 30, hit: '6px', hitArea: '8px', scale: 1.35, scaleMobile: 1.7, lift: '-10px', liftMobile: '-12px' },
@@ -1378,14 +1378,14 @@
     revita: {
       name: 'Ariel Revita Color',
       brand: 'Ariel',
-      img: '/static/images/ariel-revita.jpg',
+      img: '/static/images/ariel-revita.jpg?v=20260330',
       hotspots: revitaHotspots,
       priceMap: priceMaps.revita
     },
     '3d': {
       name: '3D Multiusos',
       brand: '3D',
-      img: '/static/images/3d.jpg',
+      img: '/static/images/3d.jpg?v=20260330',
       hotspots: threeDHotspots,
       priceMap: priceMaps['3d']
     },
@@ -1813,6 +1813,7 @@
   });
 
 </script>
+<script src="/static/floating-arrows.js?v=20260329" defer></script>
 
 </body>
 </html>
